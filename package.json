@@ -1,0 +1,46 @@
+{
+  "name": "dependency-mapper",
+  "version": "0.0.1",
+  "description": "A pretty dependency mapper for Angular projects",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm run build && node ./dist",
+    "test": "jest --config=jestconfig.json --detectOpenHandles",
+    "build": "tsc --outDir ./dist",
+    "docs": "typedoc --out docs src/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://git.webdelve.com/justforfun/dependency-mapper.git"
+  },
+  "bugs": {
+    "url": ""
+  },
+  "homepage": "https://thejustforfun.foundation",
+  "keywords": [
+    "dependency",
+    "mapper",
+    "angular",
+    "typescript"
+  ],
+  "author": {
+    "name": "Chris Holdt",
+    "email": "chris@thejustforfun.foundation",
+    "url": "https://chrisholdt.com"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jest": "^24.0.9",
+    "@types/node": "^11.10.4",
+    "jest": "^24.1.0",
+    "nodemon": "^1.18.10",
+    "prettier": "^1.16.4",
+    "ts-jest": "^24.0.0",
+    "ts-node": "^8.0.2",
+    "typedoc": "^0.14.2",
+    "typescript": "^3.3.3333"
+  },
+  "dependencies": {
+    "figlet": "^1.2.1"
+  }
+}
