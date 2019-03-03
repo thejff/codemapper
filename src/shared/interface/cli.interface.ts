@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 /*
  * MIT License (MIT)
  * Copyright (c) 2019 The Just for Fun Foundation
@@ -22,8 +20,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
-import { CLI } from "./modules/cli/cli";
-
-const commandline = new CLI();
-commandline.start();
+export interface ICLI {
+  start: Function;
+}

@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 /*
  * MIT License (MIT)
  * Copyright (c) 2019 The Just for Fun Foundation
@@ -23,7 +21,13 @@
  * SOFTWARE.
  */
 
-import { CLI } from "./modules/cli/cli";
+import { IWalkerStructure } from "./walker.interface";
 
-const commandline = new CLI();
-commandline.start();
+export interface IMapper {
+  startProcessing: Function;
+}
+
+export interface IWalkedProjectData {
+  structure: IWalkerStructure;
+  pathedFileList: string[];
+}

@@ -1,2 +1,7 @@
 node_modules
 test
+test.dot
+test.png
+dist/*
+lib/*
+codemapper
