@@ -1,0 +1,671 @@
+digraph test {
+
+subgraph clustersrc {
+		node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
+subgraph clusterapp {
+		node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
+subgraph clustercomponents {
+		node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
+subgraph clustercontracts {
+		node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
+contractscomponentts[label="contracts.component.ts"];
+
+
+
+	label="contracts";
+	style=rounded;
+
+}
+
+subgraph clusterhome {
+		node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
+	homecomponentts[label="home.component.ts"];
+	
+
+
+	label="home";
+	style=rounded;
+
+}
+
+subgraph clusteridentity {
+		node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
+		identitycomponentts[label="identity.component.ts"];
+		
+
+
+	label="identity";
+	style=rounded;
+
+}
+
+subgraph clusterkeys {
+		node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
+			keyscomponentts[label="keys.component.ts"];
+			
+
+
+	label="keys";
+	style=rounded;
+
+}
+
+subgraph clusternamespace {
+		node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
+				namespacecomponentts[label="namespace.component.ts"];
+				
+
+
+	label="namespace";
+	style=rounded;
+
+}
+
+subgraph clustersettings {
+		node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
+					settingscomponentts[label="settings.component.ts"];
+					
+
+
+	label="settings";
+	style=rounded;
+
+}
+
+subgraph clustersigning {
+		node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
+						signingcomponentts[label="signing.component.ts"];
+						
+
+
+	label="signing";
+	style=rounded;
+
+}
+
+subgraph clusterswagger {
+		node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
+							swaggercomponentts[label="swagger.component.ts"];
+							
+
+
+	label="swagger";
+	style=rounded;
+
+}
+
+
+	label="components";
+	style=rounded;
+
+}
+
+subgraph clusterdirectives {
+		node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
+	webviewdirectivets[label="webview.directive.ts"];
+	
+
+
+	label="directives";
+	style=rounded;
+
+}
+
+subgraph clusterproviders {
+		node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
+		databaseservicets[label="database.service.ts"];
+		
+
+		electronservicets[label="electron.service.ts"];
+		
+
+		saveservicets[label="save.service.ts"];
+		
+
+		uploadservicets[label="upload.service.ts"];
+		
+
+
+	label="providers";
+	style=rounded;
+
+}
+
+subgraph clustershared {
+		node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
+			subgraph clusterclasses {
+								node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
+			errorsclassests[label="errors.classes.ts"];
+			
+
+
+				label="classes";
+				style=rounded;
+
+			}
+
+			subgraph clustercomponents {
+								node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
+				subgraph clusterconsole {
+										node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
+				consolecomponentts[label="console.component.ts"];
+				
+
+
+					label="console";
+					style=rounded;
+
+				}
+
+				subgraph clustereditcontracts {
+										node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
+					editcontractscomponentts[label="edit-contracts.component.ts"];
+					
+
+
+					label="edit-contracts";
+					style=rounded;
+
+				}
+
+				subgraph clusterinfocontracts {
+										node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
+						infocontractscomponentts[label="info-contracts.component.ts"];
+						
+
+
+					label="info-contracts";
+					style=rounded;
+
+				}
+
+				subgraph clustermonacoeditor {
+										node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
+							monacoeditorcomponentts[label="monaco-editor.component.ts"];
+							
+
+
+					label="monaco-editor";
+					style=rounded;
+
+				}
+
+				subgraph clusterquickbar {
+										node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
+								quickbarcomponentts[label="quick-bar.component.ts"];
+								
+
+
+					label="quick-bar";
+					style=rounded;
+
+				}
+
+				subgraph clusterruncontracts {
+										node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
+									runcontractscomponentts[label="run-contracts.component.ts"];
+									
+
+
+					label="run-contracts";
+					style=rounded;
+
+				}
+
+				subgraph clustersettings {
+										node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
+										subgraph clusterabout {
+																						node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
+										aboutcomponentts[label="about.component.ts"];
+										
+
+
+											label="about";
+											style=rounded;
+
+										}
+
+										subgraph clusteraccount {
+																						node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
+											accountcomponentts[label="account.component.ts"];
+											
+
+
+											label="account";
+											style=rounded;
+
+										}
+
+										subgraph clusterbackup {
+																						node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
+												backupcomponentts[label="backup.component.ts"];
+												
+
+
+											label="backup";
+											style=rounded;
+
+										}
+
+										subgraph clusterconnections {
+																						node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
+													connectionscomponentts[label="connections.component.ts"];
+													
+
+
+											label="connections";
+											style=rounded;
+
+										}
+
+										subgraph clusterdefaults {
+																						node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
+														defaultscomponentts[label="defaults.component.ts"];
+														
+
+
+											label="defaults";
+											style=rounded;
+
+										}
+
+										subgraph clusterdeveloper {
+																						node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
+															developercomponentts[label="developer.component.ts"];
+															
+
+
+											label="developer";
+											style=rounded;
+
+										}
+
+										subgraph clustergeneral {
+																						node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
+																generalcomponentts[label="general.component.ts"];
+																
+
+
+											label="general";
+											style=rounded;
+
+										}
+
+										subgraph clusterrestore {
+																						node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
+																	restorecomponentts[label="restore.component.ts"];
+																	
+
+
+											label="restore";
+											style=rounded;
+
+										}
+
+										subgraph clusterupdate {
+																						node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
+																		updatecomponentts[label="update.component.ts"];
+																		
+
+
+											label="update";
+											style=rounded;
+
+										}
+
+										subgraph clusterworkspace {
+																						node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
+																			workspacecomponentts[label="workspace.component.ts"];
+																			
+
+
+											label="workspace";
+											style=rounded;
+
+										}
+
+
+					label="settings";
+					style=rounded;
+
+				}
+
+				subgraph clusterworkflowcontracts {
+										node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
+											workflowcontractscomponentts[label="workflow-contracts.component.ts"];
+											
+
+
+					label="workflow-contracts";
+					style=rounded;
+
+				}
+
+				subgraph clusterworkflowcreate {
+										node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
+												workflowcreatecomponentts[label="workflow-create.component.ts"];
+												
+
+
+					label="workflow-create";
+					style=rounded;
+
+				}
+
+
+				label="components";
+				style=rounded;
+
+			}
+
+			subgraph clusterdialogs {
+								node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
+					subgraph clusteradvancedconfirmdialog {
+												node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
+					advancedconfirmdialogcomponentts[label="advanced-confirm-dialog.component.ts"];
+					
+
+
+						label="advanced-confirm-dialog";
+						style=rounded;
+
+					}
+
+					subgraph clusterblockeddialog {
+												node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
+						blockeddialogcomponentts[label="blocked-dialog.component.ts"];
+						
+
+
+						label="blocked-dialog";
+						style=rounded;
+
+					}
+
+					subgraph clusterconfirmdialog {
+												node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
+							confirmdialogcomponentts[label="confirm-dialog.component.ts"];
+							
+
+
+						label="confirm-dialog";
+						style=rounded;
+
+					}
+
+					subgraph clustercontractinfodialog {
+												node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
+								contractinfodialogcomponentts[label="contract-info-dialog.component.ts"];
+								
+
+
+						label="contract-info-dialog";
+						style=rounded;
+
+					}
+
+					subgraph clustererrordialog {
+												node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
+									errordialogcomponentts[label="error-dialog.component.ts"];
+									
+
+
+						label="error-dialog";
+						style=rounded;
+
+					}
+
+					subgraph clusterinfodialog {
+												node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
+										infodialogcomponentts[label="info-dialog.component.ts"];
+										
+
+
+						label="info-dialog";
+						style=rounded;
+
+					}
+
+					subgraph clusterinputdialog {
+												node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
+											inputdialogcomponentts[label="input-dialog.component.ts"];
+											
+
+
+						label="input-dialog";
+						style=rounded;
+
+					}
+
+					subgraph clusterlogindialog {
+												node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
+												logindialogcomponentts[label="login-dialog.component.ts"];
+												
+
+
+						label="login-dialog";
+						style=rounded;
+
+					}
+
+					subgraph clustersavecontractdialog {
+												node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
+													savecontractdialogcomponentts[label="save-contract-dialog.component.ts"];
+													
+
+
+						label="save-contract-dialog";
+						style=rounded;
+
+					}
+
+					subgraph clusterwarningdialog {
+												node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
+														warningdialogcomponentts[label="warning-dialog.component.ts"];
+														
+
+
+						label="warning-dialog";
+						style=rounded;
+
+					}
+
+
+				label="dialogs";
+				style=rounded;
+
+			}
+
+			subgraph clusterinterfaces {
+								node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
+						connectioninterfacests[label="connection.interfaces.ts"];
+						
+
+						contractinterfacests[label="contract.interfaces.ts"];
+						
+
+						defaultinterfacests[label="default.interfaces.ts"];
+						
+
+						dialoginterfacests[label="dialog.interfaces.ts"];
+						
+
+						identityinterfacests[label="identity.interfaces.ts"];
+						
+
+						keyinterfacests[label="key.interfaces.ts"];
+						
+
+						namespaceinterfacests[label="namespace.interfaces.ts"];
+						
+
+						settingsinterfacests[label="settings.interfaces.ts"];
+						
+
+						transactioninterfacests[label="transaction.interfaces.ts"];
+						
+
+						userinterfacests[label="user.interfaces.ts"];
+						
+
+						workflowinterfacests[label="workflow.interfaces.ts"];
+						
+
+						workspaceinterfacests[label="workspace.interfaces.ts"];
+						
+
+
+				label="interfaces";
+				style=rounded;
+
+			}
+
+			subgraph clusterpipes {
+								node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
+							namespipets[label="names.pipe.ts"];
+							
+
+							ntobpipets[label="ntob.pipe.ts"];
+							
+
+
+				label="pipes";
+				style=rounded;
+
+			}
+
+			subgraph clusterservices {
+								node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
+								apiservicets[label="api.service.ts"];
+								
+
+								backupservicets[label="backup.service.ts"];
+								
+
+								configservicets[label="config.service.ts"];
+								
+
+								consoleservicets[label="console.service.ts"];
+								
+
+								contractservicets[label="contract.service.ts"];
+								
+
+								dataservicets[label="data.service.ts"];
+								
+
+								defaultsservicets[label="defaults.service.ts"];
+								
+
+								dialogservicets[label="dialog.service.ts"];
+								
+
+								fileservicets[label="file.service.ts"];
+								
+
+								generalservicets[label="general.service.ts"];
+								
+
+								identityservicets[label="identity.service.ts"];
+								
+
+								keyservicets[label="key.service.ts"];
+								
+
+								ledgerservicets[label="ledger.service.ts"];
+								
+
+								namespaceservicets[label="namespace.service.ts"];
+								
+
+								settingsservicets[label="settings.service.ts"];
+								
+
+								userservicets[label="user.service.ts"];
+								
+
+								workflowservicets[label="workflow.service.ts"];
+								
+
+
+				label="services";
+				style=rounded;
+
+			}
+
+			subgraph clusterstructures {
+								node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
+									connectionstructurests[label="connection.structures.ts"];
+									
+
+									contractstructurests[label="contract.structures.ts"];
+									
+
+									defaultstructurests[label="default.structures.ts"];
+									
+
+									identitystructurets[label="identity.structure.ts"];
+									
+
+									keystructurests[label="key.structures.ts"];
+									
+
+									namespacestructurests[label="namespace.structures.ts"];
+									
+
+									settingsstructurests[label="settings.structures.ts"];
+									
+
+									transactionstructurests[label="transaction.structures.ts"];
+									
+
+									userstructurets[label="user.structure.ts"];
+									
+
+									workflowstructurests[label="workflow.structures.ts"];
+									
+
+
+				label="structures";
+				style=rounded;
+
+			}
+
+
+	label="shared";
+	style=rounded;
+
+}
+
+
+	label="app";
+	style=rounded;
+
+}
+
+subgraph clusterenvironments {
+		node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
+	environmentdevts[label="environment.dev.ts"];
+	
+
+	environmentlocalts[label="environment.local.ts"];
+	
+
+	environmentprodts[label="environment.prod.ts"];
+	
+
+	versionts[label="version.ts"];
+	
+
+
+	label="environments";
+	style=rounded;
+
+}
+
+
+	label="src";
+	style=rounded;
+
+}
+}
