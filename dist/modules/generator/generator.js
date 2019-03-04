@@ -55,7 +55,7 @@ var Generator = /** @class */ (function () {
                 var cleanFile = files[f]
                     .replace(new RegExp("\\.", "g"), "")
                     .replace(new RegExp("-", "g"), "");
-                var links = this.getFileLinks(files[f]);
+                var links = this.getFileLinks(files[f], cleanFile);
                 dotCode += "\n" + tabs + cleanFile + "[label=\"" + files[f] + "\"];\n" + tabs + links + "\n";
             }
         }
@@ -64,6 +64,12 @@ var Generator = /** @class */ (function () {
             while (i--) {
                 if (keys[i] !== "files") {
                     var cleanKey = keys[i].replace(new RegExp("-", "g"), "");
+                    var clusterName = new RegExp("cluster" + cleanKey, "g");
+                    var existingClusterCount = (dotCode.match(clusterName) || [])
+                        .length;
+                    if (existingClusterCount > 0) {
+                        cleanKey += (existingClusterCount + 1).toString();
+                    }
                     dotCode += "\n" + tabs + "subgraph cluster" + cleanKey + " {\n" + tabs + "\t" + tabs + "\tnode [style=\"filled,rounded\", fillcolor=deepskyblue, shape=box];";
                     var subStructure = structure[keys[i]];
                     if (subStructure) {
@@ -75,20 +81,38 @@ var Generator = /** @class */ (function () {
         }
         return dotCode;
     };
-    Generator.prototype.getFileLinks = function (filename) {
+    Generator.prototype.getFileLinks = function (filename, nodeName) {
         var path = this.findPath(filename);
+        var connections = [];
+        var connectionsCode = nodeName + " -> {";
         if (path) {
             var data = fs.readFileSync(path, "utf8");
             var lines = data.split("\n");
-            var i = 10;
-            while (i < lines.length || i < 10) {
-                if (lines[i].indexOf("import") > -1 && lines[i].indexOf("from") > -1) {
-                    console.log(lines[i]);
+            // NOTE: Need to check for comments and ignore any lines after /* or /** until */ found
+            var i = lines.length;
+            while (i > 0) {
+                i--;
+                if (lines[i].indexOf("import") > -1 &&
+                    lines[i].indexOf('from ".') > -1) {
+                    var importLineSplit = lines[i].match(/(").*(")/g)[0].split("/");
+                    var importedFileName = importLineSplit[importLineSplit.length - 1]
+                        .replace(new RegExp('"', "g"), "")
+                        .replace(new RegExp("-", "g"), "")
+                        .replace(new RegExp("\\.", "g"), "");
+                    connections.push(importedFileName);
                 }
-                i++;
             }
         }
-        return "";
+        // TODO: Loop through connections and add code here
+        var c = connections.length;
+        while (c--) {
+            connectionsCode += connections[c];
+            if (c !== 0) {
+                connectionsCode += ", ";
+            }
+        }
+        connectionsCode += "}";
+        return connectionsCode;
     };
     Generator.prototype.findPath = function (filename) {
         var i = this.pathedFileList.length;
@@ -106,7 +130,7 @@ var Generator = /** @class */ (function () {
     Generator.prototype.runDot = function () {
         var _this = this;
         return new Promise(function (resolve, reject) {
-            exec("dot -Tpng " + _this.name + ".dot -o " + _this.name + ".png -Kfdp", function (err, stdout, stderr) {
+            exec("dot -Tpng " + _this.name + ".dot -o " + _this.name + ".png -Kneato", function (err, stdout, stderr) {
                 if (err) {
                     reject(err);
                 }

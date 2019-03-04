@@ -66,7 +66,7 @@ export class Generator {
           .replace(new RegExp(`\\.`, "g"), "")
           .replace(new RegExp(`-`, "g"), "");
 
-        const links = this.getFileLinks(files[f]);
+        const links = this.getFileLinks(files[f], cleanFile);
 
         dotCode += `
 ${tabs}${cleanFile}[label="${files[f]}"];
@@ -77,7 +77,16 @@ ${tabs}${links}\n`;
 
       while (i--) {
         if (keys[i] !== "files") {
-          const cleanKey = keys[i].replace(new RegExp("-", "g"), "");
+          let cleanKey = keys[i].replace(new RegExp("-", "g"), "");
+
+          const clusterName = new RegExp(`cluster${cleanKey}`, "g");
+
+          const existingClusterCount = (dotCode.match(clusterName) || [])
+            .length;
+
+          if (existingClusterCount > 0) {
+            cleanKey += (existingClusterCount + 1).toString();
+          }
 
           dotCode += `
 ${tabs}subgraph cluster${cleanKey} {
@@ -101,8 +110,10 @@ ${tabs}}\n`;
     return dotCode;
   }
 
-  private getFileLinks(filename: string): string {
+  private getFileLinks(filename: string, nodeName: string): string {
     const path = this.findPath(filename);
+    const connections: string[] = [];
+    let connectionsCode: string = `${nodeName} -> {`;
 
     if (path) {
       const data = fs.readFileSync(path, "utf8");
@@ -110,16 +121,35 @@ ${tabs}}\n`;
 
       // NOTE: Need to check for comments and ignore any lines after /* or /** until */ found
 
-      let i = 10;
-      while (i < lines.length || i < 10) {
-        if (lines[i].indexOf("import") > -1 && lines[i].indexOf("from") > -1) {
-          console.log(lines[i]);
+      let i = lines.length;
+      while (i > 0) {
+        i--;
+        if (
+          lines[i].indexOf("import") > -1 &&
+          lines[i].indexOf('from ".') > -1
+        ) {
+          const importLineSplit = lines[i].match(/(").*(")/g)[0].split("/");
+          const importedFileName = importLineSplit[importLineSplit.length - 1]
+            .replace(new RegExp('"', "g"), "")
+            .replace(new RegExp("-", "g"), "")
+            .replace(new RegExp("\\.", "g"), "");
+          connections.push(importedFileName);
         }
-        i++;
       }
     }
 
-    return "";
+    // TODO: Loop through connections and add code here
+    let c = connections.length;
+    while (c--) {
+      connectionsCode += connections[c];
+
+      if (c !== 0) {
+        connectionsCode += ", ";
+      }
+    }
+
+    connectionsCode += "}";
+    return connectionsCode;
   }
 
   private findPath(filename: string): string | undefined {
@@ -142,7 +172,7 @@ ${tabs}}\n`;
   private runDot(): Promise<void> {
     return new Promise((resolve, reject) => {
       exec(
-        `dot -Tpng ${this.name}.dot -o ${this.name}.png -Kfdp`,
+        `dot -Tpng ${this.name}.dot -o ${this.name}.png -Kneato`,
         (err: Error, stdout: unknown, stderr: unknown) => {
           if (err) {
             reject(err);

@@ -9,7 +9,7 @@ subgraph clustercomponents {
 subgraph clustercontracts {
 		node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
 contractscomponentts[label="contracts.component.ts"];
-
+contractscomponentts -> {editcontractscomponent, contractservice}
 
 
 	label="contracts";
@@ -20,7 +20,7 @@ contractscomponentts[label="contracts.component.ts"];
 subgraph clusterhome {
 		node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
 	homecomponentts[label="home.component.ts"];
-	
+	homecomponentts -> {generalservice, quickbarcomponent, dialogservice}
 
 
 	label="home";
@@ -31,7 +31,7 @@ subgraph clusterhome {
 subgraph clusteridentity {
 		node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
 		identitycomponentts[label="identity.component.ts"];
-		
+		identitycomponentts -> {keyservice, ledgerservice, identityservice, dialogservice, namespaceservice, connectionstructures, keystructures, namespacestructures, identitystructure, identityinterfaces, connectioninterfaces, keyinterfaces, namespaceinterfaces}
 
 
 	label="identity";
@@ -42,7 +42,7 @@ subgraph clusteridentity {
 subgraph clusterkeys {
 		node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
 			keyscomponentts[label="keys.component.ts"];
-			
+			keyscomponentts -> {quickbarcomponent, blockeddialogcomponent, keyservice, dialogservice, keystructures, keyinterfaces}
 
 
 	label="keys";
@@ -53,7 +53,7 @@ subgraph clusterkeys {
 subgraph clusternamespace {
 		node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
 				namespacecomponentts[label="namespace.component.ts"];
-				
+				namespacecomponentts -> {namespaceservice, ledgerservice, generalservice, dialogservice, identityservice, quickbarcomponent, namespacestructures, identitystructure, identityinterfaces, namespaceinterfaces}
 
 
 	label="namespace";
@@ -64,7 +64,7 @@ subgraph clusternamespace {
 subgraph clustersettings {
 		node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
 					settingscomponentts[label="settings.component.ts"];
-					
+					settingscomponentts -> {quickbarcomponent, connectionscomponent, defaultscomponent}
 
 
 	label="settings";
@@ -75,7 +75,7 @@ subgraph clustersettings {
 subgraph clustersigning {
 		node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
 						signingcomponentts[label="signing.component.ts"];
-						
+						signingcomponentts -> {keyservice, keyinterfaces}
 
 
 	label="signing";
@@ -86,7 +86,7 @@ subgraph clustersigning {
 subgraph clusterswagger {
 		node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
 							swaggercomponentts[label="swagger.component.ts"];
-							
+							swaggercomponentts -> {ledgerservice, connectionstructures}
 
 
 	label="swagger";
@@ -103,7 +103,7 @@ subgraph clusterswagger {
 subgraph clusterdirectives {
 		node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
 	webviewdirectivets[label="webview.directive.ts"];
-	
+	webviewdirectivets -> {}
 
 
 	label="directives";
@@ -114,16 +114,16 @@ subgraph clusterdirectives {
 subgraph clusterproviders {
 		node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
 		databaseservicets[label="database.service.ts"];
-		
+		databaseservicets -> {electronservice, workspaceinterfaces, settingsstructures}
 
 		electronservicets[label="electron.service.ts"];
-		
+		electronservicets -> {}
 
 		saveservicets[label="save.service.ts"];
-		
+		saveservicets -> {savecontractdialogcomponent, contractservice, dialogservice, contractstructures, errorsclasses, dialoginterfaces, workflowinterfaces, contractinterfaces}
 
 		uploadservicets[label="upload.service.ts"];
-		
+		uploadservicets -> {ledgerservice, dialogservice, contractstructures, errorsclasses, connectioninterfaces, identityinterfaces, namespaceinterfaces, contractinterfaces, namespaceservice}
 
 
 	label="providers";
@@ -136,7 +136,7 @@ subgraph clustershared {
 			subgraph clusterclasses {
 								node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
 			errorsclassests[label="errors.classes.ts"];
-			
+			errorsclassests -> {}
 
 
 				label="classes";
@@ -144,12 +144,12 @@ subgraph clustershared {
 
 			}
 
-			subgraph clustercomponents {
+			subgraph clustercomponents2 {
 								node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
 				subgraph clusterconsole {
 										node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
 				consolecomponentts[label="console.component.ts"];
-				
+				consolecomponentts -> {consoleservice, electronservice, generalservice}
 
 
 					label="console";
@@ -160,7 +160,7 @@ subgraph clustershared {
 				subgraph clustereditcontracts {
 										node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
 					editcontractscomponentts[label="edit-contracts.component.ts"];
-					
+					editcontractscomponentts -> {monacoeditorcomponent, dataservice, generalservice, electronservice, saveservice, quickbarcomponent, dialogservice, fileservice, contractstructures, errorsclasses, workflowservice, contractinterfaces, contractservice}
 
 
 					label="edit-contracts";
@@ -171,7 +171,7 @@ subgraph clustershared {
 				subgraph clusterinfocontracts {
 										node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
 						infocontractscomponentts[label="info-contracts.component.ts"];
-						
+						infocontractscomponentts -> {contractservice, ledgerservice, namespaceservice, quickbarcomponent, dialogservice, contractstructures, connectionstructures, namespacestructures, transactionstructures, identityinterfaces, namespaceinterfaces, identityservice, identitystructure}
 
 
 					label="info-contracts";
@@ -182,7 +182,7 @@ subgraph clustershared {
 				subgraph clustermonacoeditor {
 										node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
 							monacoeditorcomponentts[label="monaco-editor.component.ts"];
-							
+							monacoeditorcomponentts -> {electronservice}
 
 
 					label="monaco-editor";
@@ -193,7 +193,7 @@ subgraph clustershared {
 				subgraph clusterquickbar {
 										node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
 								quickbarcomponentts[label="quick-bar.component.ts"];
-								
+								quickbarcomponentts -> {electronservice, generalservice, databaseservice, dialogservice, workspaceinterfaces, userinterfaces, userservice}
 
 
 					label="quick-bar";
@@ -204,7 +204,7 @@ subgraph clustershared {
 				subgraph clusterruncontracts {
 										node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
 									runcontractscomponentts[label="run-contracts.component.ts"];
-									
+									runcontractscomponentts -> {namespaceservice, ledgerservice, dataservice, keyservice, generalservice, quickbarcomponent, electronservice, dialogservice, connectionstructures, namespacestructures, defaultstructures, contractstructures, identityservice, identitystructure, identityinterfaces, namespaceinterfaces, keyinterfaces, connectioninterfaces, defaultinterfaces}
 
 
 					label="run-contracts";
@@ -212,12 +212,12 @@ subgraph clustershared {
 
 				}
 
-				subgraph clustersettings {
+				subgraph clustersettings2 {
 										node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
 										subgraph clusterabout {
 																						node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
 										aboutcomponentts[label="about.component.ts"];
-										
+										aboutcomponentts -> {version, apiservice, electronservice, workflowservice}
 
 
 											label="about";
@@ -228,7 +228,7 @@ subgraph clustershared {
 										subgraph clusteraccount {
 																						node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
 											accountcomponentts[label="account.component.ts"];
-											
+											accountcomponentts -> {dialogservice, userinterfaces, userservice, userstructure, electronservice, apiservice}
 
 
 											label="account";
@@ -239,7 +239,7 @@ subgraph clustershared {
 										subgraph clusterbackup {
 																						node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
 												backupcomponentts[label="backup.component.ts"];
-												
+												backupcomponentts -> {backupservice, electronservice, dialogservice}
 
 
 											label="backup";
@@ -250,7 +250,7 @@ subgraph clustershared {
 										subgraph clusterconnections {
 																						node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
 													connectionscomponentts[label="connections.component.ts"];
-													
+													connectionscomponentts -> {ledgerservice, connectionstructures}
 
 
 											label="connections";
@@ -261,7 +261,7 @@ subgraph clustershared {
 										subgraph clusterdefaults {
 																						node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
 														defaultscomponentts[label="defaults.component.ts"];
-														
+														defaultscomponentts -> {ledgerservice, defaultsservice, namespaceservice, namespacestructures, defaultstructures, identityinterfaces, identityservice, generalservice, connectioninterfaces, defaultinterfaces, namespaceinterfaces}
 
 
 											label="defaults";
@@ -272,7 +272,7 @@ subgraph clustershared {
 										subgraph clusterdeveloper {
 																						node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
 															developercomponentts[label="developer.component.ts"];
-															
+															developercomponentts -> {databaseservice, electronservice, dialogservice, workspaceinterfaces, userservice}
 
 
 											label="developer";
@@ -283,7 +283,7 @@ subgraph clustershared {
 										subgraph clustergeneral {
 																						node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
 																generalcomponentts[label="general.component.ts"];
-																
+																generalcomponentts -> {generalservice, settingsstructures}
 
 
 											label="general";
@@ -294,7 +294,7 @@ subgraph clustershared {
 										subgraph clusterrestore {
 																						node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
 																	restorecomponentts[label="restore.component.ts"];
-																	
+																	restorecomponentts -> {electronservice, backupservice, dialogservice}
 
 
 											label="restore";
@@ -305,7 +305,7 @@ subgraph clustershared {
 										subgraph clusterupdate {
 																						node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
 																		updatecomponentts[label="update.component.ts"];
-																		
+																		updatecomponentts -> {}
 
 
 											label="update";
@@ -316,7 +316,7 @@ subgraph clustershared {
 										subgraph clusterworkspace {
 																						node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
 																			workspacecomponentts[label="workspace.component.ts"];
-																			
+																			workspacecomponentts -> {databaseservice, dialogservice, electronservice, workspaceinterfaces}
 
 
 											label="workspace";
@@ -333,7 +333,7 @@ subgraph clustershared {
 				subgraph clusterworkflowcontracts {
 										node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
 											workflowcontractscomponentts[label="workflow-contracts.component.ts"];
-											
+											workflowcontractscomponentts -> {workflowinterfaces, workflowservice, contractservice, identityinterfaces, identityservice, contractinterfaces, uploadservice}
 
 
 					label="workflow-contracts";
@@ -344,7 +344,7 @@ subgraph clustershared {
 				subgraph clusterworkflowcreate {
 										node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
 												workflowcreatecomponentts[label="workflow-create.component.ts"];
-												
+												workflowcreatecomponentts -> {workflowstructures, identityservice, identityinterfaces, workflowservice, workflowinterfaces}
 
 
 					label="workflow-create";
@@ -363,7 +363,7 @@ subgraph clustershared {
 					subgraph clusteradvancedconfirmdialog {
 												node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
 					advancedconfirmdialogcomponentts[label="advanced-confirm-dialog.component.ts"];
-					
+					advancedconfirmdialogcomponentts -> {}
 
 
 						label="advanced-confirm-dialog";
@@ -374,7 +374,7 @@ subgraph clustershared {
 					subgraph clusterblockeddialog {
 												node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
 						blockeddialogcomponentts[label="blocked-dialog.component.ts"];
-						
+						blockeddialogcomponentts -> {}
 
 
 						label="blocked-dialog";
@@ -385,7 +385,7 @@ subgraph clustershared {
 					subgraph clusterconfirmdialog {
 												node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
 							confirmdialogcomponentts[label="confirm-dialog.component.ts"];
-							
+							confirmdialogcomponentts -> {}
 
 
 						label="confirm-dialog";
@@ -396,7 +396,7 @@ subgraph clustershared {
 					subgraph clustercontractinfodialog {
 												node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
 								contractinfodialogcomponentts[label="contract-info-dialog.component.ts"];
-								
+								contractinfodialogcomponentts -> {databaseservice, contractstructures, connectionstructures, identityservice, identitystructure}
 
 
 						label="contract-info-dialog";
@@ -407,7 +407,7 @@ subgraph clustershared {
 					subgraph clustererrordialog {
 												node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
 									errordialogcomponentts[label="error-dialog.component.ts"];
-									
+									errordialogcomponentts -> {}
 
 
 						label="error-dialog";
@@ -418,7 +418,7 @@ subgraph clustershared {
 					subgraph clusterinfodialog {
 												node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
 										infodialogcomponentts[label="info-dialog.component.ts"];
-										
+										infodialogcomponentts -> {databaseservice, contractstructures, connectionstructures, identityservice, identitystructure}
 
 
 						label="info-dialog";
@@ -429,7 +429,7 @@ subgraph clustershared {
 					subgraph clusterinputdialog {
 												node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
 											inputdialogcomponentts[label="input-dialog.component.ts"];
-											
+											inputdialogcomponentts -> {}
 
 
 						label="input-dialog";
@@ -440,7 +440,7 @@ subgraph clustershared {
 					subgraph clusterlogindialog {
 												node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
 												logindialogcomponentts[label="login-dialog.component.ts"];
-												
+												logindialogcomponentts -> {userinterfaces}
 
 
 						label="login-dialog";
@@ -451,7 +451,7 @@ subgraph clustershared {
 					subgraph clustersavecontractdialog {
 												node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
 													savecontractdialogcomponentts[label="save-contract-dialog.component.ts"];
-													
+													savecontractdialogcomponentts -> {}
 
 
 						label="save-contract-dialog";
@@ -462,7 +462,7 @@ subgraph clustershared {
 					subgraph clusterwarningdialog {
 												node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
 														warningdialogcomponentts[label="warning-dialog.component.ts"];
-														
+														warningdialogcomponentts -> {}
 
 
 						label="warning-dialog";
@@ -479,7 +479,7 @@ subgraph clustershared {
 			subgraph clusterenums {
 								node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
 						keyenumts[label="key.enum.ts"];
-						
+						keyenumts -> {}
 
 
 				label="enums";
@@ -490,40 +490,40 @@ subgraph clustershared {
 			subgraph clusterinterfaces {
 								node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
 							connectioninterfacests[label="connection.interfaces.ts"];
-							
+							connectioninterfacests -> {}
 
 							contractinterfacests[label="contract.interfaces.ts"];
-							
+							contractinterfacests -> {connectioninterfaces, identityinterfaces}
 
 							defaultinterfacests[label="default.interfaces.ts"];
-							
+							defaultinterfacests -> {}
 
 							dialoginterfacests[label="dialog.interfaces.ts"];
-							
+							dialoginterfacests -> {}
 
 							identityinterfacests[label="identity.interfaces.ts"];
-							
+							identityinterfacests -> {}
 
 							keyinterfacests[label="key.interfaces.ts"];
-							
+							keyinterfacests -> {}
 
 							namespaceinterfacests[label="namespace.interfaces.ts"];
-							
+							namespaceinterfacests -> {}
 
 							settingsinterfacests[label="settings.interfaces.ts"];
-							
+							settingsinterfacests -> {}
 
 							transactioninterfacests[label="transaction.interfaces.ts"];
-							
+							transactioninterfacests -> {}
 
 							userinterfacests[label="user.interfaces.ts"];
-							
+							userinterfacests -> {}
 
 							workflowinterfacests[label="workflow.interfaces.ts"];
-							
+							workflowinterfacests -> {}
 
 							workspaceinterfacests[label="workspace.interfaces.ts"];
-							
+							workspaceinterfacests -> {}
 
 
 				label="interfaces";
@@ -534,10 +534,10 @@ subgraph clustershared {
 			subgraph clusterpipes {
 								node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
 								namespipets[label="names.pipe.ts"];
-								
+								namespipets -> {ledgerservice, connectionstructures, identityservice, identityinterfaces, connectioninterfaces}
 
 								ntobpipets[label="ntob.pipe.ts"];
-								
+								ntobpipets -> {}
 
 
 				label="pipes";
@@ -548,55 +548,55 @@ subgraph clustershared {
 			subgraph clusterservices {
 								node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
 									apiservicets[label="api.service.ts"];
-									
+									apiservicets -> {userinterfaces}
 
 									backupservicets[label="backup.service.ts"];
-									
+									backupservicets -> {databaseservice, electronservice, generalservice, dialogservice}
 
 									configservicets[label="config.service.ts"];
-									
+									configservicets -> {electronservice}
 
 									consoleservicets[label="console.service.ts"];
-									
+									consoleservicets -> {electronservice}
 
 									contractservicets[label="contract.service.ts"];
-									
+									contractservicets -> {databaseservice, uploadservice, identityservice, contractstructures, contractinterfaces, identityinterfaces}
 
 									dataservicets[label="data.service.ts"];
-									
+									dataservicets -> {defaultsservice, keyservice, namespaceservice, ledgerservice, contractservice, defaultstructures, connectionstructures, contractstructures, keystructures, namespacestructures}
 
 									defaultsservicets[label="defaults.service.ts"];
-									
+									defaultsservicets -> {databaseservice, defaultstructures}
 
 									dialogservicets[label="dialog.service.ts"];
-									
+									dialogservicets -> {errordialogcomponent, advancedconfirmdialogcomponent, confirmdialogcomponent, warningdialogcomponent, infodialogcomponent, inputdialogcomponent, contractinfodialogcomponent, logindialogcomponent, contractstructures, userinterfaces, blockeddialogcomponent}
 
 									fileservicets[label="file.service.ts"];
-									
+									fileservicets -> {electronservice}
 
 									generalservicets[label="general.service.ts"];
-									
+									generalservicets -> {electronservice, version, databaseservice, settingsstructures}
 
 									identityservicets[label="identity.service.ts"];
-									
+									identityservicets -> {databaseservice, ledgerservice, keyservice, identityinterfaces, connectioninterfaces}
 
 									keyservicets[label="key.service.ts"];
-									
+									keyservicets -> {databaseservice, keyinterfaces}
 
 									ledgerservicets[label="ledger.service.ts"];
-									
+									ledgerservicets -> {databaseservice, electronservice, connectionstructures, identityinterfaces, keyservice, keyinterfaces}
 
 									namespaceservicets[label="namespace.service.ts"];
-									
+									namespaceservicets -> {generalservice, databaseservice, identityservice, ledgerservice, namespacestructures, transactionstructures, identitystructure, namespaceinterfaces, identityinterfaces, connectioninterfaces}
 
 									settingsservicets[label="settings.service.ts"];
-									
+									settingsservicets -> {databaseservice, settingsstructures}
 
 									userservicets[label="user.service.ts"];
-									
+									userservicets -> {userinterfaces, apiservice, electronservice, userstructure}
 
 									workflowservicets[label="workflow.service.ts"];
-									
+									workflowservicets -> {workflowinterfaces, databaseservice, contractinterfaces, saveservice, dialogservice, uploadservice, identityinterfaces}
 
 
 				label="services";
@@ -607,34 +607,34 @@ subgraph clustershared {
 			subgraph clusterstructures {
 								node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
 										connectionstructurests[label="connection.structures.ts"];
-										
+										connectionstructurests -> {connectioninterfaces}
 
 										contractstructurests[label="contract.structures.ts"];
-										
+										contractstructurests -> {}
 
 										defaultstructurests[label="default.structures.ts"];
-										
+										defaultstructurests -> {defaultinterfaces}
 
 										identitystructurets[label="identity.structure.ts"];
-										
+										identitystructurets -> {}
 
 										keystructurests[label="key.structures.ts"];
-										
+										keystructurests -> {}
 
 										namespacestructurests[label="namespace.structures.ts"];
-										
+										namespacestructurests -> {namespaceinterfaces}
 
 										settingsstructurests[label="settings.structures.ts"];
-										
+										settingsstructurests -> {}
 
 										transactionstructurests[label="transaction.structures.ts"];
-										
+										transactionstructurests -> {transactioninterfaces}
 
 										userstructurets[label="user.structure.ts"];
-										
+										userstructurets -> {userinterfaces}
 
 										workflowstructurests[label="workflow.structures.ts"];
-										
+										workflowstructurests -> {workflowinterfaces}
 
 
 				label="structures";
@@ -657,16 +657,16 @@ subgraph clustershared {
 subgraph clusterenvironments {
 		node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
 	environmentdevts[label="environment.dev.ts"];
-	
+	environmentdevts -> {}
 
 	environmentlocalts[label="environment.local.ts"];
-	
+	environmentlocalts -> {}
 
 	environmentprodts[label="environment.prod.ts"];
-	
+	environmentprodts -> {}
 
 	versionts[label="version.ts"];
-	
+	versionts -> {}
 
 
 	label="environments";
