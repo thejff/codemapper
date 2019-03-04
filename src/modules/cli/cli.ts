@@ -94,8 +94,11 @@ export class CLI implements ICLI {
   }
 
   private debug(): void {
+    console.log(`${__dirname}/../../../test`);
+
     this.mapper = new Mapper(
-      "G:/Code/Just For Fun Foundation/dependency-mapper/test/",
+      // "G:/Code/Just For Fun Foundation/dependency-mapper/test/",
+      `${__dirname}/../../../test`,
       this.excludeNodeModules
     );
 

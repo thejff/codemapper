@@ -476,43 +476,54 @@ subgraph clustershared {
 
 			}
 
+			subgraph clusterenums {
+								node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
+						keyenumts[label="key.enum.ts"];
+						
+
+
+				label="enums";
+				style=rounded;
+
+			}
+
 			subgraph clusterinterfaces {
 								node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
-						connectioninterfacests[label="connection.interfaces.ts"];
-						
+							connectioninterfacests[label="connection.interfaces.ts"];
+							
 
-						contractinterfacests[label="contract.interfaces.ts"];
-						
+							contractinterfacests[label="contract.interfaces.ts"];
+							
 
-						defaultinterfacests[label="default.interfaces.ts"];
-						
+							defaultinterfacests[label="default.interfaces.ts"];
+							
 
-						dialoginterfacests[label="dialog.interfaces.ts"];
-						
+							dialoginterfacests[label="dialog.interfaces.ts"];
+							
 
-						identityinterfacests[label="identity.interfaces.ts"];
-						
+							identityinterfacests[label="identity.interfaces.ts"];
+							
 
-						keyinterfacests[label="key.interfaces.ts"];
-						
+							keyinterfacests[label="key.interfaces.ts"];
+							
 
-						namespaceinterfacests[label="namespace.interfaces.ts"];
-						
+							namespaceinterfacests[label="namespace.interfaces.ts"];
+							
 
-						settingsinterfacests[label="settings.interfaces.ts"];
-						
+							settingsinterfacests[label="settings.interfaces.ts"];
+							
 
-						transactioninterfacests[label="transaction.interfaces.ts"];
-						
+							transactioninterfacests[label="transaction.interfaces.ts"];
+							
 
-						userinterfacests[label="user.interfaces.ts"];
-						
+							userinterfacests[label="user.interfaces.ts"];
+							
 
-						workflowinterfacests[label="workflow.interfaces.ts"];
-						
+							workflowinterfacests[label="workflow.interfaces.ts"];
+							
 
-						workspaceinterfacests[label="workspace.interfaces.ts"];
-						
+							workspaceinterfacests[label="workspace.interfaces.ts"];
+							
 
 
 				label="interfaces";
@@ -522,11 +533,11 @@ subgraph clustershared {
 
 			subgraph clusterpipes {
 								node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
-							namespipets[label="names.pipe.ts"];
-							
+								namespipets[label="names.pipe.ts"];
+								
 
-							ntobpipets[label="ntob.pipe.ts"];
-							
+								ntobpipets[label="ntob.pipe.ts"];
+								
 
 
 				label="pipes";
@@ -536,56 +547,56 @@ subgraph clustershared {
 
 			subgraph clusterservices {
 								node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
-								apiservicets[label="api.service.ts"];
-								
+									apiservicets[label="api.service.ts"];
+									
 
-								backupservicets[label="backup.service.ts"];
-								
+									backupservicets[label="backup.service.ts"];
+									
 
-								configservicets[label="config.service.ts"];
-								
+									configservicets[label="config.service.ts"];
+									
 
-								consoleservicets[label="console.service.ts"];
-								
+									consoleservicets[label="console.service.ts"];
+									
 
-								contractservicets[label="contract.service.ts"];
-								
+									contractservicets[label="contract.service.ts"];
+									
 
-								dataservicets[label="data.service.ts"];
-								
+									dataservicets[label="data.service.ts"];
+									
 
-								defaultsservicets[label="defaults.service.ts"];
-								
+									defaultsservicets[label="defaults.service.ts"];
+									
 
-								dialogservicets[label="dialog.service.ts"];
-								
+									dialogservicets[label="dialog.service.ts"];
+									
 
-								fileservicets[label="file.service.ts"];
-								
+									fileservicets[label="file.service.ts"];
+									
 
-								generalservicets[label="general.service.ts"];
-								
+									generalservicets[label="general.service.ts"];
+									
 
-								identityservicets[label="identity.service.ts"];
-								
+									identityservicets[label="identity.service.ts"];
+									
 
-								keyservicets[label="key.service.ts"];
-								
+									keyservicets[label="key.service.ts"];
+									
 
-								ledgerservicets[label="ledger.service.ts"];
-								
+									ledgerservicets[label="ledger.service.ts"];
+									
 
-								namespaceservicets[label="namespace.service.ts"];
-								
+									namespaceservicets[label="namespace.service.ts"];
+									
 
-								settingsservicets[label="settings.service.ts"];
-								
+									settingsservicets[label="settings.service.ts"];
+									
 
-								userservicets[label="user.service.ts"];
-								
+									userservicets[label="user.service.ts"];
+									
 
-								workflowservicets[label="workflow.service.ts"];
-								
+									workflowservicets[label="workflow.service.ts"];
+									
 
 
 				label="services";
@@ -595,35 +606,35 @@ subgraph clustershared {
 
 			subgraph clusterstructures {
 								node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
-									connectionstructurests[label="connection.structures.ts"];
-									
+										connectionstructurests[label="connection.structures.ts"];
+										
 
-									contractstructurests[label="contract.structures.ts"];
-									
+										contractstructurests[label="contract.structures.ts"];
+										
 
-									defaultstructurests[label="default.structures.ts"];
-									
+										defaultstructurests[label="default.structures.ts"];
+										
 
-									identitystructurets[label="identity.structure.ts"];
-									
+										identitystructurets[label="identity.structure.ts"];
+										
 
-									keystructurests[label="key.structures.ts"];
-									
+										keystructurests[label="key.structures.ts"];
+										
 
-									namespacestructurests[label="namespace.structures.ts"];
-									
+										namespacestructurests[label="namespace.structures.ts"];
+										
 
-									settingsstructurests[label="settings.structures.ts"];
-									
+										settingsstructurests[label="settings.structures.ts"];
+										
 
-									transactionstructurests[label="transaction.structures.ts"];
-									
+										transactionstructurests[label="transaction.structures.ts"];
+										
 
-									userstructurets[label="user.structure.ts"];
-									
+										userstructurets[label="user.structure.ts"];
+										
 
-									workflowstructurests[label="workflow.structures.ts"];
-									
+										workflowstructurests[label="workflow.structures.ts"];
+										
 
 
 				label="structures";

@@ -53,8 +53,8 @@ var Generator = /** @class */ (function () {
             var f = files.length;
             while (f--) {
                 var cleanFile = files[f]
-                    .replace(new RegExp(/\./s, "g"), "")
-                    .replace(new RegExp(/-/s, "g"), "");
+                    .replace(new RegExp("\\.", "g"), "")
+                    .replace(new RegExp("-", "g"), "");
                 var links = this.getFileLinks(files[f]);
                 dotCode += "\n" + tabs + cleanFile + "[label=\"" + files[f] + "\"];\n" + tabs + links + "\n";
             }
@@ -66,7 +66,6 @@ var Generator = /** @class */ (function () {
                     var cleanKey = keys[i].replace(new RegExp("-", "g"), "");
                     dotCode += "\n" + tabs + "subgraph cluster" + cleanKey + " {\n" + tabs + "\t" + tabs + "\tnode [style=\"filled,rounded\", fillcolor=deepskyblue, shape=box];";
                     var subStructure = structure[keys[i]];
-                    // console.log(keys[i]);
                     if (subStructure) {
                         dotCode = this.addSubgraphs(dotCode, subStructure, depth++);
                     }
@@ -80,7 +79,14 @@ var Generator = /** @class */ (function () {
         var path = this.findPath(filename);
         if (path) {
             var data = fs.readFileSync(path, "utf8");
-            console.log(data);
+            var lines = data.split("\n");
+            var i = 10;
+            while (i < lines.length || i < 10) {
+                if (lines[i].indexOf("import") > -1 && lines[i].indexOf("from") > -1) {
+                    console.log(lines[i]);
+                }
+                i++;
+            }
         }
         return "";
     };

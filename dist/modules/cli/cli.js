@@ -80,7 +80,10 @@ var CLI = /** @class */ (function () {
         });
     };
     CLI.prototype.debug = function () {
-        this.mapper = new mapper_1.Mapper("G:/Code/Just For Fun Foundation/dependency-mapper/test/", this.excludeNodeModules);
+        console.log(__dirname + "/../../../test");
+        this.mapper = new mapper_1.Mapper(
+        // "G:/Code/Just For Fun Foundation/dependency-mapper/test/",
+        __dirname + "/../../../test", this.excludeNodeModules);
         this.mapper.startProcessing();
     };
     CLI.prototype.mapCurrentDirectory = function () {

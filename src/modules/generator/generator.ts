@@ -63,8 +63,8 @@ export class Generator {
       let f = files.length;
       while (f--) {
         const cleanFile = files[f]
-          .replace(new RegExp(/\./s, "g"), "")
-          .replace(new RegExp(/-/s, "g"), "");
+          .replace(new RegExp(`\\.`, "g"), "")
+          .replace(new RegExp(`-`, "g"), "");
 
         const links = this.getFileLinks(files[f]);
 
@@ -84,8 +84,6 @@ ${tabs}subgraph cluster${cleanKey} {
 ${tabs}\t${tabs}\tnode [style="filled,rounded", fillcolor=deepskyblue, shape=box];`;
 
           const subStructure = (structure as any)[keys[i]];
-
-          // console.log(keys[i]);
 
           if (subStructure) {
             dotCode = this.addSubgraphs(dotCode, subStructure, depth++);
@@ -108,7 +106,17 @@ ${tabs}}\n`;
 
     if (path) {
       const data = fs.readFileSync(path, "utf8");
-      console.log(data);
+      const lines = data.split(`\n`);
+
+      // NOTE: Need to check for comments and ignore any lines after /* or /** until */ found
+
+      let i = 10;
+      while (i < lines.length || i < 10) {
+        if (lines[i].indexOf("import") > -1 && lines[i].indexOf("from") > -1) {
+          console.log(lines[i]);
+        }
+        i++;
+      }
     }
 
     return "";

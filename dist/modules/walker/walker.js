@@ -96,8 +96,8 @@ var Walker = /** @class */ (function () {
             var f = fileStructure.length;
             while (f--) {
                 this.completeCleanedFileList.push(fileStructure[f]
-                    .replace(new RegExp(/\./s, "g"), "")
-                    .replace(new RegExp(/-/s, "g"), ""));
+                    .replace(new RegExp("\\.", "g"), "")
+                    .replace(new RegExp("-", "g"), ""));
                 this.completePathedFileList.push(path + "/" + fileStructure[f]);
             }
             fileCount = fileStructure.length;
