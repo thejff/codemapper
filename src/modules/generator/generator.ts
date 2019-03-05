@@ -41,7 +41,8 @@ export class Generator {
     return new Promise((resolve, reject) => {
       let dotCode = `digraph ${this.name} {
         splines="curved";
-        K=200;\n`;
+        node [nodesep=1000.0];
+        graph [overlap=scalexy; splines=true];\n`;
       dotCode = this.addSubgraphs(dotCode, this.structure);
       dotCode = this.addConnections(dotCode);
       dotCode += "}";
