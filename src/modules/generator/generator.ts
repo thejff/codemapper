@@ -12,6 +12,7 @@ export class Generator {
     "purple",
     "chocolate2",
     "gold",
+    "black",
     "deeppink2",
     "firebrick2",
     "limegreen",
