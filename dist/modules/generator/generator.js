@@ -9,6 +9,8 @@ var Generator = /** @class */ (function () {
         this.cleanedFileList = cleanedFileList;
         this.pathedFileList = pathedFileList;
         this.cleanNameHolder = [];
+        this.connections = [];
+        this.tabs = "";
         this.generate();
     }
     Generator.prototype.generate = function () {
@@ -20,7 +22,6 @@ var Generator = /** @class */ (function () {
             })
                 .then(function () {
                 return _this.runDot();
-                resolve();
             })
                 .then(function () {
                 resolve();
@@ -33,8 +34,9 @@ var Generator = /** @class */ (function () {
     Generator.prototype.convertStructToDot = function () {
         var _this = this;
         return new Promise(function (resolve, reject) {
-            var dotCode = "digraph " + _this.name + " {\n";
+            var dotCode = "digraph " + _this.name + " {\n        splines=\"curved\";\n        K=200;\n";
             dotCode = _this.addSubgraphs(dotCode, _this.structure);
+            dotCode = _this.addConnections(dotCode);
             dotCode += "}";
             resolve(dotCode);
         });
@@ -42,10 +44,9 @@ var Generator = /** @class */ (function () {
     Generator.prototype.addSubgraphs = function (dotCode, structure, depth) {
         if (depth === void 0) { depth = 0; }
         var keys = Object.keys(structure);
-        var tabs = "";
         var j = depth;
         while (j--) {
-            tabs += "\t";
+            this.tabs += "\t";
         }
         // If only one key, it's the file array
         if (keys.length === 1 && keys[0] === "files") {
@@ -55,8 +56,8 @@ var Generator = /** @class */ (function () {
                 var cleanFile = files[f]
                     .replace(new RegExp("\\.", "g"), "")
                     .replace(new RegExp("-", "g"), "");
-                var links = this.getFileLinks(files[f], cleanFile);
-                dotCode += "\n" + tabs + cleanFile + "[label=\"" + files[f] + "\"];\n" + tabs + links + "\n";
+                this.getFileLinks(files[f], cleanFile);
+                dotCode += "\n" + this.tabs + cleanFile + "[label=\"" + files[f] + "\"];";
             }
         }
         else {
@@ -70,12 +71,12 @@ var Generator = /** @class */ (function () {
                     if (existingClusterCount > 0) {
                         cleanKey += (existingClusterCount + 1).toString();
                     }
-                    dotCode += "\n" + tabs + "subgraph cluster" + cleanKey + " {\n" + tabs + "\t" + tabs + "\tnode [style=\"filled,rounded\", fillcolor=deepskyblue, shape=box];";
+                    dotCode += "\n" + this.tabs + "subgraph cluster" + cleanKey + " {\n" + this.tabs + "\t" + this.tabs + "\tnode [style=\"filled,rounded\", fillcolor=deepskyblue, shape=box];";
                     var subStructure = structure[keys[i]];
                     if (subStructure) {
                         dotCode = this.addSubgraphs(dotCode, subStructure, depth++);
                     }
-                    dotCode += "\n\n" + tabs + "\tlabel=\"" + keys[i] + "\";\n" + tabs + "\tstyle=rounded;\n\n" + tabs + "}\n";
+                    dotCode += "\n\n" + this.tabs + "\tlabel=\"" + keys[i] + "\";\n" + this.tabs + "\tstyle=rounded;\n\n" + this.tabs + "}\n";
                 }
             }
         }
@@ -90,8 +91,7 @@ var Generator = /** @class */ (function () {
             var lines = data.split("\n");
             // NOTE: Need to check for comments and ignore any lines after /* or /** until */ found
             var i = lines.length;
-            while (i > 0) {
-                i--;
+            while (i--) {
                 if (lines[i].indexOf("import") > -1 &&
                     lines[i].indexOf('from ".') > -1) {
                     var importLineSplit = lines[i].match(/(").*(")/g)[0].split("/");
@@ -99,11 +99,10 @@ var Generator = /** @class */ (function () {
                         .replace(new RegExp('"', "g"), "")
                         .replace(new RegExp("-", "g"), "")
                         .replace(new RegExp("\\.", "g"), "");
-                    connections.push(importedFileName);
+                    connections.push(importedFileName + "ts");
                 }
             }
         }
-        // TODO: Loop through connections and add code here
         var c = connections.length;
         while (c--) {
             connectionsCode += connections[c];
@@ -112,7 +111,17 @@ var Generator = /** @class */ (function () {
             }
         }
         connectionsCode += "}";
-        return connectionsCode;
+        if (!connectionsCode.match(new RegExp("{}"))) {
+            this.connections.push(connectionsCode);
+        }
+        return;
+    };
+    Generator.prototype.addConnections = function (dotCode) {
+        var i = this.connections.length;
+        while (i--) {
+            dotCode += "\n" + this.tabs + this.connections[i] + "\n";
+        }
+        return dotCode;
     };
     Generator.prototype.findPath = function (filename) {
         var i = this.pathedFileList.length;
@@ -124,13 +133,10 @@ var Generator = /** @class */ (function () {
         }
         return;
     };
-    Generator.prototype.addNode = function () {
-        return "";
-    };
     Generator.prototype.runDot = function () {
         var _this = this;
         return new Promise(function (resolve, reject) {
-            exec("dot -Tpng " + _this.name + ".dot -o " + _this.name + ".png -Kneato", function (err, stdout, stderr) {
+            exec("dot -Tpng " + _this.name + ".dot -o " + _this.name + ".png -Kfdp", function (err, stdout, stderr) {
                 if (err) {
                     reject(err);
                 }
