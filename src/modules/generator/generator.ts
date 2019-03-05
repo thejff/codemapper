@@ -6,6 +6,10 @@ const fs = require("fs");
 export class Generator {
   private cleanNameHolder: string[] = [];
 
+  private connections: string[] = [];
+
+  private tabs = "";
+
   constructor(
     private structure: IWalkerStructure,
     private name: string,
@@ -23,7 +27,6 @@ export class Generator {
         })
         .then(() => {
           return this.runDot();
-          resolve();
         })
         .then(() => {
           resolve();
@@ -36,8 +39,11 @@ export class Generator {
 
   private convertStructToDot(): Promise<string> {
     return new Promise((resolve, reject) => {
-      let dotCode = `digraph ${this.name} {\n`;
+      let dotCode = `digraph ${this.name} {
+        splines="curved";
+        K=200;\n`;
       dotCode = this.addSubgraphs(dotCode, this.structure);
+      dotCode = this.addConnections(dotCode);
       dotCode += "}";
       resolve(dotCode);
     });
@@ -50,10 +56,9 @@ export class Generator {
   ): string {
     const keys = Object.keys(structure);
 
-    let tabs = "";
     let j = depth;
     while (j--) {
-      tabs += "\t";
+      this.tabs += "\t";
     }
 
     // If only one key, it's the file array
@@ -66,11 +71,10 @@ export class Generator {
           .replace(new RegExp(`\\.`, "g"), "")
           .replace(new RegExp(`-`, "g"), "");
 
-        const links = this.getFileLinks(files[f], cleanFile);
+        this.getFileLinks(files[f], cleanFile);
 
         dotCode += `
-${tabs}${cleanFile}[label="${files[f]}"];
-${tabs}${links}\n`;
+${this.tabs}${cleanFile}[label="${files[f]}"];`;
       }
     } else {
       let i = keys.length;
@@ -89,8 +93,10 @@ ${tabs}${links}\n`;
           }
 
           dotCode += `
-${tabs}subgraph cluster${cleanKey} {
-${tabs}\t${tabs}\tnode [style="filled,rounded", fillcolor=deepskyblue, shape=box];`;
+${this.tabs}subgraph cluster${cleanKey} {
+${this.tabs}\t${
+            this.tabs
+          }\tnode [style="filled,rounded", fillcolor=deepskyblue, shape=box];`;
 
           const subStructure = (structure as any)[keys[i]];
 
@@ -100,9 +106,9 @@ ${tabs}\t${tabs}\tnode [style="filled,rounded", fillcolor=deepskyblue, shape=box
 
           dotCode += `
 
-${tabs}\tlabel="${keys[i]}";
-${tabs}\tstyle=rounded;\n
-${tabs}}\n`;
+${this.tabs}\tlabel="${keys[i]}";
+${this.tabs}\tstyle=rounded;\n
+${this.tabs}}\n`;
         }
       }
     }
@@ -110,7 +116,7 @@ ${tabs}}\n`;
     return dotCode;
   }
 
-  private getFileLinks(filename: string, nodeName: string): string {
+  private getFileLinks(filename: string, nodeName: string): void {
     const path = this.findPath(filename);
     const connections: string[] = [];
     let connectionsCode: string = `${nodeName} -> {`;
@@ -122,8 +128,7 @@ ${tabs}}\n`;
       // NOTE: Need to check for comments and ignore any lines after /* or /** until */ found
 
       let i = lines.length;
-      while (i > 0) {
-        i--;
+      while (i--) {
         if (
           lines[i].indexOf("import") > -1 &&
           lines[i].indexOf('from ".') > -1
@@ -133,12 +138,11 @@ ${tabs}}\n`;
             .replace(new RegExp('"', "g"), "")
             .replace(new RegExp("-", "g"), "")
             .replace(new RegExp("\\.", "g"), "");
-          connections.push(importedFileName);
+          connections.push(importedFileName + "ts");
         }
       }
     }
 
-    // TODO: Loop through connections and add code here
     let c = connections.length;
     while (c--) {
       connectionsCode += connections[c];
@@ -149,7 +153,23 @@ ${tabs}}\n`;
     }
 
     connectionsCode += "}";
-    return connectionsCode;
+
+    if (!connectionsCode.match(new RegExp("{}"))) {
+      this.connections.push(connectionsCode);
+    }
+    return;
+  }
+
+  private addConnections(dotCode: string): string {
+    let i = this.connections.length;
+
+    while (i--) {
+      dotCode += `
+${this.tabs}${this.connections[i]}
+`;
+    }
+
+    return dotCode;
   }
 
   private findPath(filename: string): string | undefined {
@@ -165,14 +185,10 @@ ${tabs}}\n`;
     return;
   }
 
-  private addNode(): string {
-    return "";
-  }
-
   private runDot(): Promise<void> {
     return new Promise((resolve, reject) => {
       exec(
-        `dot -Tpng ${this.name}.dot -o ${this.name}.png -Kneato`,
+        `dot -Tpng ${this.name}.dot -o ${this.name}.png -Kfdp`,
         (err: Error, stdout: unknown, stderr: unknown) => {
           if (err) {
             reject(err);
