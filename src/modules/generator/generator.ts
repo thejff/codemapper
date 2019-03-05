@@ -4,7 +4,22 @@ const exec = require("child_process").exec;
 const fs = require("fs");
 
 export class Generator {
-  private cleanNameHolder: string[] = [];
+  private colours = [
+    "red",
+    "orange",
+    "darkgreen",
+    "blue",
+    "purple",
+    "chocolate2",
+    "gold",
+    "deeppink2",
+    "firebrick2",
+    "limegreen",
+    "yellow",
+    "turquoise1"
+  ];
+
+  private colourSelector = 0;
 
   private connections: string[] = [];
 
@@ -57,6 +72,7 @@ export class Generator {
   ): string {
     const keys = Object.keys(structure);
 
+    this.tabs = "";
     let j = depth;
     while (j--) {
       this.tabs += "\t";
@@ -153,7 +169,12 @@ ${this.tabs}}\n`;
       }
     }
 
-    connectionsCode += "}";
+    connectionsCode += `} [color=${this.colours[this.colourSelector]}];`;
+    if (this.colourSelector >= this.colours.length - 1) {
+      this.colourSelector = 0;
+    } else {
+      this.colourSelector++;
+    }
 
     if (!connectionsCode.match(new RegExp("{}"))) {
       this.connections.push(connectionsCode);
