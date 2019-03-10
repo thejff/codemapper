@@ -1,6 +1,6 @@
 {
-  "name": "dependency-mapper",
-  "version": "0.0.1",
+  "name": "codemapper",
+  "version": "1.0.0",
   "description": "A pretty dependency mapper for Angular projects",
   "main": "index.js",
   "scripts": {
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://git.webdelve.com/justforfun/dependency-mapper.git"
+    "url": "https://github.com/thejff/codemapper.git"
   },
   "bugs": {
     "url": ""
@@ -30,13 +30,13 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@types/jest": "^24.0.9",
-    "@types/node": "^11.10.4",
-    "jest": "^24.1.0",
+    "@types/jest": "^24.0.11",
+    "@types/node": "^11.11.0",
+    "jest": "^24.3.1",
     "nodemon": "^1.18.10",
     "prettier": "^1.16.4",
     "ts-jest": "^24.0.0",
-    "ts-node": "^8.0.2",
+    "ts-node": "^8.0.3",
     "typedoc": "^0.14.2",
     "typescript": "^3.3.3333"
   },

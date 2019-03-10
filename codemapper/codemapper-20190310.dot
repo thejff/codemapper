@@ -1,0 +1,70 @@
+digraph codemapper20190310 {
+        splines="curved";
+        node [nodesep=1000.0];
+        graph [overlap=scalexy; splines=true];
+
+            subgraph clustersrc {
+            node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
+            subgraph clustermodules {
+            node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
+            subgraph clustercli {
+            node [style="filled,rounded", fillcolor=deepskyblue, shape=box];clits[label="cli.ts"];
+            label="cli";
+            style=rounded;
+        }
+            subgraph clustergenerator {
+            node [style="filled,rounded", fillcolor=deepskyblue, shape=box];generatorts[label="generator.ts"];
+            label="generator";
+            style=rounded;
+        }
+            subgraph clustermapper {
+            node [style="filled,rounded", fillcolor=deepskyblue, shape=box];mapperts[label="mapper.ts"];
+            label="mapper";
+            style=rounded;
+        }
+            subgraph clusterwalker {
+            node [style="filled,rounded", fillcolor=deepskyblue, shape=box];walkerts[label="walker.ts"];
+            label="walker";
+            style=rounded;
+        }
+            label="modules";
+            style=rounded;
+        }
+            subgraph clustershared {
+            node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
+            subgraph clusterinterface {
+            node [style="filled,rounded", fillcolor=deepskyblue, shape=box];cliinterfacets[label="cli.interface.ts"];generatorinterfacets[label="generator.interface.ts"];mapperinterfacets[label="mapper.interface.ts"];walkerinterfacets[label="walker.interface.ts"];
+            label="interface";
+            style=rounded;
+        }
+            label="shared";
+            style=rounded;
+        }
+            subgraph cluster__tests__ {
+            node [style="filled,rounded", fillcolor=deepskyblue, shape=box];
+            subgraph clustercli2 {
+            node [style="filled,rounded", fillcolor=deepskyblue, shape=box];cliteststs[label="cli.tests.ts"];
+            label="cli";
+            style=rounded;
+        }
+            subgraph clustergenerator2 {
+            node [style="filled,rounded", fillcolor=deepskyblue, shape=box];generatorteststs[label="generator.tests.ts"];
+            label="generator";
+            style=rounded;
+        }
+            subgraph clustermapper2 {
+            node [style="filled,rounded", fillcolor=deepskyblue, shape=box];mapperteststs[label="mapper.tests.ts"];
+            label="mapper";
+            style=rounded;
+        }
+            subgraph clusterwalker2 {
+            node [style="filled,rounded", fillcolor=deepskyblue, shape=box];walkerteststs[label="walker.tests.ts"];
+            label="walker";
+            style=rounded;
+        }
+            label="__tests__";
+            style=rounded;
+        }
+            label="src";
+            style=rounded;
+        }clits -> {mapperts, mapperinterfacets, cliinterfacets} [color=red];generatorts -> {walkerinterfacets, generatorinterfacets} [color=orange];mapperts -> {walkerts, generatorts} [color=darkgreen];mapperinterfacets -> {walkerinterfacets} [color=gold];cliteststs -> {clits} [color=deeppink2];generatorteststs -> {generatorts} [color=firebrick2];mapperteststs -> {mapperts} [color=limegreen];walkerteststs -> {walkerts} [color=yellow];}
