@@ -1,4 +1,4 @@
-<img src="https://thejustforfun.foundation/wp-content/uploads/2019/03/Logo.png" alt="TJFFF Logo" width="500"/>
+<img src="https://thejustforfun.foundation/wp-content/uploads/2019/03/Logo.png" alt="TJFFF Logo" width="200"/>
 
 # The Just for Fun Foundation - Code Mapper
 
@@ -20,7 +20,7 @@ Type docs can be found [here](https://tjff.github.io/codemapper)
 ## Installation
 
 ```
-$ npm i -g codemapper
+$ npm i -g @justforfun/codemapper
 ```
 
 ## Notes
@@ -34,7 +34,7 @@ The code mapper is currently in its early stages of development, as such there a
 
 ## Usage
 
-Code mapper can be run globablly, after installing it run the following command:
+The code mapper can be run globablly, after installing it run the following command:
 
 ```
 codemapper
@@ -42,13 +42,16 @@ codemapper
 
 Once the app has started you will see a menu with several options:
 
-1. Input a directory to map
-2. Map the current directory
+1. Input a directory to map - This can be relative or a full path
+2. Map the current directory - Generate the graph from the location codemapper is run
 
 As well as options that can be entered into any input
 
 - "q" to quit
 - "menu" to return to the menu
+
+Once the code has run successfully you will see a folder called "codemapper" inside the directory you selected.<br/>
+Inside this directory you will find two files, the generated DOT code and the generated graph (Currently PNG only). You can see an example of the graph below.
 
 ## Example output
 

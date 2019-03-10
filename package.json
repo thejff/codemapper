@@ -1,20 +1,20 @@
 {
-  "name": "codemapper",
+  "name": "@justforfun/codemapper",
   "version": "1.0.0",
   "description": "A pretty dependency mapper for Angular projects",
   "main": "index.js",
   "scripts": {
-    "start": "npm run build && node ./dist",
+    "start": "npm run build && node ./lib",
     "test": "jest --config=jestconfig.json --detectOpenHandles",
-    "build": "tsc --outDir ./dist",
+    "build": "tsc --outDir ./lib",
     "docs": "typedoc --out docs src/"
+  },
+  "bin": {
+    "codemapper": "./lib/index.js"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/thejff/codemapper.git"
-  },
-  "bugs": {
-    "url": ""
+    "url": "git+https://github.com/thejff/codemapper.git"
   },
   "homepage": "https://thejustforfun.foundation",
   "keywords": [
@@ -23,11 +23,7 @@
     "angular",
     "typescript"
   ],
-  "author": {
-    "name": "Chris Holdt",
-    "email": "chris@thejustforfun.foundation",
-    "url": "https://chrisholdt.com"
-  },
+  "author": "Chris Holdt <chris@thejustforfun.foundation> (https://chrisholdt.com)",
   "license": "MIT",
   "devDependencies": {
     "@types/jest": "^24.0.11",
@@ -42,5 +38,11 @@
   },
   "dependencies": {
     "figlet": "^1.2.1"
+  },
+  "directories": {
+    "doc": "docs"
+  },
+  "bugs": {
+    "url": "https://github.com/thejff/codemapper/issues"
   }
 }

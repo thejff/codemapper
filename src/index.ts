@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 /*
  * MIT License (MIT)
  * Copyright (c) 2019 The Just for Fun Foundation

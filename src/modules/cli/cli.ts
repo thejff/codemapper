@@ -250,14 +250,15 @@ export class CLI implements ICLI {
    */
   private async mapCurrentDirectory() {
     await this.getName();
-    console.log("This will map from: " + __dirname);
+    console.log("This will map from: " + process.cwd());
     this.getInput("Continue? (Y/n): ")
       .then((input: string) => {
         switch (input) {
           case "n":
+            this.start();
             break;
           default:
-            const directory = __dirname;
+            const directory = process.cwd();
             console.log("Mapping current directory...");
             if (this.regex) {
               this.mapper = new Mapper(
