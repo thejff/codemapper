@@ -3,17 +3,17 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>@justforfun/codemapper</title>
+	<title>&quot;__tests__/mapper/mapper.tests&quot; | @justforfun/codemapper</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="assets/css/main.css">
+	<link rel="stylesheet" href="../assets/css/main.css">
 </head>
 <body>
 <header>
 	<div class="tsd-page-toolbar">
 		<div class="container">
 			<div class="table-wrap">
-				<div class="table-cell" id="tsd-search" data-index="assets/js/search.js" data-base=".">
+				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.js" data-base="..">
 					<div class="field">
 						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
 						<input id="tsd-search-field" type="text" />
@@ -22,7 +22,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="index.html" class="title">@justforfun/codemapper</a>
+					<a href="../index.html" class="title">@justforfun/codemapper</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -53,124 +53,64 @@
 		<div class="container">
 			<ul class="tsd-breadcrumb">
 				<li>
-					<a href="globals.html">Globals</a>
+					<a href="../globals.html">Globals</a>
+				</li>
+				<li>
+					<a href="___tests___mapper_mapper_tests_.html">&quot;__tests__/mapper/mapper.tests&quot;</a>
 				</li>
 			</ul>
-			<h1> @justforfun/codemapper</h1>
+			<h1>External module &quot;__tests__/mapper/mapper.tests&quot;</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
-			<div class="tsd-panel tsd-typography">
-				<img src="https://thejustforfun.foundation/wp-content/uploads/2019/03/Logo.png" alt="TJFFF Logo" width="200"/>
-				<h1 id="the-just-for-fun-foundation-code-mapper">The Just for Fun Foundation - Code Mapper</h1>
-				<p>The Just for Fun Foundation presents the code mapper. <br/>
-				This project runs through a Typescript project and maps all internal dependencies, generating a useful graph powered by <a href="https://www.graphviz.org/">Graphviz</a></p>
-				<h3 id="github">GitHub</h3>
-				<p>You can find the source code for the project <a href="https://github.com/thejff/codemapper">here</a></p>
-				<h3 id="bugs">Bugs</h3>
-				<p>Please report any issues <a href="https://github.com/thejff/codemapper/issues">here</a></p>
-				<h3 id="further-documentation">Further documentation</h3>
-				<p>Type docs can be found <a href="https://thejff.github.io/codemapper">here</a></p>
-				<h2 id="installation">Installation</h2>
-				<pre><code>$ <span class="hljs-built_in">npm</span> i -g @justforfun/codemapper</code></pre><h2 id="notes">Notes</h2>
-				<p>The code mapper is currently in its early stages of development, as such there are a few restrictions (see the next release and future work sections below for more). <br/></p>
-				<ul>
-					<li>Currently the only output available is png allow all Graphviz outputs are planned for the next release. Additionally a custom HTML output will be added.</li>
-					<li>There is no direct command that can be run to generate the graph and skip the menu, this is also planned for the next release.</li>
-					<li>You can&#39;t use custom regex, this is also planned for the next release.</li>
-					<li>Only files local to the project that are linked via import code will be linked in the graph, but all .ts files will be shown</li>
-				</ul>
-				<h2 id="usage">Usage</h2>
-				<p>The code mapper can be run globablly, after installing it run the following command:</p>
-				<pre><code><span class="hljs-attribute">codemapper</span></code></pre><p>Once the app has started you will see a menu with several options:</p>
-				<ol>
-					<li>Input a directory to map - This can be relative or a full path</li>
-					<li>Map the current directory - Generate the graph from the location codemapper is run</li>
-				</ol>
-				<p>As well as options that can be entered into any input</p>
-				<ul>
-					<li>&quot;q&quot; to quit</li>
-					<li>&quot;menu&quot; to return to the menu</li>
-				</ul>
-				<p>Once the code has run successfully you will see a folder called &quot;codemapper&quot; inside the directory you selected.<br/>
-				Inside this directory you will find two files, the generated DOT code and the generated graph (Currently PNG only). You can see an example of the graph below.</p>
-				<h2 id="example-output">Example output</h2>
-				<img src="https://thejustforfun.foundation/wp-content/uploads/2019/03/codemapper-20190310.png" alt="Example graph output" width="500"/>
-				<h2 id="next-release">Next release</h2>
-				<ul>
-					<li>Allow for multiple output types</li>
-					<li>Direct CLI command input</li>
-					<li>Allow optional custom regex</li>
-				</ul>
-				<h2 id="future-work">Future work</h2>
-				<ul>
-					<li>Allow optional mapping of NPM dependencies</li>
-					<li>Allow optional mapping of all files in directory</li>
-					<li>Check and map require()</li>
-					<li>Allow walking of .js files</li>
-					<li>Map all imports (currently checks for local imports only)</li>
-					<li>Ignore imports/requires that are commented out</li>
-					<li>Angular: Check for contstruct declarations</li>
-					<li>Add custom HTML output</li>
-					<li>Add output verification checks</li>
-				</ul>
-				<h2 id="known-issues">Known issues</h2>
-				<ul>
-					<li>Doesn&#39;t map monorepos</li>
-				</ul>
-				<h2 id="the-just-for-fun-foundation">The Just For Fun Foundation</h2>
-				<p><a href="https://thejustforfun.foundation">Vist TheJustForFun.Foundation</a></p>
-				<h2 id="license">License</h2>
-				<p>This project is licensed under the <a href="https://github.com/thejff/codemapper/blob/master/LICENSE">MIT</a> License</p>
-			</div>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
 			<nav class="tsd-navigation primary">
 				<ul>
 					<li class="globals  ">
-						<a href="globals.html"><em>Globals</em></a>
+						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="modules/___tests___cli_cli_tests_.html">"__tests__/cli/cli.tests"</a>
+						<a href="___tests___cli_cli_tests_.html">"__tests__/cli/cli.tests"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="modules/___tests___generator_generator_tests_.html">"__tests__/generator/generator.tests"</a>
+						<a href="___tests___generator_generator_tests_.html">"__tests__/generator/generator.tests"</a>
+					</li>
+					<li class="current tsd-kind-external-module">
+						<a href="___tests___mapper_mapper_tests_.html">"__tests__/mapper/mapper.tests"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="modules/___tests___mapper_mapper_tests_.html">"__tests__/mapper/mapper.tests"</a>
+						<a href="___tests___walker_walker_tests_.html">"__tests__/walker/walker.tests"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="modules/___tests___walker_walker_tests_.html">"__tests__/walker/walker.tests"</a>
+						<a href="_index_.html">"index"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="modules/_index_.html">"index"</a>
+						<a href="_modules_cli_cli_.html">"modules/cli/cli"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="modules/_modules_cli_cli_.html">"modules/cli/cli"</a>
+						<a href="_modules_generator_generator_.html">"modules/generator/generator"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="modules/_modules_generator_generator_.html">"modules/generator/generator"</a>
+						<a href="_modules_mapper_mapper_.html">"modules/mapper/mapper"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="modules/_modules_mapper_mapper_.html">"modules/mapper/mapper"</a>
+						<a href="_modules_walker_walker_.html">"modules/walker/walker"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="modules/_modules_walker_walker_.html">"modules/walker/walker"</a>
+						<a href="_shared_interface_cli_interface_.html">"shared/interface/cli.interface"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="modules/_shared_interface_cli_interface_.html">"shared/interface/cli.interface"</a>
+						<a href="_shared_interface_generator_interface_.html">"shared/interface/generator.interface"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="modules/_shared_interface_generator_interface_.html">"shared/interface/generator.interface"</a>
+						<a href="_shared_interface_mapper_interface_.html">"shared/interface/mapper.interface"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="modules/_shared_interface_mapper_interface_.html">"shared/interface/mapper.interface"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_shared_interface_walker_interface_.html">"shared/interface/walker.interface"</a>
+						<a href="_shared_interface_walker_interface_.html">"shared/interface/walker.interface"</a>
 					</li>
 				</ul>
 			</nav>
@@ -244,7 +184,7 @@
 	<p>Generated using <a href="http://typedoc.org/" target="_blank">TypeDoc</a></p>
 </div>
 <div class="overlay"></div>
-<script src="assets/js/main.js"></script>
-<script>if (location.protocol == 'file:') document.write('<script src="assets/js/search.js"><' + '/script>');</script>
+<script src="../assets/js/main.js"></script>
+<script>if (location.protocol == 'file:') document.write('<script src="../assets/js/search.js"><' + '/script>');</script>
 </body>
 </html>

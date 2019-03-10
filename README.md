@@ -15,7 +15,7 @@ Please report any issues [here](https://github.com/thejff/codemapper/issues)
 
 ### Further documentation
 
-Type docs can be found [here](https://tjff.github.io/codemapper)
+Type docs can be found [here](https://thejff.github.io/codemapper)
 
 ## Installation
 
