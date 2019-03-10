@@ -1,6 +1,6 @@
 {
   "name": "@justforfun/codemapper",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A pretty dependency mapper for Angular projects",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -43,7 +43,8 @@
     "typescript": "^3.3.3333"
   },
   "dependencies": {
-    "figlet": "^1.2.1"
+    "figlet": "^1.2.1",
+    "shelljs": "^0.8.3"
   },
   "directories": {
     "doc": "docs"
