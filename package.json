@@ -1,14 +1,17 @@
 {
   "name": "@justforfun/codemapper",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A pretty dependency mapper for Angular projects",
-  "main": "index.js",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
   "scripts": {
     "start": "npm run build && node ./lib",
     "test": "jest --config=jestconfig.json --detectOpenHandles",
     "build": "tsc --outDir ./lib",
-    "docs": "typedoc --out docs src/"
+    "docs": "typedoc --out docs src/",
+    "prepare": "npm run build"
   },
+  "preferGlobal": true,
   "bin": {
     "codemapper": "./lib/index.js"
   },
@@ -22,6 +25,9 @@
     "mapper",
     "angular",
     "typescript"
+  ],
+  "files": [
+    "lib"
   ],
   "author": "Chris Holdt <chris@thejustforfun.foundation> (https://chrisholdt.com)",
   "license": "MIT",

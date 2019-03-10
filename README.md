@@ -23,6 +23,8 @@ Type docs can be found [here](https://thejff.github.io/codemapper)
 $ npm i -g @justforfun/codemapper
 ```
 
+You also need to make sure Graphviz is installed, it can be downloaded [here](https://www.graphviz.org/download/)
+
 ## Notes
 
 The code mapper is currently in its early stages of development, as such there are a few restrictions (see the next release and future work sections below for more). <br/>
