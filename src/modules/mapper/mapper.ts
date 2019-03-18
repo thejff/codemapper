@@ -48,9 +48,13 @@ export class Mapper implements IMapper {
     private directory: string,
     private excludeNodeModules: boolean = true,
     private outputName: string,
-    private regex?: RegExp
+    private regex?: RegExp,
+    private _outputType?: string
   ) {}
 
+  set outputType(type: string) {
+    this._outputType = type;
+  }
   /**
    * Main entry point
    * Begins processing the projects using the data provided in the constructor
@@ -115,7 +119,8 @@ export class Mapper implements IMapper {
         this.directory,
         data.structure,
         this.outputName,
-        data.pathedFileList
+        data.pathedFileList,
+        this._outputType
       );
 
       // TODO: Add data verification checks

@@ -94,8 +94,12 @@ export class Generator implements IGenerator {
     private directory: string,
     private structure: IWalkerStructure,
     private name: string,
-    private pathedFileList: string[]
-  ) {
+    private pathedFileList: string[],
+    private outputType?: string
+    ) {
+      if (!outputType) {
+        this.outputType = "png";
+      }
     this.codemapperDirectory = this.checkDir();
   }
 
@@ -132,7 +136,7 @@ export class Generator implements IGenerator {
       // Initialise the dot code with some global data
       let dotCode = `digraph ${graphName} {
         splines="curved";
-        node [nodesep=1000.0];
+        node [nodesep=20.0];
         graph [overlap=scalexy; splines=true];\n`;
 
       // Generate and add the sub graphs based on the pre generated structure
@@ -321,9 +325,9 @@ export class Generator implements IGenerator {
   private runDot(): Promise<void> {
     return new Promise((resolve, reject) => {
       exec(
-        `dot -Tpng "${this.codemapperDirectory}/${this.name}.dot" -o "${
+        `dot -T${this.outputType} "${this.codemapperDirectory}/${this.name}.dot" -o "${
           this.codemapperDirectory
-        }/${this.name}.png" -Kfdp`,
+        }/${this.name}.${this.outputType}" -Kfdp`,
         (err: Error, stdout: unknown, stderr: unknown) => {
           if (err) {
             reject(err);

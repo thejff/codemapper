@@ -103,7 +103,7 @@ export class CLI implements ICLI {
    */
   public start(): void {
     this.setDefaultOutputName();
-    console.clear();
+    // console.clear();
     console.log(figlet.textSync("Just For Fun", { font: "doom" }));
     console.log("\n");
 
@@ -133,19 +133,26 @@ export class CLI implements ICLI {
    * @memberof CLI
    */
   private inputHandler(): void {
+    let input: string;
+
     this.getInput("What do you want to do: ")
-      .then((input: string) => {
+      .then((_input: string) => {
+        input = _input;
+
+        return this.inputOutputType();
+      })
+      .then((outputType: string) => {
         switch (input) {
           case "1":
-            this.inputDirectory();
+            this.inputDirectory(outputType);
             break;
           case "2":
-            this.mapCurrentDirectory();
+            this.mapCurrentDirectory(outputType);
             break;
           /* Debug input for quickly running everything
-          case "d":
-            this.debug();
-            break; */
+              case "d":
+                this.debug();
+                break; */
           default:
             console.log("Please select an option...");
             this.inputHandler();
@@ -163,14 +170,14 @@ export class CLI implements ICLI {
    * @private
    * @memberof CLI
    */
-  private async inputDirectory() {
+  private async inputDirectory(outputType: string) {
     await this.getName();
     this.getInput("Please enter the directory to map: ")
       .then((directory: string) => {
         fs.stat(directory, (err: Error, data: any) => {
           if (err) {
             console.log("The path entered is not a directory!");
-            this.inputDirectory();
+            this.inputDirectory(outputType);
           } else {
             if (data.isDirectory()) {
               if (this.regex) {
@@ -178,20 +185,23 @@ export class CLI implements ICLI {
                   directory,
                   this.excludeNodeModules,
                   this.outputName,
-                  this.regex
+                  this.regex,
+                  outputType
                 );
               } else {
                 this.mapper = new Mapper(
                   directory,
                   this.excludeNodeModules,
-                  this.outputName
+                  this.outputName,
+                  undefined,
+                  outputType
                 );
               }
 
               this.mapper.startProcessing();
             } else {
               console.log("The path entered is not a directory!");
-              this.inputDirectory();
+              this.inputDirectory(outputType);
             }
           }
         });
@@ -199,6 +209,72 @@ export class CLI implements ICLI {
       .catch((err: unknown) => {
         console.error(err);
       });
+  }
+
+  private inputOutputType(): Promise<string> {
+    return new Promise((resolve, reject) => {
+      console.log(`
+      Image output
+      ----------------
+      1. PNG (.png)
+      2. JPEG (.jpeg)
+      3. Photoshop (PSD)
+      4. SVG (.svg)
+      5. PDF (.pdf)
+  
+      Non image output
+      ----------------
+      6. Plain Text (.txt)
+      7. JSON (.json)
+      8. DOT (.dot)
+      `);
+      this.getInput("What output type would you like to use? (blank = png): ")
+        .then((input: string) => {
+          switch (input.trim()) {
+            case "1":
+              resolve("png");
+              break;
+
+            case "2":
+              resolve("jpeg");
+              break;
+
+            case "3":
+              resolve("psd");
+              break;
+
+            case "4":
+              resolve("svg");
+              break;
+
+            case "5":
+              resolve("pdf");
+              break;
+
+            case "6":
+              resolve("plain");
+              break;
+
+            case "7":
+              resolve("json");
+              break;
+
+            case "8":
+              resolve("dot");
+              break;
+
+            case "":
+              resolve("png");
+              break;
+            default:
+              this.inputOutputType();
+              break;
+          }
+        })
+        .catch((err: unknown) => {
+          reject(err);
+        });
+    });
   }
 
   /**
@@ -248,7 +324,7 @@ export class CLI implements ICLI {
    * @private
    * @memberof CLI
    */
-  private async mapCurrentDirectory() {
+  private async mapCurrentDirectory(outputType: string) {
     await this.getName();
     console.log("This will map from: " + process.cwd());
     this.getInput("Continue? (Y/n): ")
@@ -265,13 +341,16 @@ export class CLI implements ICLI {
                 directory,
                 this.excludeNodeModules,
                 this.outputName,
-                this.regex
+                this.regex,
+                outputType
               );
             } else {
               this.mapper = new Mapper(
                 directory,
                 this.excludeNodeModules,
-                this.outputName
+                this.outputName,
+                undefined,
+                outputType
               );
             }
 
