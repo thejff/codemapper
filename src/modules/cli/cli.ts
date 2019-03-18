@@ -72,6 +72,10 @@ export class CLI implements ICLI {
    */
   private outputName: string = "";
 
+  private args: string[] = [];
+
+  private isCLI = false;
+
   private setDefaultOutputName(): void {
     const date = new Date(Date.now());
     let month = this.fixDate((date.getMonth() + 1).toString());
@@ -102,8 +106,39 @@ export class CLI implements ICLI {
    * @memberof CLI
    */
   public start(): void {
+    this.args = process.argv.slice(2);
     this.setDefaultOutputName();
-    // console.clear();
+
+    /*
+    --help displays help
+    -o = Output path/name; If not provided use current dir
+    -t = Output type; If not provided use PNG
+    -r = regex; If not provided use default
+    */
+
+    if (this.args.length === 0) {
+      this.menu();
+    } else {
+      this.isCLI = true;
+      this.processCLIArguments();
+    }
+  }
+
+  private processCLIArguments(): void {
+    let i = this.args.length;
+    while (i--) {
+      switch (this.args[i].substr(0, 2)) {
+        case "--":
+          if (this.args[i].substr(2, 6) === "help") {
+            this.showHelp();
+          }
+          break;
+      }
+    }
+  }
+
+  private menu(): void {
+    console.clear();
     console.log(figlet.textSync("Just For Fun", { font: "doom" }));
     console.log("\n");
 
@@ -224,7 +259,7 @@ export class CLI implements ICLI {
   
       Non image output
       ----------------
-      6. Plain Text (.txt)
+      6. Plain Text (.plain)
       7. JSON (.json)
       8. DOT (.dot)
       `);

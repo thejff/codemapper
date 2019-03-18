@@ -29,7 +29,7 @@ You also need to make sure Graphviz is installed, it can be downloaded [here](ht
 
 The code mapper is currently in its early stages of development, as such there are a few restrictions (see the next release and future work sections below for more). <br/>
 
-- Currently the only output available is png allow all Graphviz outputs are planned for the next release. Additionally a custom HTML output will be added.
+- ~~Currently the only output available is png allow all Graphviz outputs are planned for the next release.~~ Additionally a custom HTML output will be added.
 - There is no direct command that can be run to generate the graph and skip the menu, this is also planned for the next release.
 - You can't use custom regex, this is also planned for the next release.
 - Only files local to the project that are linked via import code will be linked in the graph, but all .ts files will be shown
@@ -59,9 +59,12 @@ Inside this directory you will find two files, the generated DOT code and the ge
 
 <img src="https://thejustforfun.foundation/wp-content/uploads/2019/03/codemapper-20190310.png" alt="Example graph output" width="500"/>
 
-## Next release
+## This release (1.4.x)
 
 - Allow for multiple output types
+
+## Next release
+
 - Direct CLI command input
 - Allow optional custom regex
 
@@ -80,6 +83,11 @@ Inside this directory you will find two files, the generated DOT code and the ge
 ## Known issues
 
 - Doesn't map monorepos
+- Some angular x.module.ts files don't get picked up
+
+## 1.4.x
+
+- Allow for multiple output types
 
 ## The Just For Fun Foundation
 
