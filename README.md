@@ -59,35 +59,11 @@ Inside this directory you will find two files, the generated DOT code and the ge
 
 <img src="https://thejustforfun.foundation/wp-content/uploads/2019/03/codemapper-20190310.png" alt="Example graph output" width="500"/>
 
-## This release (1.4.x)
+## Future Milestones
 
-- Allow for multiple output types
+See [CHANGELOG](CHANGELOG.md) for latest and future changes and bugs
 
-## Next release
-
-- Direct CLI command input
-- Allow optional custom regex
-
-## Future work
-
-- Allow optional mapping of NPM dependencies
-- Allow optional mapping of all files in directory
-- Check and map require()
-- Allow walking of .js files
-- Map all imports (currently checks for local imports only)
-- Ignore imports/requires that are commented out
-- Angular: Check for contstruct declarations
-- Add custom HTML output
-- Add output verification checks
-
-## Known issues
-
-- Doesn't map monorepos
-- Some angular x.module.ts files don't get picked up
-
-## 1.4.x
-
-- Allow for multiple output types
+- Custom HTML Output
 
 ## The Just For Fun Foundation
 

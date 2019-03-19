@@ -20,14 +20,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-export interface ICLI {
-  start: Function;
-}
 
-export interface ICLIData {
-  [option: string]: string;
-}
-
-export interface IInputMap {
-  [input: string]: string;
+export class Output {
+  constructor(private verbose: boolean) {}
 }

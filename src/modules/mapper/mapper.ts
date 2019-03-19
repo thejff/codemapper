@@ -48,8 +48,10 @@ export class Mapper implements IMapper {
     private directory: string,
     private excludeNodeModules: boolean = true,
     private outputName: string,
+    private verbose: boolean = false,
     private regex?: RegExp,
-    private _outputType?: string
+    private _outputType?: string,
+    private outputDirectory?: string
   ) {}
 
   set outputType(type: string) {

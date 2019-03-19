@@ -24,10 +24,18 @@
 import { exit } from "shelljs";
 import { Mapper } from "../mapper/mapper";
 import { IMapper } from "../../shared/interface/mapper.interface";
-import { ICLI, ICLIData } from "../../shared/interface/cli.interface";
+import {
+  ICLI,
+  ICLIData,
+  IInputMap
+} from "../../shared/interface/cli.interface";
+import { OutputType } from "../../shared/enum/outputType.enum";
+import { CLIParameters } from "../../shared/enum/cli.enum";
 const figlet = require("figlet");
 const readline = require("readline");
 const fs = require("fs");
+
+// TODO: Put strings in separate store for easier modification
 
 /**
  * Handles input from the command line
@@ -38,13 +46,13 @@ const fs = require("fs");
  */
 export class CLI implements ICLI {
   /**
-   * Holds custom regex (NOT YET IMPLEMENTED)
+   * Holds custom regex
    *
    * @private
    * @type {(null | RegExp)}
    * @memberof CLI
    */
-  private regex: null | RegExp = null;
+  private regex: undefined | RegExp;
 
   /**
    * Holds an instance of the mapper class
@@ -54,6 +62,8 @@ export class CLI implements ICLI {
    * @memberof CLI
    */
   private mapper: null | IMapper = null;
+
+  private verbose = false;
 
   /**
    * Flag to exclude node modules
@@ -72,9 +82,7 @@ export class CLI implements ICLI {
    */
   private outputName: string = "";
 
-  private cliData: ICLIData = {
-    verbose: false
-  };
+  private cliData: ICLIData = {};
 
   private args: string[] = [];
 
@@ -113,96 +121,100 @@ export class CLI implements ICLI {
     this.args = process.argv.slice(2);
     this.setDefaultOutputName();
 
-    /*
-    --help displays help
-    -i = Input path
-    -o = Output path; If not provided use current dir
-    -oN = the Output name
-    -t = Output type; If not provided use PNG
-    -r = regex; If not provided use default
-    -v = verbose
-    */
-
     if (this.args.length === 0) {
       this.menu();
     } else {
       this.isCLI = true;
-      this.processCLIArguments();
+      this.processCLIArguments()
+        .then(() => {
+          return this.runAsCli();
+        })
+        .catch((err: unknown) => {
+          console.error(err);
+        });
     }
   }
 
-  private processCLIArguments(): void {
+  private runAsCli(): Promise<void> {
+    this.mapper = new Mapper(
+      this.cliData[CLIParameters.INPUT] || __dirname,
+      this.excludeNodeModules,
+      this.cliData[CLIParameters.OUTPUTNAME] || __dirname,
+      this.verbose,
+      new RegExp(this.cliData[CLIParameters.REGEX]) || this.regex,
+      this.cliData[CLIParameters.TYPE] || OutputType.PNG,
+      this.cliData[CLIParameters.OUTPUT]
+    );
+
+    this.mapper
+      .startProcessing()
+      .then((result: string) => {
+        this.handleEnd(result);
+      })
+      .catch((err: Error) => {
+        this.handleEnd("An error occured during mapping!", err);
+      });
+
+    return Promise.resolve();
+  }
+
+  private processCLIArguments(): Promise<void> {
     let i = this.args.length;
     while (i--) {
-      switch (this.args[i].substr(0, 2)) {
-        case "--":
-          this.handleDoubleDash(this.args[i]);
-          break;
+      const currentArg = this.args[i];
 
-        case "-i":
-          this.cliData.input = this.args[i].substring(3, this.args[i].length);
-          break;
+      let endIndex;
+      currentArg.indexOf("=") > -1
+        ? (endIndex = currentArg.indexOf("="))
+        : (endIndex = currentArg.length);
 
-        case "-o":
-          if (this.args[i].substr(1, 2) === "oN") {
-            this.cliData.name = this.args[i].substring(4, this.args[i].length);
-          } else {
-            this.cliData.output = this.args[i].substring(
-              3,
-              this.args[i].length
-            );
-          }
-          break;
+      const param = currentArg.substring(0, endIndex);
 
-        case "-t":
-          this.cliData.type = this.args[i].substring(3, this.args[i].length);
-          break;
+      const argMap: IInputMap = {
+        "-d": CLIParameters.DEFAULT,
+        "--default": CLIParameters.DEFAULT,
+        "-i": CLIParameters.INPUT,
+        "--input": CLIParameters.INPUT,
+        "-o": CLIParameters.OUTPUT,
+        "--output": CLIParameters.OUTPUT,
+        "-oN": CLIParameters.OUTPUTNAME,
+        "--outputName": CLIParameters.OUTPUTNAME,
+        "-t": CLIParameters.TYPE,
+        "--type": CLIParameters.TYPE,
+        "-r": CLIParameters.REGEX,
+        "--regex": CLIParameters.REGEX,
+        "-iN": CLIParameters.INCLUDENODE,
+        "--includeNode": CLIParameters.INCLUDENODE,
+        "-v": CLIParameters.VERBOSE,
+        "--verbose": CLIParameters.VERBOSE,
+        "-h": CLIParameters.HELP,
+        "--help": CLIParameters.HELP
+      };
 
-        case "-r":
-          this.cliData.regex = this.args[i].substring(3, this.args[i].length);
-          break;
+      if (
+        Object.keys(argMap).indexOf(param) === -1 ||
+        argMap[param] === CLIParameters.HELP
+      ) {
+        this.showHelp();
+        exit(0);
+      } else {
+        if (argMap[param] === CLIParameters.DEFAULT) {
+          return Promise.resolve();
+        }
 
-        default:
-          this.showHelp();
-          break;
+        if (argMap[param] === CLIParameters.VERBOSE) {
+          this.verbose = true;
+        } else if (argMap[param] === CLIParameters.INCLUDENODE) {
+          this.excludeNodeModules = false;
+        } else {
+          this.cliData[argMap[param]] = currentArg.substring(
+            currentArg.indexOf("=") + 1,
+            currentArg.length
+          );
+        }
       }
     }
-
-    console.log("CLI Data");
-    console.log(this.cliData);
-  }
-
-  private handleDoubleDash(arg: string): void {
-    if (arg === "--verbose") {
-      this.cliData.verbose = true;
-    } else {
-      switch (arg.substring(2, arg.indexOf("="))) {
-        case "input":
-          this.cliData.input = arg.substring(arg.indexOf("=") + 1, arg.length);
-          break;
-
-        case "output":
-          this.cliData.output = arg.substring(arg.indexOf("=") + 1, arg.length);
-          break;
-
-        case "outName":
-          this.cliData.name = arg.substring(arg.indexOf("=") + 1, arg.length);
-          break;
-
-        case "type":
-          this.cliData.type = arg.substring(arg.indexOf("=") + 1, arg.length);
-          break;
-
-        case "regex":
-          this.cliData.regex = arg.substring(arg.indexOf("=") + 1, arg.length);
-          break;
-
-        case "help":
-        default:
-          this.showHelp();
-          break;
-      }
-    }
+    return Promise.resolve();
   }
 
   private showHelp(): void {
@@ -212,13 +224,15 @@ export class CLI implements ICLI {
     CLI Options:
       Full    |  Shorthand
       =============================
-      --input   -i=<Input Path>    (Optional) The input path of the project to map
-      --output  -o=<Output Path>   (Optional) The output path of the graph data and the name you want to use
-      --outName -oN=<Output name>  (Optional) The name of the graph file, this should not include the file extension
-      --type    -t=<Output Type>   (Optional) Defaults to png. One of: png, jpeg, psd, svg, pdf, plain (for plain text), json, or dot
-      --regex   -r=<Regex>         (Optional) The regex used to exclude files, this will bypass the default regex.
-      --verbose -v                 (Optional) Output verbose information whilst processing
-      --help                        Display this
+      --default     -d                 Run codemapper using the default settings
+      --input       -i=<Input Path>    The input path of the project to map
+      --output      -o=<Output Path>   The output path of the graph data and the name you want to use
+      --outName     -oN=<Output name>  The name of the graph file, this should not include the file extension
+      --type        -t=<Output Type>   Defaults to png. One of: png, jpeg, psd, svg, pdf, plain (for plain text), json, or dot
+      --regex       -r=<Regex>         The regex used to exclude files, this will bypass the default regex.
+      --includeNode -iN                Include node_modules in the graph
+      --verbose     -v                 Output verbose information whilst processing
+      --help        -h                 Display this
 
     To run the interactive version of the code mapper simply run "codemapper" with no CLI parameters.
     `);
@@ -302,25 +316,23 @@ export class CLI implements ICLI {
             this.inputDirectory(outputType);
           } else {
             if (data.isDirectory()) {
-              if (this.regex) {
-                this.mapper = new Mapper(
-                  directory,
-                  this.excludeNodeModules,
-                  this.outputName,
-                  this.regex,
-                  outputType
-                );
-              } else {
-                this.mapper = new Mapper(
-                  directory,
-                  this.excludeNodeModules,
-                  this.outputName,
-                  undefined,
-                  outputType
-                );
-              }
+              this.mapper = new Mapper(
+                directory,
+                this.excludeNodeModules,
+                this.outputName,
+                this.verbose,
+                this.regex,
+                outputType
+              );
 
-              this.mapper.startProcessing();
+              this.mapper
+                .startProcessing()
+                .then((result: string) => {
+                  this.handleEnd(result);
+                })
+                .catch((err: Error) => {
+                  this.handleEnd("An error occured during mapping!", err);
+                });
             } else {
               console.log("The path entered is not a directory!");
               this.inputDirectory(outputType);
@@ -341,10 +353,13 @@ export class CLI implements ICLI {
       1. PNG (.png)
       2. JPEG (.jpeg)
       3. Photoshop (.psd)
+
+      Data Output
+      ----------------
       4. SVG (.svg)
       5. PDF (.pdf)
   
-      Non image output
+      Text/Code output
       ----------------
       6. Plain Text (.plain)
       7. JSON (.json)
@@ -352,45 +367,21 @@ export class CLI implements ICLI {
       `);
       this.getInput("What output type would you like to use? (blank = png): ")
         .then((input: string) => {
-          switch (input.trim()) {
-            case "1":
-              resolve("png");
-              break;
+          const inputMap: IInputMap = {
+            1: OutputType.PNG,
+            2: OutputType.JPEG,
+            3: OutputType.PSD,
+            4: OutputType.SVG,
+            5: OutputType.PDF,
+            6: OutputType.PLAIN,
+            7: OutputType.JSON,
+            8: OutputType.DOT
+          };
 
-            case "2":
-              resolve("jpeg");
-              break;
-
-            case "3":
-              resolve("psd");
-              break;
-
-            case "4":
-              resolve("svg");
-              break;
-
-            case "5":
-              resolve("pdf");
-              break;
-
-            case "6":
-              resolve("plain");
-              break;
-
-            case "7":
-              resolve("json");
-              break;
-
-            case "8":
-              resolve("dot");
-              break;
-
-            case "":
-              resolve("png");
-              break;
-            default:
-              this.inputOutputType();
-              break;
+          if (input.trim() !== "") {
+            resolve(inputMap[input]);
+          } else {
+            this.inputOutputType();
           }
         })
         .catch((err: unknown) => {
@@ -423,24 +414,6 @@ export class CLI implements ICLI {
   }
 
   /**
-   * Debug function
-   *
-   * @private
-   * @memberof CLI
-   */
-  private debug(): void {
-    console.log(`${__dirname}/../../../test`);
-
-    this.mapper = new Mapper(
-      `${__dirname}/../../../test`,
-      this.excludeNodeModules,
-      "test"
-    );
-
-    this.mapper.startProcessing();
-  }
-
-  /**
    * Handles mapping the current directory
    *
    * @private
@@ -458,23 +431,14 @@ export class CLI implements ICLI {
           default:
             const directory = process.cwd();
             console.log("Mapping current directory...");
-            if (this.regex) {
-              this.mapper = new Mapper(
-                directory,
-                this.excludeNodeModules,
-                this.outputName,
-                this.regex,
-                outputType
-              );
-            } else {
-              this.mapper = new Mapper(
-                directory,
-                this.excludeNodeModules,
-                this.outputName,
-                undefined,
-                outputType
-              );
-            }
+            this.mapper = new Mapper(
+              directory,
+              this.excludeNodeModules,
+              this.outputName,
+              this.verbose,
+              this.regex,
+              outputType
+            );
 
             this.mapper
               .startProcessing()

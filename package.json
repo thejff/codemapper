@@ -1,6 +1,6 @@
 {
   "name": "@justforfun/codemapper",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "description": "A pretty dependency mapper for Typescript & Angular",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
