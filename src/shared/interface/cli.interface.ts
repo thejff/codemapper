@@ -23,3 +23,12 @@
 export interface ICLI {
   start: Function;
 }
+
+export interface ICLIData {
+  input?: string;
+  output?: string;
+  name?: string;
+  type?: string;
+  regex?: string;
+  verbose: boolean;
+}

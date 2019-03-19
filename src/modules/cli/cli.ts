@@ -24,7 +24,7 @@
 import { exit } from "shelljs";
 import { Mapper } from "../mapper/mapper";
 import { IMapper } from "../../shared/interface/mapper.interface";
-import { ICLI } from "../../shared/interface/cli.interface";
+import { ICLI, ICLIData } from "../../shared/interface/cli.interface";
 const figlet = require("figlet");
 const readline = require("readline");
 const fs = require("fs");
@@ -72,6 +72,10 @@ export class CLI implements ICLI {
    */
   private outputName: string = "";
 
+  private cliData: ICLIData = {
+    verbose: false
+  };
+
   private args: string[] = [];
 
   private isCLI = false;
@@ -111,9 +115,12 @@ export class CLI implements ICLI {
 
     /*
     --help displays help
-    -o = Output path/name; If not provided use current dir
+    -i = Input path
+    -o = Output path; If not provided use current dir
+    -oN = the Output name
     -t = Output type; If not provided use PNG
     -r = regex; If not provided use default
+    -v = verbose
     */
 
     if (this.args.length === 0) {
@@ -129,12 +136,92 @@ export class CLI implements ICLI {
     while (i--) {
       switch (this.args[i].substr(0, 2)) {
         case "--":
-          if (this.args[i].substr(2, 6) === "help") {
-            this.showHelp();
+          this.handleDoubleDash(this.args[i]);
+          break;
+
+        case "-i":
+          this.cliData.input = this.args[i].substring(3, this.args[i].length);
+          break;
+
+        case "-o":
+          if (this.args[i].substr(1, 2) === "oN") {
+            this.cliData.name = this.args[i].substring(4, this.args[i].length);
+          } else {
+            this.cliData.output = this.args[i].substring(
+              3,
+              this.args[i].length
+            );
           }
+          break;
+
+        case "-t":
+          this.cliData.type = this.args[i].substring(3, this.args[i].length);
+          break;
+
+        case "-r":
+          this.cliData.regex = this.args[i].substring(3, this.args[i].length);
+          break;
+
+        default:
+          this.showHelp();
           break;
       }
     }
+
+    console.log("CLI Data");
+    console.log(this.cliData);
+  }
+
+  private handleDoubleDash(arg: string): void {
+    if (arg === "--verbose") {
+      this.cliData.verbose = true;
+    } else {
+      switch (arg.substring(2, arg.indexOf("="))) {
+        case "input":
+          this.cliData.input = arg.substring(arg.indexOf("=") + 1, arg.length);
+          break;
+
+        case "output":
+          this.cliData.output = arg.substring(arg.indexOf("=") + 1, arg.length);
+          break;
+
+        case "outName":
+          this.cliData.name = arg.substring(arg.indexOf("=") + 1, arg.length);
+          break;
+
+        case "type":
+          this.cliData.type = arg.substring(arg.indexOf("=") + 1, arg.length);
+          break;
+
+        case "regex":
+          this.cliData.regex = arg.substring(arg.indexOf("=") + 1, arg.length);
+          break;
+
+        case "help":
+        default:
+          this.showHelp();
+          break;
+      }
+    }
+  }
+
+  private showHelp(): void {
+    console.log(`
+    Welcome to the Just for Fun foundation's Code mapper.
+
+    CLI Options:
+      Full    |  Shorthand
+      =============================
+      --input   -i=<Input Path>    (Optional) The input path of the project to map
+      --output  -o=<Output Path>   (Optional) The output path of the graph data and the name you want to use
+      --outName -oN=<Output name>  (Optional) The name of the graph file, this should not include the file extension
+      --type    -t=<Output Type>   (Optional) Defaults to png. One of: png, jpeg, psd, svg, pdf, plain (for plain text), json, or dot
+      --regex   -r=<Regex>         (Optional) The regex used to exclude files, this will bypass the default regex.
+      --verbose -v                 (Optional) Output verbose information whilst processing
+      --help                        Display this
+
+    To run the interactive version of the code mapper simply run "codemapper" with no CLI parameters.
+    `);
   }
 
   private menu(): void {
@@ -143,7 +230,7 @@ export class CLI implements ICLI {
     console.log("\n");
 
     console.log(
-      "Welcome to the Just For Fun foundation's Typescript and Angular dependency mapper.\n For more projects check out: https:\\\\thejustforfun.foundation"
+      "Welcome to the Just For Fun foundation's code mapper.\n For more projects check out: https:\\\\thejustforfun.foundation"
     );
     console.log("\n");
     console.log("You can use the following commands to generate a map:");
@@ -253,7 +340,7 @@ export class CLI implements ICLI {
       ----------------
       1. PNG (.png)
       2. JPEG (.jpeg)
-      3. Photoshop (PSD)
+      3. Photoshop (.psd)
       4. SVG (.svg)
       5. PDF (.pdf)
   
