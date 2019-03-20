@@ -24,7 +24,7 @@ export interface ICLI {
   start: Function;
 }
 
-export interface ICLIData {
+export interface IMapData {
   [option: string]: string;
 }
 

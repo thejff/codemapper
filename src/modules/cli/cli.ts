@@ -26,8 +26,8 @@ import { Mapper } from "../mapper/mapper";
 import { IMapper } from "../../shared/interface/mapper.interface";
 import {
   ICLI,
-  ICLIData,
-  IInputMap
+  IInputMap,
+  IMapData
 } from "../../shared/interface/cli.interface";
 import { OutputType } from "../../shared/enum/outputType.enum";
 import { CLIParameters } from "../../shared/enum/cli.enum";
@@ -82,11 +82,15 @@ export class CLI implements ICLI {
    */
   private outputName: string = "";
 
-  private cliData: ICLIData = {};
+  private mapData: IMapData = {};
 
   private args: string[] = [];
 
   private isCLI = false;
+
+  private allFiles = false;
+
+  // TODO: Handle starting mapper in its own function
 
   private setDefaultOutputName(): void {
     const date = new Date(Date.now());
@@ -127,7 +131,7 @@ export class CLI implements ICLI {
       this.isCLI = true;
       this.processCLIArguments()
         .then(() => {
-          return this.runAsCli();
+          return this.runMapper();
         })
         .catch((err: unknown) => {
           console.error(err);
@@ -135,27 +139,30 @@ export class CLI implements ICLI {
     }
   }
 
-  private runAsCli(): Promise<void> {
-    this.mapper = new Mapper(
-      this.cliData[CLIParameters.INPUT] || __dirname,
-      this.excludeNodeModules,
-      this.cliData[CLIParameters.OUTPUTNAME] || __dirname,
-      this.verbose,
-      new RegExp(this.cliData[CLIParameters.REGEX]) || this.regex,
-      this.cliData[CLIParameters.TYPE] || OutputType.PNG,
-      this.cliData[CLIParameters.OUTPUT]
-    );
+  private runMapper(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.mapper = new Mapper(
+        this.mapData[CLIParameters.INPUT] || process.cwd(),
+        this.excludeNodeModules,
+        this.mapData[CLIParameters.OUTPUTNAME] || this.outputName,
+        this.verbose,
+        this.allFiles,
+        new RegExp(this.mapData[CLIParameters.REGEX]) || this.regex,
+        this.mapData[CLIParameters.TYPE] || OutputType.PNG,
+        this.mapData[CLIParameters.OUTPUT]
+      );
 
-    this.mapper
-      .startProcessing()
-      .then((result: string) => {
-        this.handleEnd(result);
-      })
-      .catch((err: Error) => {
-        this.handleEnd("An error occured during mapping!", err);
-      });
-
-    return Promise.resolve();
+      this.mapper
+        .startProcessing()
+        .then((result: string) => {
+          this.handleEnd(result);
+          resolve();
+        })
+        .catch((err: Error) => {
+          this.handleEnd("An error occured during mapping!", err);
+          reject();
+        });
+    });
   }
 
   private processCLIArguments(): Promise<void> {
@@ -187,6 +194,8 @@ export class CLI implements ICLI {
         "--includeNode": CLIParameters.INCLUDENODE,
         "-v": CLIParameters.VERBOSE,
         "--verbose": CLIParameters.VERBOSE,
+        "-aF": CLIParameters.ALLFILES,
+        "--allFiles": CLIParameters.ALLFILES,
         "-h": CLIParameters.HELP,
         "--help": CLIParameters.HELP
       };
@@ -206,8 +215,10 @@ export class CLI implements ICLI {
           this.verbose = true;
         } else if (argMap[param] === CLIParameters.INCLUDENODE) {
           this.excludeNodeModules = false;
+        } else if (argMap[param] === CLIParameters.ALLFILES) {
+          this.allFiles = true;
         } else {
-          this.cliData[argMap[param]] = currentArg.substring(
+          this.mapData[argMap[param]] = currentArg.substring(
             currentArg.indexOf("=") + 1,
             currentArg.length
           );
@@ -231,6 +242,7 @@ export class CLI implements ICLI {
       --type        -t=<Output Type>   Defaults to png. One of: png, jpeg, psd, svg, pdf, plain (for plain text), json, or dot
       --regex       -r=<Regex>         The regex used to exclude files, this will bypass the default regex.
       --includeNode -iN                Include node_modules in the graph
+      --allFiles    -aF                Include all file typs in the graph
       --verbose     -v                 Output verbose information whilst processing
       --help        -h                 Display this
 
@@ -278,12 +290,13 @@ export class CLI implements ICLI {
         return this.inputOutputType();
       })
       .then((outputType: string) => {
+        this.mapData[CLIParameters.TYPE] = outputType;
         switch (input) {
           case "1":
-            this.inputDirectory(outputType);
+            this.inputDirectory();
             break;
           case "2":
-            this.mapCurrentDirectory(outputType);
+            this.mapCurrentDirectory();
             break;
           /* Debug input for quickly running everything
               case "d":
@@ -306,36 +319,21 @@ export class CLI implements ICLI {
    * @private
    * @memberof CLI
    */
-  private async inputDirectory(outputType: string) {
+  private async inputDirectory() {
     await this.getName();
     this.getInput("Please enter the directory to map: ")
       .then((directory: string) => {
         fs.stat(directory, (err: Error, data: any) => {
           if (err) {
             console.log("The path entered is not a directory!");
-            this.inputDirectory(outputType);
+            this.inputDirectory();
           } else {
             if (data.isDirectory()) {
-              this.mapper = new Mapper(
-                directory,
-                this.excludeNodeModules,
-                this.outputName,
-                this.verbose,
-                this.regex,
-                outputType
-              );
-
-              this.mapper
-                .startProcessing()
-                .then((result: string) => {
-                  this.handleEnd(result);
-                })
-                .catch((err: Error) => {
-                  this.handleEnd("An error occured during mapping!", err);
-                });
+              this.mapData[CLIParameters.INPUT] = directory;
+              this.runMapper();
             } else {
               console.log("The path entered is not a directory!");
-              this.inputDirectory(outputType);
+              this.inputDirectory();
             }
           }
         });
@@ -419,7 +417,7 @@ export class CLI implements ICLI {
    * @private
    * @memberof CLI
    */
-  private async mapCurrentDirectory(outputType: string) {
+  private async mapCurrentDirectory() {
     await this.getName();
     console.log("This will map from: " + process.cwd());
     this.getInput("Continue? (Y/n): ")
@@ -429,25 +427,9 @@ export class CLI implements ICLI {
             this.start();
             break;
           default:
-            const directory = process.cwd();
             console.log("Mapping current directory...");
-            this.mapper = new Mapper(
-              directory,
-              this.excludeNodeModules,
-              this.outputName,
-              this.verbose,
-              this.regex,
-              outputType
-            );
-
-            this.mapper
-              .startProcessing()
-              .then((result: string) => {
-                this.handleEnd(result);
-              })
-              .catch((err: Error) => {
-                this.handleEnd("An error occured during mapping!", err);
-              });
+            this.mapData[CLIParameters.INPUT] = process.cwd();
+            this.runMapper();
             break;
         }
       })
@@ -470,15 +452,21 @@ export class CLI implements ICLI {
     }
     console.log(output);
 
-    this.getInput(
-      "Process is finished, thank you for using the JFF Foundations code mapper!\nPress return to continue or q to quit... "
-    )
-      .then(() => {
-        this.start();
-      })
-      .catch((err: unknown) => {
-        console.error(err);
-      });
+    if (this.isCLI) {
+      console.log(
+        "Process is finished, thank you for using the JFF Foundations code mapper!"
+      );
+    } else {
+      this.getInput(
+        "Process is finished, thank you for using the JFF Foundations code mapper!\nPress return to continue or q to quit... "
+      )
+        .then(() => {
+          this.start();
+        })
+        .catch((err: unknown) => {
+          console.error(err);
+        });
+    }
   }
 
   /**

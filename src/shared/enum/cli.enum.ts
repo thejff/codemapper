@@ -7,5 +7,6 @@ export enum CLIParameters {
   REGEX = "regex",
   VERBOSE = "verbose",
   INCLUDENODE = "includenode",
+  ALLFILES = "allfiles",
   HELP = "help"
 }

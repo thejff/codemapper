@@ -28,6 +28,8 @@ import { IGenerator } from "../../shared/interface/generator.interface";
 const exec = require("child_process").exec;
 const fs = require("fs");
 
+// TODO: Remove subgraphs with no nodes
+
 /**
  * The generator class uses the generated file structure in the walker class to
  * generate a .dot file which it passes to the dot software to generate a graph
@@ -95,11 +97,12 @@ export class Generator implements IGenerator {
     private structure: IWalkerStructure,
     private name: string,
     private pathedFileList: string[],
+    private allFiles: boolean,
     private outputType?: string
-    ) {
-      if (!outputType) {
-        this.outputType = "png";
-      }
+  ) {
+    if (!outputType) {
+      this.outputType = "png";
+    }
     this.codemapperDirectory = this.checkDir();
   }
 
@@ -174,22 +177,31 @@ export class Generator implements IGenerator {
 
       let f = files.length;
       while (f--) {
-        let cleanFile = files[f]
-          .replace(new RegExp(`\\.`, "g"), "")
-          .replace(new RegExp(`-`, "g"), "");
+        const charsToReplace = [`\\.`, "-", "_", "@"];
+        let cleanFile = files[f];
 
-        this.getFileLinks(files[f], cleanFile);
-
-        // Check if node name already used
-        const existingNodeCount = (
-          dotCode.match(new RegExp(cleanFile, "g")) || []
-        ).length;
-
-        if (existingNodeCount > 0) {
-          cleanFile += (existingNodeCount + 1).toString();
+        let j = charsToReplace.length;
+        while (j--) {
+          cleanFile = cleanFile.replace(new RegExp(charsToReplace[j], "g"), "");
         }
 
-        dotCode += `${cleanFile}[label="${files[f]}"];`;
+        if (
+          this.allFiles ||
+          cleanFile.substring(cleanFile.length - 2, cleanFile.length) === "ts"
+        ) {
+          this.getFileLinks(files[f], cleanFile);
+
+          // Check if node name already used
+          const existingNodeCount = (
+            dotCode.match(new RegExp(cleanFile, "g")) || []
+          ).length;
+
+          if (existingNodeCount > 0) {
+            cleanFile += (existingNodeCount + 1).toString();
+          }
+
+          dotCode += `${cleanFile}[label="${files[f]}"];`;
+        }
       }
     } else {
       let i = keys.length;
@@ -197,7 +209,13 @@ export class Generator implements IGenerator {
       // Create a new cluster for each entry in the structure
       while (i--) {
         if (keys[i] !== "files") {
-          let cleanKey = keys[i].replace(new RegExp("-", "g"), "");
+          const charsToReplace = [`\\.`, "-", "_", "@"];
+          let cleanKey = keys[i];
+
+          let j = charsToReplace.length;
+          while (j--) {
+            cleanKey = cleanKey.replace(new RegExp(charsToReplace[j], "g"), "");
+          }
 
           const clusterName = new RegExp(`cluster${cleanKey}`, "g");
 
@@ -210,8 +228,8 @@ export class Generator implements IGenerator {
           }
 
           dotCode += `
-            subgraph cluster${cleanKey} {
-            node [style="filled,rounded", fillcolor=deepskyblue, shape=box];`;
+              subgraph cluster${cleanKey} {
+              node [style="filled,rounded", fillcolor=deepskyblue, shape=box];`;
 
           const subStructure = (structure as any)[keys[i]];
 
@@ -220,9 +238,9 @@ export class Generator implements IGenerator {
           }
 
           dotCode += `
-            label="${keys[i]}";
-            style=rounded;
-        }`;
+              label="${keys[i]}";
+              style=rounded;
+          }`;
         }
       }
     }
@@ -248,7 +266,7 @@ export class Generator implements IGenerator {
     const connections: string[] = [];
     let connectionsCode: string = `${nodeName} -> {`;
 
-    if (path) {
+    if (path && !fs.statSync(path).isDirectory()) {
       const data = fs.readFileSync(path, "utf8");
       const lines = data.split(`\n`);
 
@@ -313,7 +331,6 @@ export class Generator implements IGenerator {
     return;
   }
 
-  // TODO: Flag to set output type
   // TODO: Add custom HTML output
   /**
    * Run DOT to generate png
@@ -325,15 +342,19 @@ export class Generator implements IGenerator {
   private runDot(): Promise<void> {
     return new Promise((resolve, reject) => {
       exec(
-        `dot -T${this.outputType} "${this.codemapperDirectory}/${this.name}.dot" -o "${
-          this.codemapperDirectory
-        }/${this.name}.${this.outputType}" -Kfdp`,
+        `dot -T${this.outputType} "${this.codemapperDirectory}/${
+          this.name
+        }.dot" -o "${this.codemapperDirectory}/${this.name}.${
+          this.outputType
+        }" -Kfdp`,
         (err: Error, stdout: unknown, stderr: unknown) => {
           if (err) {
+            console.error("DOT Process Error");
             reject(err);
           }
 
           if (stderr) {
+            console.error("DOT Process Error");
             reject(stderr);
           }
 

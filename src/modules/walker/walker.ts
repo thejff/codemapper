@@ -66,11 +66,11 @@ export class Walker {
 
   /**
    * Creates an instance of Walker and builds JSON structure.
-   * @param {string} [directory=__dirname]
+   * @param {string} [directory=process.cwd()]
    * @memberof Walker
    */
   constructor(
-    directory: string = __dirname,
+    directory: string = process.cwd(),
     private excludeNodeModules: boolean = true,
     private customRegex?: RegExp
   ) {
@@ -164,8 +164,15 @@ export class Walker {
 
       // Check nextPath is a directory
       if (
-        (isDir && !this.excludeNodeModules) ||
-        (isDir && this.excludeNodeModules && entry !== "node_modules")
+        (isDir &&
+          !this.excludeNodeModules &&
+          entry !== ".git" &&
+          entry !== "codemapper") ||
+        (isDir &&
+          this.excludeNodeModules &&
+          entry !== "node_modules" &&
+          entry !== ".git" &&
+          entry !== "codemapper")
       ) {
         jsonStruct[entry] = {};
 

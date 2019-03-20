@@ -28,6 +28,8 @@ import {
 } from "../../shared/interface/mapper.interface";
 import { Generator } from "../generator/generator";
 
+// TODO: Implement verbose
+
 /**
  * The mapper class is the main class that handles the core functionality
  *
@@ -49,6 +51,7 @@ export class Mapper implements IMapper {
     private excludeNodeModules: boolean = true,
     private outputName: string,
     private verbose: boolean = false,
+    private allFiles: boolean = false,
     private regex?: RegExp,
     private _outputType?: string,
     private outputDirectory?: string
@@ -122,6 +125,7 @@ export class Mapper implements IMapper {
         data.structure,
         this.outputName,
         data.pathedFileList,
+        this.allFiles,
         this._outputType
       );
 
