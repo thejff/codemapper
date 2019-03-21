@@ -71,7 +71,7 @@ export class Mapper implements IMapper {
     return new Promise((resolve, reject) => {
       this.runWalker()
         .then((data: IWalkedProjectData) => {
-          this.runGenerator(data);
+          return this.runGenerator(data);
         })
         .then(() => {
           resolve("Mapping complete");
@@ -129,7 +129,6 @@ export class Mapper implements IMapper {
         this._outputType
       );
 
-      // TODO: Add data verification checks
       generator
         .generate()
         .then(() => {

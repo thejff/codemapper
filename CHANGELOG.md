@@ -10,7 +10,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Features
 
 - Allow optional mapping of NPM dependencies
-- Allow optional mapping of all files in directory
 - Check and map require()
 - Allow walking of .js files
 - Map all imports (currently checks for local imports only)
@@ -25,7 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Some files are missed, notably some x.module.ts
 - Sometimes files have too many edges
 
-## [1.3.0] - 2019-03-
+## [1.1.0] - 2019-03-
 
 ### Added
 
@@ -33,4 +32,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Allow for multiple output types
 - Direct CLI command input
 - Allow optional custom regex
-- Output handling to allo for verbose output during processing
+- Output handling to allow for verbose output during processing
+- Allow optional mapping of all files in directory

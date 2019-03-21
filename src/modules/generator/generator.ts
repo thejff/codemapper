@@ -24,8 +24,7 @@
 import { IWalkerStructure } from "../../shared/interface/walker.interface";
 import { exit } from "shelljs";
 import { IGenerator } from "../../shared/interface/generator.interface";
-
-const exec = require("child_process").exec;
+import * as child from "child_process";
 const fs = require("fs");
 
 // TODO: Remove subgraphs with no nodes
@@ -130,6 +129,18 @@ export class Generator implements IGenerator {
     });
   }
 
+  private removeEmptySubgraphs() {
+    // Check for subgraphs with not child subgraphs and remove them
+    // How to track if there are any? If no deletes on last pass then end?
+  }
+
+  /**
+   *
+   *
+   * @private
+   * @returns {Promise<string>}
+   * @memberof Generator
+   */
   private convertStructToDot(): Promise<string> {
     return new Promise((resolve, reject) => {
       const graphName = this.name
@@ -178,6 +189,7 @@ export class Generator implements IGenerator {
       let f = files.length;
       while (f--) {
         const charsToReplace = [`\\.`, "-", "_", "@"];
+
         let cleanFile = files[f];
 
         let j = charsToReplace.length;
@@ -199,6 +211,10 @@ export class Generator implements IGenerator {
           if (existingNodeCount > 0) {
             cleanFile += (existingNodeCount + 1).toString();
           }
+
+          // Starting an ID with a number is invalid so wrap in quotes
+          // Wrap all to be safe
+          cleanFile = `"${cleanFile}"`;
 
           dotCode += `${cleanFile}[label="${files[f]}"];`;
         }
@@ -341,30 +357,46 @@ export class Generator implements IGenerator {
    */
   private runDot(): Promise<void> {
     return new Promise((resolve, reject) => {
-      exec(
-        `dot -T${this.outputType} "${this.codemapperDirectory}/${
-          this.name
-        }.dot" -o "${this.codemapperDirectory}/${this.name}.${
-          this.outputType
-        }" -Kfdp`,
-        (err: Error, stdout: unknown, stderr: unknown) => {
-          if (err) {
-            console.error("DOT Process Error");
-            reject(err);
-          }
+      console.log("Beginning DOT processing...");
+      const dotCommand = `dot -T${this.outputType} "${
+        this.codemapperDirectory
+      }/${this.name}.dot" -o "${this.codemapperDirectory}/${this.name}.${
+        this.outputType
+      }" -Kfdp -v`;
 
-          if (stderr) {
-            console.error("DOT Process Error");
-            reject(stderr);
-          }
-
-          if (stdout) {
-            console.log(stdout);
-          }
-
-          resolve();
+      const dotChild = child.exec(dotCommand, (err, stdout, stderr) => {
+        if (err) {
+          console.log(err);
         }
-      );
+
+        if (stderr) {
+          console.log(stderr);
+        }
+
+        if (stdout) {
+          console.log(stdout);
+        }
+      });
+
+      dotChild.on("message", (message) => {
+        console.log("message");
+        console.log(message);
+      });
+
+      dotChild.on("close", (code: number) => {
+        console.log("DOT processing finished. Exited with code: " + code);
+        resolve();
+      });
+
+      dotChild.on("error", (err) => {
+        console.log("DOT processing errored. Error: \n" + err);
+        reject(err);
+      });
+
+      dotChild.on("disconnect", (code: number) => {
+        console.log("DOT processing disconnected. Exited with code: " + code);
+        reject("DOT Process disconnected");
+      });
     });
   }
 

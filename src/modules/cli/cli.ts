@@ -90,8 +90,6 @@ export class CLI implements ICLI {
 
   private allFiles = false;
 
-  // TODO: Handle starting mapper in its own function
-
   private setDefaultOutputName(): void {
     const date = new Date(Date.now());
     let month = this.fixDate((date.getMonth() + 1).toString());
@@ -241,8 +239,8 @@ export class CLI implements ICLI {
       --outName     -oN=<Output name>  The name of the graph file, this should not include the file extension
       --type        -t=<Output Type>   Defaults to png. One of: png, jpeg, psd, svg, pdf, plain (for plain text), json, or dot
       --regex       -r=<Regex>         The regex used to exclude files, this will bypass the default regex.
-      --includeNode -iN                Include node_modules in the graph
-      --allFiles    -aF                Include all file typs in the graph
+      --includeNode -iN                Include node_modules in the graph. This can take a very long time.
+      --allFiles    -aF                Include all file typs in the graph. 
       --verbose     -v                 Output verbose information whilst processing
       --help        -h                 Display this
 
