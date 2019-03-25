@@ -46,15 +46,6 @@ const fs = require("fs");
  */
 export class CLI implements ICLI {
   /**
-   * Holds custom regex
-   *
-   * @private
-   * @type {(null | RegExp)}
-   * @memberof CLI
-   */
-  private regex: undefined | RegExp;
-
-  /**
    * Holds an instance of the mapper class
    *
    * @private
@@ -145,8 +136,8 @@ export class CLI implements ICLI {
         this.mapData[CLIParameters.OUTPUTNAME] || this.outputName,
         this.verbose,
         this.allFiles,
-        new RegExp(this.mapData[CLIParameters.REGEX]) || this.regex,
-        this.mapData[CLIParameters.TYPE] || OutputType.PNG,
+        this.mapData[CLIParameters.REGEX],
+        this.mapData[CLIParameters.TYPE] || OutputType.SVG,
         this.mapData[CLIParameters.OUTPUT]
       );
 
@@ -483,7 +474,7 @@ export class CLI implements ICLI {
       })
       .then((regex: string) => {
         if (regex !== "" || regex !== undefined || regex !== null) {
-          this.regex = new RegExp(regex);
+          this.mapData[CLIParameters.REGEX] = regex;
         }
       })
       .catch((err: unknown) => {

@@ -23,7 +23,8 @@
 
 import {
   IWalkerStructure,
-  IWalkerResponse
+  IWalkerResponse,
+  IDirectoryStructure
 } from "../../shared/interface/walker.interface";
 
 const fs = require("fs");
@@ -43,7 +44,7 @@ export class Walker {
    * @type {IWalkerStructure}
    * @memberof Walker
    */
-  private _structure: IWalkerStructure;
+  private _structure: IWalkerStructure = { files: [] };
 
   /**
    * Holds a complete list of all file names cleaned.
@@ -64,6 +65,8 @@ export class Walker {
    */
   private completePathedFileList: string[] = [];
 
+  private regex: RegExp;
+
   /**
    * Creates an instance of Walker and builds JSON structure.
    * @param {string} [directory=process.cwd()]
@@ -72,9 +75,19 @@ export class Walker {
   constructor(
     directory: string = process.cwd(),
     private excludeNodeModules: boolean = true,
-    private customRegex?: RegExp
+    private allFiles: boolean = false,
+    private verbose: boolean = false,
+    regex?: string
   ) {
-    this._structure = this.dirLoop(directory).structure;
+    if (regex) {
+      this.regex = new RegExp(regex);
+    } else {
+      this.regex = new RegExp(/.+(?<!\.d)(?<!\.spec)(\.ts)(?!\.map)/g);
+    }
+
+    this._structure = this.buildStructure(directory);
+    /* console.log("this._structure");
+    console.log(JSON.stringify(this._structure)); */
   }
 
   /**
@@ -86,6 +99,7 @@ export class Walker {
    */
   get structure(): IWalkerStructure {
     return this._structure;
+    // return {};
   }
 
   /**
@@ -110,116 +124,111 @@ export class Walker {
     return this.completePathedFileList;
   }
 
-  // TODO: Remove any
-  /**
-   * Loop through the give directory to build file structure
-   *
-   * @private
-   * @param {string} path
-   * @returns {IWalkerResponse}
-   * @memberof Walker
-   */
-  private dirLoop(path: string): IWalkerResponse;
-  private dirLoop(path: string, jsonStruct: IWalkerStructure): IWalkerResponse;
-  private dirLoop(path: string, jsonStruct?: any): IWalkerResponse {
+  private buildStructure(
+    path: string,
+    jsonStruct?: IWalkerStructure
+  ): IWalkerStructure {
     if (!jsonStruct) {
-      jsonStruct = {};
-    }
-
-    let fileCount = 0;
-
-    // If no directory structure passed get the base from the path
-    const directoryStructure = fs.readdirSync(path);
-
-    // Check for files and add to JSON
-    const fileStructure = this.buildFileList(directoryStructure);
-    if (fileStructure.length > 0) {
       jsonStruct = {
-        files: fileStructure
+        files: []
       };
-
-      let f = fileStructure.length;
-      while (f--) {
-        this.completePathedFileList.push(`${path}/${fileStructure[f]}`);
-      }
-
-      fileCount = fileStructure.length;
     }
 
-    // Loop through given structure to build JSON
-    let i = directoryStructure.length;
-    while (i--) {
-      const entry = directoryStructure[i];
+    const directoryStructure: IDirectoryStructure = this.createDirectoryStructure(
+      path
+    );
+
+    if (directoryStructure.files.length > 0) {
+      jsonStruct.files = directoryStructure.files;
+    }
+
+    let i = 0;
+    while (i < directoryStructure.folders.length) {
+      const folder = directoryStructure.folders[i];
 
       let nextPath: string;
 
       // Check if there is already a / at the end
       if (path[path.length - 1] === "/" || path[path.length - 1] === "\\") {
-        nextPath = `${path}${entry}`;
+        nextPath = `${path}${folder}`;
       } else {
-        nextPath = `${path}/${entry}`;
+        nextPath = `${path}/${folder}`;
       }
 
-      const isDir = fs.lstatSync(nextPath).isDirectory();
+      const folderData: IWalkerStructure = this.buildStructure(
+        nextPath,
+        (jsonStruct[folder] = { files: [] })
+      );
 
-      // Check nextPath is a directory
-      if (
-        (isDir &&
-          !this.excludeNodeModules &&
-          entry !== ".git" &&
-          entry !== "codemapper") ||
-        (isDir &&
-          this.excludeNodeModules &&
-          entry !== "node_modules" &&
-          entry !== ".git" &&
-          entry !== "codemapper")
-      ) {
-        jsonStruct[entry] = {};
-
-        // Loop through checking for files and folders
-        const subDirData = this.dirLoop(nextPath, jsonStruct[entry]);
-
-        // If there are no sub directories don't add the structure
-        if (
-          Object.keys(subDirData.structure).length > 0 ||
-          subDirData.fileCount > 0
-        ) {
-          jsonStruct[entry] = subDirData.structure;
-        } else {
-          // Delete empty structures as we initialise it earlier
-          delete jsonStruct[entry];
-        }
+      if (folderData.files.length <= 0 && Object.keys(folderData).length <= 1) {
+        /* console.log("Deleting folder: " + folder);
+        console.log(jsonStruct);
+        console.log(jsonStruct[folder]); */
+        delete jsonStruct[folder];
       }
+
+      i++;
     }
 
-    return { structure: jsonStruct, fileCount };
+    return jsonStruct;
   }
 
-  /**
-   * Create and return an array of just files, using a regex lookup to exclude
-   * Definition files, specification files and map files
-   *
-   * @private
-   * @param {string[]} directoryStructure
-   * @returns {string[]}
-   * @memberof Walker
-   */
-  private buildFileList(directoryStructure: string[]): string[] {
-    const files: string[] = [];
+  private createDirectoryStructure(path: string): IDirectoryStructure {
+    const directoryData = fs.readdirSync(path);
+    const structure: IDirectoryStructure = {
+      files: [],
+      folders: []
+    };
 
-    let regex = /.+(?<!\.d)(?<!\.spec)(\.ts)(?!\.map)/g;
+    let i = 0;
+    while (i < directoryData.length) {
+      const pathCheck = `${path}/${directoryData[i]}`;
 
-    if (this.customRegex) {
-      regex = this.customRegex;
+      if (fs.lstatSync(pathCheck).isFile()) {
+        // Check if file passes parameters and regex
+        if (this.acceptableFile(directoryData[i])) {
+          structure.files.push(directoryData[i]);
+          this.completePathedFileList.push(pathCheck);
+        }
+      } else {
+        if (this.acceptableFolder(directoryData[i])) {
+          structure.folders.push(directoryData[i]);
+        }
+      }
+
+      i++;
     }
 
-    let i = directoryStructure.length;
-    while (i--) {
-      if (directoryStructure[i].match(regex) !== null) {
-        files.push(directoryStructure[i]);
+    return structure;
+  }
+
+  private acceptableFile(file: string): boolean {
+    if (this.allFiles) {
+      return true;
+    } else {
+      // NOTE: this.regex.test alternates between true and false when the global flag is used
+      // using file specific matching instead
+      const match = file.match(this.regex);
+      if (match && match.indexOf(file) > -1) {
+        return true;
       }
     }
 
-    return files;
+    return false;
+  }
+
+  private acceptableFolder(folder: string): boolean {
+    const notAcceptable = [".git", "node_modules", "codemapper"];
+
+    // check if node_modules should be included
+    if (folder === "node_modules" && !this.excludeNodeModules) {
+      return true;
+    }
+
+    if (notAcceptable.indexOf(folder) > -1) {
+      return false;
+    } else {
+      return true;
+    }
   }
 }

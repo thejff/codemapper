@@ -22,11 +22,16 @@
  */
 
 export interface IWalkerStructure {
-  files?: string[];
-  subDirectory?: {};
+  [folder: string]: {};
+  files: string[];
 }
 
 export interface IWalkerResponse {
-  structure: {};
+  structure: {} | IWalkerStructure;
   fileCount: number;
+}
+
+export interface IDirectoryStructure {
+  files: string[];
+  folders: string[];
 }

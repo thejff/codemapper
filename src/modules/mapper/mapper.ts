@@ -52,7 +52,7 @@ export class Mapper implements IMapper {
     private outputName: string,
     private verbose: boolean = false,
     private allFiles: boolean = false,
-    private regex?: RegExp,
+    private regex?: string,
     private _outputType?: string,
     private outputDirectory?: string
   ) {}
@@ -93,15 +93,13 @@ export class Mapper implements IMapper {
     return new Promise((resolve) => {
       let walker;
 
-      if (this.regex) {
-        walker = new Walker(
-          this.directory,
-          this.excludeNodeModules,
-          this.regex
-        );
-      } else {
-        walker = new Walker(this.directory, this.excludeNodeModules);
-      }
+      walker = new Walker(
+        this.directory,
+        this.excludeNodeModules,
+        this.allFiles,
+        this.verbose,
+        this.regex
+      );
 
       resolve({
         structure: walker.structure,

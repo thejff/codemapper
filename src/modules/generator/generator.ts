@@ -97,7 +97,8 @@ export class Generator implements IGenerator {
     private name: string,
     private pathedFileList: string[],
     private allFiles: boolean,
-    private outputType?: string
+    private outputType?: string,
+    private verbose?: boolean
   ) {
     if (!outputType) {
       this.outputType = "png";
@@ -150,7 +151,7 @@ export class Generator implements IGenerator {
       // Initialise the dot code with some global data
       let dotCode = `digraph ${graphName} {
         splines="curved";
-        node [nodesep=20.0];
+        node [nodesep=0.1];
         graph [overlap=scalexy; splines=true];\n`;
 
       // Generate and add the sub graphs based on the pre generated structure
@@ -182,12 +183,18 @@ export class Generator implements IGenerator {
   ): string {
     const keys = Object.keys(structure);
 
+    /* console.log("\n------------- STRUCT\n");
+    console.log(keys[0]);
+    console.log(structure); */
+
     // If only one key, it's the file array
     if (keys.length === 1 && keys[0] === "files") {
+      // this.addFiles((structure as any)[keys[0]], dotCode);
       let files = (structure as any)[keys[0]];
+      this.addFiles(files, dotCode);
 
-      let f = files.length;
-      while (f--) {
+      /* let f = 0;
+      while (f < files.length) {
         const charsToReplace = [`\\.`, "-", "_", "@"];
 
         let cleanFile = files[f];
@@ -218,12 +225,50 @@ export class Generator implements IGenerator {
 
           dotCode += `${cleanFile}[label="${files[f]}"];`;
         }
-      }
+        f++;
+      } */
     } else {
-      let i = keys.length;
+      let files = (structure as any)[keys[0]];
+      /* let f = 0;
+      while (f < files.length) {
+        const charsToReplace = [`\\.`, "-", "_", "@"];
+
+        let cleanFile = files[f];
+
+        let j = charsToReplace.length;
+        while (j--) {
+          cleanFile = cleanFile.replace(new RegExp(charsToReplace[j], "g"), "");
+        }
+
+        if (
+          this.allFiles ||
+          cleanFile.substring(cleanFile.length - 2, cleanFile.length) === "ts"
+        ) {
+          this.getFileLinks(files[f], cleanFile);
+
+          // Check if node name already used
+          const existingNodeCount = (
+            dotCode.match(new RegExp(cleanFile, "g")) || []
+          ).length;
+
+          if (existingNodeCount > 0) {
+            cleanFile += (existingNodeCount + 1).toString();
+          }
+
+          // Starting an ID with a number is invalid so wrap in quotes
+          // Wrap all to be safe
+          cleanFile = `"${cleanFile}"`;
+
+          dotCode += `${cleanFile}[label="${files[f]}"];`;
+        }
+        f++;
+      } */
+      // this.addFiles(files, dotCode);
+
+      let i = 0;
 
       // Create a new cluster for each entry in the structure
-      while (i--) {
+      while (i < keys.length) {
         if (keys[i] !== "files") {
           const charsToReplace = [`\\.`, "-", "_", "@"];
           let cleanKey = keys[i];
@@ -258,10 +303,48 @@ export class Generator implements IGenerator {
               style=rounded;
           }`;
         }
+        i++;
       }
     }
 
     return dotCode;
+  }
+
+  private addFiles(files: string[], dotCode: string): void {
+    let f = 0;
+    while (f < files.length) {
+      const charsToReplace = [`\\.`, "-", "_", "@"];
+
+      let cleanFile = files[f];
+
+      let j = charsToReplace.length;
+      while (j--) {
+        cleanFile = cleanFile.replace(new RegExp(charsToReplace[j], "g"), "");
+      }
+
+      if (
+        this.allFiles ||
+        cleanFile.substring(cleanFile.length - 2, cleanFile.length) === "ts"
+      ) {
+        this.getFileLinks(files[f], cleanFile);
+
+        // Check if node name already used
+        const existingNodeCount = (
+          dotCode.match(new RegExp(cleanFile, "g")) || []
+        ).length;
+
+        if (existingNodeCount > 0) {
+          cleanFile += (existingNodeCount + 1).toString();
+        }
+
+        // Starting an ID with a number is invalid so wrap in quotes
+        // Wrap all to be safe
+        cleanFile = `"${cleanFile}"`;
+
+        dotCode += `${cleanFile}[label="${files[f]}"];`;
+      }
+      f++;
+    }
   }
 
   // TODO: Check for require
@@ -284,13 +367,25 @@ export class Generator implements IGenerator {
 
     if (path && !fs.statSync(path).isDirectory()) {
       const data = fs.readFileSync(path, "utf8");
-      const lines = data.split(`\n`);
+      let lines = data.split(`;\r\n`);
+
+      lines = this.cleanLines(lines);
 
       // NOTE: Need to check for comments and ignore any lines after /* or /** until */ found
 
+      /* console.log("\n ----------------- " + filename);
+      console.log(lines); */
+
       let i = lines.length;
       while (i--) {
+        /* if (filename === "cli.ts") {
+          console.log("\n----------------- PATH");
+          console.log(filename);
+          console.log(lines[i]);
+        } */
+
         if (
+          // lines[i] &&
           lines[i].indexOf("import") > -1 &&
           lines[i].indexOf('from ".') > -1
         ) {
@@ -299,6 +394,11 @@ export class Generator implements IGenerator {
             .replace(new RegExp('"', "g"), "")
             .replace(new RegExp("-", "g"), "")
             .replace(new RegExp("\\.", "g"), "");
+
+          /* console.log("\n--------------- FILE NAME");
+          console.log(importedFileName);
+          console.log(importLineSplit); */
+
           connections.push(importedFileName + "ts");
         }
       }
@@ -321,9 +421,32 @@ export class Generator implements IGenerator {
     }
 
     if (!connectionsCode.match(new RegExp("{}"))) {
-      this.connectionsCodeHolder += `${connectionsCode}`;
+      this.connectionsCodeHolder += `\n${connectionsCode}`;
     }
     return;
+  }
+
+  private cleanLines(lines: string[]): string[] {
+    const ignores = ["//", "/*", "*/"];
+    const includes = ['} from ".'];
+
+    const clean: string[] = [];
+
+    let i = 0;
+    while (i < lines.length) {
+      if (
+        lines[i].indexOf('} from ".') > -1 &&
+        lines[i].indexOf("//") <= -1 &&
+        lines[i].indexOf("/*") <= -1 &&
+        lines[i].indexOf("*/") <= -1
+      ) {
+        clean.push(lines[i]);
+      }
+
+      i++;
+    }
+
+    return clean;
   }
 
   /**
@@ -358,11 +481,15 @@ export class Generator implements IGenerator {
   private runDot(): Promise<void> {
     return new Promise((resolve, reject) => {
       console.log("Beginning DOT processing...");
-      const dotCommand = `dot -T${this.outputType} "${
-        this.codemapperDirectory
-      }/${this.name}.dot" -o "${this.codemapperDirectory}/${this.name}.${
+      let dotCommand = `dot -T${this.outputType} "${this.codemapperDirectory}/${
+        this.name
+      }.dot" -o "${this.codemapperDirectory}/${this.name}.${
         this.outputType
-      }" -Kfdp -v`;
+      }" -Kfdp`;
+
+      if (this.verbose) {
+        dotCommand += " -v";
+      }
 
       const dotChild = child.exec(dotCommand, (err, stdout, stderr) => {
         if (err) {
