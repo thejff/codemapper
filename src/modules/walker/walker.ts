@@ -23,9 +23,9 @@
 
 import {
   IWalkerStructure,
-  IWalkerResponse,
   IDirectoryStructure
 } from "../../shared/interface/walker.interface";
+import { Logger } from "../logger/logger";
 
 const fs = require("fs");
 
@@ -76,7 +76,7 @@ export class Walker {
     directory: string = process.cwd(),
     private excludeNodeModules: boolean = true,
     private allFiles: boolean = false,
-    private verbose: boolean = false,
+    private logger: Logger,
     regex?: string
   ) {
     if (regex) {
@@ -85,9 +85,8 @@ export class Walker {
       this.regex = new RegExp(/.+(?<!\.d)(?<!\.spec)(\.ts)(?!\.map)/g);
     }
 
+    this.logger.info("Building structure from: " + directory);
     this._structure = this.buildStructure(directory);
-    /* console.log("this._structure");
-    console.log(JSON.stringify(this._structure)); */
   }
 
   /**
@@ -99,19 +98,7 @@ export class Walker {
    */
   get structure(): IWalkerStructure {
     return this._structure;
-    // return {};
   }
-
-  /**
-   * Returns an array of the cleaned file names
-   *
-   * @readonly
-   * @type {string[]}
-   * @memberof Walker
-   */
-  /* get cleanedFileList(): string[] {
-    return this.completeCleanedFileList;
-  } */
 
   /**
    * Returns an array of all file paths
@@ -124,10 +111,20 @@ export class Walker {
     return this.completePathedFileList;
   }
 
+  /**
+   * Build the JSON structure used to generate the DOT code
+   *
+   * @private
+   * @param {string} path
+   * @param {IWalkerStructure} [jsonStruct]
+   * @returns {IWalkerStructure}
+   * @memberof Walker
+   */
   private buildStructure(
     path: string,
     jsonStruct?: IWalkerStructure
   ): IWalkerStructure {
+    this.logger.info(`Building structure from ${path}`);
     if (!jsonStruct) {
       jsonStruct = {
         files: []
@@ -136,6 +133,10 @@ export class Walker {
 
     const directoryStructure: IDirectoryStructure = this.createDirectoryStructure(
       path
+    );
+
+    this.logger.info(
+      `Directory structure: \n${JSON.stringify(directoryStructure, null, 4)}`
     );
 
     if (directoryStructure.files.length > 0) {
@@ -161,9 +162,9 @@ export class Walker {
       );
 
       if (folderData.files.length <= 0 && Object.keys(folderData).length <= 1) {
-        /* console.log("Deleting folder: " + folder);
-        console.log(jsonStruct);
-        console.log(jsonStruct[folder]); */
+        this.logger.info(
+          `${folder} folder doesn't contain any relevant files, skipping`
+        );
         delete jsonStruct[folder];
       }
 
@@ -173,7 +174,17 @@ export class Walker {
     return jsonStruct;
   }
 
+  /**
+   * Build up the directory structure from a give path
+   *
+   * @private
+   * @param {string} path
+   * @returns {IDirectoryStructure}
+   * @memberof Walker
+   */
   private createDirectoryStructure(path: string): IDirectoryStructure {
+    this.logger.info(`Getting files and folders at ${path}`);
+
     const directoryData = fs.readdirSync(path);
     const structure: IDirectoryStructure = {
       files: [],
@@ -202,7 +213,17 @@ export class Walker {
     return structure;
   }
 
+  /**
+   * Check if file meets requirements
+   *
+   * @private
+   * @param {string} file
+   * @returns {boolean}
+   * @memberof Walker
+   */
   private acceptableFile(file: string): boolean {
+    this.logger.info(`Checking if file acceptable: ${file}`);
+
     if (this.allFiles) {
       return true;
     } else {
@@ -210,6 +231,7 @@ export class Walker {
       // using file specific matching instead
       const match = file.match(this.regex);
       if (match && match.indexOf(file) > -1) {
+        this.logger.info(`File is acceptable: ${file}`);
         return true;
       }
     }
@@ -217,7 +239,17 @@ export class Walker {
     return false;
   }
 
+  /**
+   * Check if a folder meets requirements
+   *
+   * @private
+   * @param {string} folder
+   * @returns {boolean}
+   * @memberof Walker
+   */
   private acceptableFolder(folder: string): boolean {
+    this.logger.info(`Checking if folder acceptable: ${folder}`);
+
     const notAcceptable = [".git", "node_modules", "codemapper"];
 
     // check if node_modules should be included
@@ -228,6 +260,7 @@ export class Walker {
     if (notAcceptable.indexOf(folder) > -1) {
       return false;
     } else {
+      this.logger.info(`Folder is acceptable: ${folder}`);
       return true;
     }
   }

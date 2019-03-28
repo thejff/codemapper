@@ -34,3 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Allow optional custom regex
 - Output handling to allow for verbose output during processing
 - Allow optional mapping of all files in directory
+
+### Bugs
+
+- Files in non end directories ignored

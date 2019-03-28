@@ -31,6 +31,7 @@ import {
 } from "../../shared/interface/cli.interface";
 import { OutputType } from "../../shared/enum/outputType.enum";
 import { CLIParameters } from "../../shared/enum/cli.enum";
+import { Logger } from "../logger/logger";
 const figlet = require("figlet");
 const readline = require("readline");
 const fs = require("fs");
@@ -89,6 +90,14 @@ export class CLI implements ICLI {
     this.outputName = `codemapper-${date.getFullYear()}${month}${dayOfMonth}`;
   }
 
+  private logger: Logger;
+
+  constructor() {
+    // Initialise logger with verbose as true as we generally always want to display output from this class
+    // If the user is running a direct command we will later change this to false if they haven't specified verbose
+    this.logger = new Logger(true);
+  }
+
   /**
    * Used for generating the default output name
    *
@@ -117,6 +126,7 @@ export class CLI implements ICLI {
     if (this.args.length === 0) {
       this.menu();
     } else {
+      this.logger.info("CLI Input detected, beginning processing...");
       this.isCLI = true;
       this.processCLIArguments()
         .then(() => {
@@ -202,11 +212,24 @@ export class CLI implements ICLI {
 
         if (argMap[param] === CLIParameters.VERBOSE) {
           this.verbose = true;
-        } else if (argMap[param] === CLIParameters.INCLUDENODE) {
-          this.excludeNodeModules = false;
-        } else if (argMap[param] === CLIParameters.ALLFILES) {
-          this.allFiles = true;
         } else {
+          this.logger.verbose = false;
+        }
+
+        if (argMap[param] === CLIParameters.INCLUDENODE) {
+          this.excludeNodeModules = false;
+        }
+
+        if (argMap[param] === CLIParameters.ALLFILES) {
+          this.allFiles = true;
+        }
+
+        if (
+          argMap[param] !== CLIParameters.DEFAULT &&
+          argMap[param] !== CLIParameters.VERBOSE &&
+          argMap[param] !== CLIParameters.INCLUDENODE &&
+          argMap[param] !== CLIParameters.ALLFILES
+        ) {
           this.mapData[argMap[param]] = currentArg.substring(
             currentArg.indexOf("=") + 1,
             currentArg.length
@@ -437,12 +460,12 @@ export class CLI implements ICLI {
    */
   private handleEnd(output: string, error?: Error): void {
     if (error) {
-      console.error(error);
+      this.logger.error(error);
     }
-    console.log(output);
+    this.logger.info(output);
 
     if (this.isCLI) {
-      console.log(
+      this.logger.info(
         "Process is finished, thank you for using the JFF Foundations code mapper!"
       );
     } else {
@@ -452,8 +475,8 @@ export class CLI implements ICLI {
         .then(() => {
           this.start();
         })
-        .catch((err: unknown) => {
-          console.error(err);
+        .catch((err: Error) => {
+          this.logger.error(err);
         });
     }
   }
@@ -477,8 +500,8 @@ export class CLI implements ICLI {
           this.mapData[CLIParameters.REGEX] = regex;
         }
       })
-      .catch((err: unknown) => {
-        console.error(err);
+      .catch((err: Error) => {
+        this.logger.error(err);
       });
   }
 

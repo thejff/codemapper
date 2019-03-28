@@ -25,9 +25,8 @@ import { IWalkerStructure } from "../../shared/interface/walker.interface";
 import { exit } from "shelljs";
 import { IGenerator } from "../../shared/interface/generator.interface";
 import * as child from "child_process";
+import { Logger } from "../logger/logger";
 const fs = require("fs");
-
-// TODO: Remove subgraphs with no nodes
 
 /**
  * The generator class uses the generated file structure in the walker class to
@@ -74,7 +73,7 @@ export class Generator implements IGenerator {
    * @private
    * @memberof Generator
    */
-  private connectionsCodeHolder = "";
+  private connectionsCodeCache = "";
 
   /**
    * The directory to save the output files to
@@ -97,6 +96,7 @@ export class Generator implements IGenerator {
     private name: string,
     private pathedFileList: string[],
     private allFiles: boolean,
+    private logger: Logger,
     private outputType?: string,
     private verbose?: boolean
   ) {
@@ -114,6 +114,8 @@ export class Generator implements IGenerator {
    */
   public generate(): Promise<void> {
     return new Promise((resolve, reject) => {
+      this.logger.info("Beginning DOT code generation...");
+
       this.convertStructToDot()
         .then((dotCode: string) => {
           return this.writeFile(dotCode, this.name);
@@ -130,11 +132,6 @@ export class Generator implements IGenerator {
     });
   }
 
-  private removeEmptySubgraphs() {
-    // Check for subgraphs with not child subgraphs and remove them
-    // How to track if there are any? If no deletes on last pass then end?
-  }
-
   /**
    *
    *
@@ -143,10 +140,12 @@ export class Generator implements IGenerator {
    * @memberof Generator
    */
   private convertStructToDot(): Promise<string> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       const graphName = this.name
         .replace(new RegExp(`\\.`, "g"), "")
         .replace(new RegExp(`-`, "g"), "");
+
+      this.logger.info(`Setting graph name to ${graphName}`);
 
       // Initialise the dot code with some global data
       let dotCode = `digraph ${graphName} {
@@ -157,8 +156,9 @@ export class Generator implements IGenerator {
       // Generate and add the sub graphs based on the pre generated structure
       dotCode = this.addSubgraphs(dotCode, this.structure);
 
+      this.logger.info(`Adding edges`);
       // Add the connections between nodes
-      dotCode += `${this.connectionsCodeHolder}`;
+      dotCode += `${this.connectionsCodeCache}`;
 
       // Close of the code and return it
       dotCode += "}";
@@ -182,94 +182,29 @@ export class Generator implements IGenerator {
     depth: number = 0
   ): string {
     const keys = Object.keys(structure);
-
-    /* console.log("\n------------- STRUCT\n");
-    console.log(keys[0]);
-    console.log(structure); */
+    this.logger.info(`Current depth: ${depth}`);
+    this.logger.info(
+      `Parsing structure:\n ${JSON.stringify(structure, null, 4)}`
+    );
 
     // If only one key, it's the file array
     if (keys.length === 1 && keys[0] === "files") {
-      // this.addFiles((structure as any)[keys[0]], dotCode);
       let files = (structure as any)[keys[0]];
-      this.addFiles(files, dotCode);
-
-      /* let f = 0;
-      while (f < files.length) {
-        const charsToReplace = [`\\.`, "-", "_", "@"];
-
-        let cleanFile = files[f];
-
-        let j = charsToReplace.length;
-        while (j--) {
-          cleanFile = cleanFile.replace(new RegExp(charsToReplace[j], "g"), "");
-        }
-
-        if (
-          this.allFiles ||
-          cleanFile.substring(cleanFile.length - 2, cleanFile.length) === "ts"
-        ) {
-          this.getFileLinks(files[f], cleanFile);
-
-          // Check if node name already used
-          const existingNodeCount = (
-            dotCode.match(new RegExp(cleanFile, "g")) || []
-          ).length;
-
-          if (existingNodeCount > 0) {
-            cleanFile += (existingNodeCount + 1).toString();
-          }
-
-          // Starting an ID with a number is invalid so wrap in quotes
-          // Wrap all to be safe
-          cleanFile = `"${cleanFile}"`;
-
-          dotCode += `${cleanFile}[label="${files[f]}"];`;
-        }
-        f++;
-      } */
+      dotCode = this.addFiles(files, dotCode);
     } else {
       let files = (structure as any)[keys[0]];
-      /* let f = 0;
-      while (f < files.length) {
-        const charsToReplace = [`\\.`, "-", "_", "@"];
-
-        let cleanFile = files[f];
-
-        let j = charsToReplace.length;
-        while (j--) {
-          cleanFile = cleanFile.replace(new RegExp(charsToReplace[j], "g"), "");
-        }
-
-        if (
-          this.allFiles ||
-          cleanFile.substring(cleanFile.length - 2, cleanFile.length) === "ts"
-        ) {
-          this.getFileLinks(files[f], cleanFile);
-
-          // Check if node name already used
-          const existingNodeCount = (
-            dotCode.match(new RegExp(cleanFile, "g")) || []
-          ).length;
-
-          if (existingNodeCount > 0) {
-            cleanFile += (existingNodeCount + 1).toString();
-          }
-
-          // Starting an ID with a number is invalid so wrap in quotes
-          // Wrap all to be safe
-          cleanFile = `"${cleanFile}"`;
-
-          dotCode += `${cleanFile}[label="${files[f]}"];`;
-        }
-        f++;
-      } */
-      // this.addFiles(files, dotCode);
-
-      let i = 0;
+      dotCode = this.addFiles(files, dotCode);
 
       // Create a new cluster for each entry in the structure
+
+      // TODO: Make this a separate function
+      let i = 0;
       while (i < keys.length) {
         if (keys[i] !== "files") {
+          this.logger.info("Setting up data for subgraph cluster...");
+
+          this.logger.info(`Adding folder: ${keys[i]}`);
+
           const charsToReplace = [`\\.`, "-", "_", "@"];
           let cleanKey = keys[i];
 
@@ -277,6 +212,8 @@ export class Generator implements IGenerator {
           while (j--) {
             cleanKey = cleanKey.replace(new RegExp(charsToReplace[j], "g"), "");
           }
+
+          this.logger.info(`Cleaned key to use as cluser name: ${cleanKey}`);
 
           const clusterName = new RegExp(`cluster${cleanKey}`, "g");
 
@@ -286,6 +223,9 @@ export class Generator implements IGenerator {
 
           if (existingClusterCount > 0) {
             cleanKey += (existingClusterCount + 1).toString();
+            this.logger.info(
+              `Key already used, adding incremental value. New key: ${cleanKey}`
+            );
           }
 
           dotCode += `
@@ -295,6 +235,7 @@ export class Generator implements IGenerator {
           const subStructure = (structure as any)[keys[i]];
 
           if (subStructure) {
+            this.logger.info("Sub directories found, recursing...");
             dotCode = this.addSubgraphs(dotCode, subStructure, depth++);
           }
 
@@ -302,6 +243,7 @@ export class Generator implements IGenerator {
               label="${keys[i]}";
               style=rounded;
           }`;
+          this.logger.info(`Finished adding cluster data for: ${keys[i]}`);
         }
         i++;
       }
@@ -310,41 +252,51 @@ export class Generator implements IGenerator {
     return dotCode;
   }
 
-  private addFiles(files: string[], dotCode: string): void {
+  private addFiles(files: string[], dotCode: string): string {
+    this.logger.info(`Adding files to DOT code...`);
+
     let f = 0;
     while (f < files.length) {
-      const charsToReplace = [`\\.`, "-", "_", "@"];
+      if (this.allFiles || files[f].substring(files[f].length - 2) === "ts") {
+        this.logger.info(`Adding file: ${files[f]}`);
 
-      let cleanFile = files[f];
+        const charsToReplace = [`\\.`, "-", "_", "@"];
 
-      let j = charsToReplace.length;
-      while (j--) {
-        cleanFile = cleanFile.replace(new RegExp(charsToReplace[j], "g"), "");
-      }
+        let cleanFile = files[f];
 
-      if (
-        this.allFiles ||
-        cleanFile.substring(cleanFile.length - 2, cleanFile.length) === "ts"
-      ) {
+        let j = charsToReplace.length;
+        while (j--) {
+          cleanFile = cleanFile.replace(new RegExp(charsToReplace[j], "g"), "");
+        }
+
+        this.logger.info(`Cleaned file name for DOT code: ${cleanFile}`);
+
         this.getFileLinks(files[f], cleanFile);
 
         // Check if node name already used
+        this.logger.info("Checking if cleaned file name used");
         const existingNodeCount = (
           dotCode.match(new RegExp(cleanFile, "g")) || []
         ).length;
 
         if (existingNodeCount > 0) {
           cleanFile += (existingNodeCount + 1).toString();
+          this.logger.info(
+            `File name already used, adding increment: ${cleanFile}`
+          );
         }
 
         // Starting an ID with a number is invalid so wrap in quotes
         // Wrap all to be safe
         cleanFile = `"${cleanFile}"`;
 
+        this.logger.info(`Added ${files[f]}, using ${cleanFile} in DOT code`);
+
         dotCode += `${cleanFile}[label="${files[f]}"];`;
       }
       f++;
     }
+    return dotCode;
   }
 
   // TODO: Check for require
@@ -361,31 +313,26 @@ export class Generator implements IGenerator {
    * @memberof Generator
    */
   private getFileLinks(filename: string, nodeName: string): void {
+    this.logger.info(`Getting imports from ${filename}...`);
+
     const path = this.findPath(filename);
     const connections: string[] = [];
     let connectionsCode: string = `${nodeName} -> {`;
 
     if (path && !fs.statSync(path).isDirectory()) {
+      this.logger.info(`File found, reading...`);
       const data = fs.readFileSync(path, "utf8");
-      let lines = data.split(`;\r\n`);
+      this.logger.info(`File read, processing...`);
+
+      let lines = data.split(`\n`);
 
       lines = this.cleanLines(lines);
 
-      // NOTE: Need to check for comments and ignore any lines after /* or /** until */ found
-
-      /* console.log("\n ----------------- " + filename);
-      console.log(lines); */
-
+      // NOTE: Need to check for comments and ignore any lines after /* or /** until */ found (Maybe not anymore?)
+      this.logger.info(`Building connecitons list...`);
       let i = lines.length;
       while (i--) {
-        /* if (filename === "cli.ts") {
-          console.log("\n----------------- PATH");
-          console.log(filename);
-          console.log(lines[i]);
-        } */
-
         if (
-          // lines[i] &&
           lines[i].indexOf("import") > -1 &&
           lines[i].indexOf('from ".') > -1
         ) {
@@ -395,15 +342,17 @@ export class Generator implements IGenerator {
             .replace(new RegExp("-", "g"), "")
             .replace(new RegExp("\\.", "g"), "");
 
-          /* console.log("\n--------------- FILE NAME");
-          console.log(importedFileName);
-          console.log(importLineSplit); */
+          this.logger.info(
+            `Adding (cleaned) ${importedFileName}ts to connections list.`
+          );
 
           connections.push(importedFileName + "ts");
         }
       }
     }
+    this.logger.info(`Connections list built, adding connections to code`);
 
+    // Merge this into the loop above?
     let c = connections.length;
     while (c--) {
       connectionsCode += connections[c];
@@ -413,6 +362,7 @@ export class Generator implements IGenerator {
       }
     }
 
+    this.logger.info(`Colouring edge`);
     connectionsCode += `} [color=${this.colours[this.colourSelector]}];`;
     if (this.colourSelector >= this.colours.length - 1) {
       this.colourSelector = 0;
@@ -421,25 +371,24 @@ export class Generator implements IGenerator {
     }
 
     if (!connectionsCode.match(new RegExp("{}"))) {
-      this.connectionsCodeHolder += `\n${connectionsCode}`;
+      this.logger.info(`Adding connection code to cache`);
+      this.connectionsCodeCache += `\n${connectionsCode}`;
     }
     return;
   }
 
   private cleanLines(lines: string[]): string[] {
-    const ignores = ["//", "/*", "*/"];
-    const includes = ['} from ".'];
-
     const clean: string[] = [];
 
     let i = 0;
     while (i < lines.length) {
       if (
         lines[i].indexOf('} from ".') > -1 &&
-        lines[i].indexOf("//") <= -1 &&
-        lines[i].indexOf("/*") <= -1 &&
-        lines[i].indexOf("*/") <= -1
+        lines[i].indexOf("//") === -1 &&
+        lines[i].indexOf("/*") === -1 &&
+        lines[i].indexOf("*/") === -1
       ) {
+        this.logger.info(`Line verified clean: ${lines[i]}`);
         clean.push(lines[i]);
       }
 
@@ -458,15 +407,18 @@ export class Generator implements IGenerator {
    * @memberof Generator
    */
   private findPath(filename: string): string | undefined {
+    this.logger.info(`Finding full path of ${filename}`);
     let i = this.pathedFileList.length;
     while (i--) {
       const currentPath = this.pathedFileList[i];
 
       if (currentPath.indexOf(filename) > -1) {
+        this.logger.info(`Full path of ${filename} is ${currentPath}`);
         return currentPath;
       }
     }
 
+    this.logger.info(`Full path of ${filename} was not found.`);
     return;
   }
 
@@ -480,7 +432,7 @@ export class Generator implements IGenerator {
    */
   private runDot(): Promise<void> {
     return new Promise((resolve, reject) => {
-      console.log("Beginning DOT processing...");
+      this.logger.info("Beginning DOT processing...");
       let dotCommand = `dot -T${this.outputType} "${this.codemapperDirectory}/${
         this.name
       }.dot" -o "${this.codemapperDirectory}/${this.name}.${
@@ -493,35 +445,37 @@ export class Generator implements IGenerator {
 
       const dotChild = child.exec(dotCommand, (err, stdout, stderr) => {
         if (err) {
-          console.log(err);
+          this.logger.error(err);
         }
 
         if (stderr) {
-          console.log(stderr);
+          this.logger.error(stderr);
         }
 
         if (stdout) {
-          console.log(stdout);
+          this.logger.important(stdout);
         }
       });
 
       dotChild.on("message", (message) => {
-        console.log("message");
-        console.log(message);
+        this.logger.important("message");
+        this.logger.important(message);
       });
 
       dotChild.on("close", (code: number) => {
-        console.log("DOT processing finished. Exited with code: " + code);
+        this.logger.info("DOT processing finished. Exited with code: " + code);
         resolve();
       });
 
       dotChild.on("error", (err) => {
-        console.log("DOT processing errored. Error: \n" + err);
+        this.logger.error("DOT processing errored. Error: \n" + err);
         reject(err);
       });
 
       dotChild.on("disconnect", (code: number) => {
-        console.log("DOT processing disconnected. Exited with code: " + code);
+        this.logger.warning(
+          "DOT processing disconnected. Exited with code: " + code
+        );
         reject("DOT Process disconnected");
       });
     });
@@ -538,6 +492,11 @@ export class Generator implements IGenerator {
    */
   private writeFile(data: string, name: string): Promise<void> {
     return new Promise((resolve, reject) => {
+      this.logger.info(
+        `Writing file: ${name}\n Full path: ${
+          this.codemapperDirectory
+        }/${name}.dot`
+      );
       fs.writeFile(
         `${this.codemapperDirectory}/${name}.dot`,
         data,
@@ -563,6 +522,7 @@ export class Generator implements IGenerator {
     if (!directory) {
       directory = this.directory;
     }
+    this.logger.info(`Checking directory path ${directory} for / or \\`);
 
     const lastChar = directory[directory.length - 1];
 
@@ -572,17 +532,22 @@ export class Generator implements IGenerator {
 
     directory = `${directory}/codemapper`;
 
+    this.logger.info(`Checking if ${directory} exists...`);
     // Check codemapper dir exists
     const baseExists = fs.existsSync(directory);
 
     if (!baseExists) {
+      this.logger.info(`${directory} does not exist, attempting to create...`);
       try {
         fs.mkdirSync(directory);
+        this.logger.info(`${directory} created.`);
       } catch (err) {
-        console.error(err);
-        console.log("Unable to create codemapper directory! Quitting...");
+        this.logger.error(err);
+        this.logger.error("Unable to create codemapper directory! Quitting...");
         exit(1);
       }
+    } else {
+      this.logger.info(`${directory} exists.`);
     }
 
     return directory;

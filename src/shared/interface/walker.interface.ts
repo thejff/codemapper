@@ -26,11 +26,6 @@ export interface IWalkerStructure {
   files: string[];
 }
 
-export interface IWalkerResponse {
-  structure: {} | IWalkerStructure;
-  fileCount: number;
-}
-
 export interface IDirectoryStructure {
   files: string[];
   folders: string[];

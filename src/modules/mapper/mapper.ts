@@ -27,8 +27,7 @@ import {
   IWalkedProjectData
 } from "../../shared/interface/mapper.interface";
 import { Generator } from "../generator/generator";
-
-// TODO: Implement verbose
+import { Logger } from "../logger/logger";
 
 /**
  * The mapper class is the main class that handles the core functionality
@@ -38,6 +37,8 @@ import { Generator } from "../generator/generator";
  * @implements {IMapper}
  */
 export class Mapper implements IMapper {
+  private logger: Logger;
+
   /**
    * Creates an instance of Mapper.
    * @param {string} directory
@@ -55,7 +56,9 @@ export class Mapper implements IMapper {
     private regex?: string,
     private _outputType?: string,
     private outputDirectory?: string
-  ) {}
+  ) {
+    this.logger = new Logger(verbose);
+  }
 
   set outputType(type: string) {
     this._outputType = type;
@@ -91,16 +94,18 @@ export class Mapper implements IMapper {
    */
   private runWalker(): Promise<IWalkedProjectData> {
     return new Promise((resolve) => {
+      this.logger.info("Initialising file walker...");
       let walker;
 
       walker = new Walker(
         this.directory,
         this.excludeNodeModules,
         this.allFiles,
-        this.verbose,
+        this.logger,
         this.regex
       );
 
+      this.logger.info("Files walked.");
       resolve({
         structure: walker.structure,
         pathedFileList: walker.pathedFileList
@@ -118,18 +123,22 @@ export class Mapper implements IMapper {
    */
   private runGenerator(data: IWalkedProjectData): Promise<void> {
     return new Promise((resolve, reject) => {
+      this.logger.info("Initialising Graph generator...");
       const generator = new Generator(
         this.directory,
         data.structure,
         this.outputName,
         data.pathedFileList,
         this.allFiles,
-        this._outputType
+        this.logger,
+        this._outputType,
+        this.verbose
       );
 
       generator
         .generate()
         .then(() => {
+          this.logger.info("Graph generation complete");
           resolve();
         })
         .catch((err: unknown) => {
