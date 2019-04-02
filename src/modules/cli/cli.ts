@@ -251,12 +251,22 @@ export class CLI implements ICLI {
       --input       -i=<Input Path>    The input path of the project to map
       --output      -o=<Output Path>   The output path of the graph data and the name you want to use
       --outName     -oN=<Output name>  The name of the graph file, this should not include the file extension
-      --type        -t=<Output Type>   Defaults to png. One of: png, jpeg, psd, svg, pdf, plain (for plain text), json, or dot
+      --type        -t=<Output Type>   Defaults to svg. One of: png, jpeg, psd, svg, pdf, plain (for plain text), json, or dot
       --regex       -r=<Regex>         The regex used to exclude files, this will bypass the default regex.
       --includeNode -iN                Include node_modules in the graph. This can take a very long time.
       --allFiles    -aF                Include all file typs in the graph. 
       --verbose     -v                 Output verbose information whilst processing
       --help        -h                 Display this
+
+    Output Types:
+      png           PNG image
+      jpeg          JPEG image
+      psd           Photoshop image 
+      svg (default) XML Vector image
+      pdf           PDF File 
+      plain         Plain text
+      json          JSON File
+      dot           DOT Code
 
     To run the interactive version of the code mapper simply run "codemapper" with no CLI parameters.
     `);
@@ -375,7 +385,7 @@ export class CLI implements ICLI {
       7. JSON (.json)
       8. DOT (.dot)
       `);
-      this.getInput("What output type would you like to use? (blank = png): ")
+      this.getInput("What output type would you like to use? (blank = svg): ")
         .then((input: string) => {
           const inputMap: IInputMap = {
             1: OutputType.PNG,

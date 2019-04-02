@@ -93,6 +93,19 @@ In CLI mode there are multiple parameters that can be included in the codemapper
 | --verbose     | -v        | Output verbose information whilst processing                                            |
 | --help        | -h        | Display the help menu                                                                   |
 
+### Output Types
+
+| Type  | Output | Description              |
+| ----- | ------ | ------------------------ |
+| png   | .png   | PNG Image                |
+| jpeg  | .jpeg  | JPEG Image               |
+| psd   | .psd   | Photoshop Image          |
+| svg   | .svg   | XML Vector Graphic Image |
+| pdf   | .pdf   | PDF File                 |
+| plain | .txt   | Plain text               |
+| json  | .json  | JSON file                |
+| dot   | .dot   | DOT Code                 |
+
 ### After execution
 
 Once the code has run successfully you will see a folder called "codemapper" inside the directory you selected.<br/>

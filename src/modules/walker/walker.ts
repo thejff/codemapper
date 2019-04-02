@@ -125,8 +125,19 @@ export class Walker {
     jsonStruct?: IWalkerStructure
   ): IWalkerStructure {
     this.logger.info(`Building structure from ${path}`);
+    let baseDir: undefined | string = undefined;
+
     if (!jsonStruct) {
+      if (path.indexOf("/") > -1) {
+        baseDir = path.slice(path.lastIndexOf("/") + 1);
+      } else {
+        baseDir = path.slice(path.lastIndexOf("\\") + 1);
+      }
+
       jsonStruct = {
+        [baseDir]: {
+          files: []
+        },
         files: []
       };
     }
@@ -140,7 +151,12 @@ export class Walker {
     );
 
     if (directoryStructure.files.length > 0) {
-      jsonStruct.files = directoryStructure.files;
+      if (baseDir) {
+        (jsonStruct[baseDir] as IWalkerStructure).files =
+          directoryStructure.files;
+      } else {
+        jsonStruct.files = directoryStructure.files;
+      }
     }
 
     let i = 0;
@@ -156,16 +172,28 @@ export class Walker {
         nextPath = `${path}/${folder}`;
       }
 
+      let nextFolder;
+      if (baseDir) {
+        nextFolder = (jsonStruct[baseDir] as any)[folder] = { files: [] };
+      } else {
+        nextFolder = jsonStruct[folder] = { files: [] };
+      }
+
       const folderData: IWalkerStructure = this.buildStructure(
         nextPath,
-        (jsonStruct[folder] = { files: [] })
+        nextFolder
       );
 
       if (folderData.files.length <= 0 && Object.keys(folderData).length <= 1) {
         this.logger.info(
           `${folder} folder doesn't contain any relevant files, skipping`
         );
-        delete jsonStruct[folder];
+
+        if (baseDir) {
+          delete (jsonStruct[baseDir] as any)[folder];
+        } else {
+          delete jsonStruct[folder];
+        }
       }
 
       i++;

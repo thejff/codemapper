@@ -26,6 +26,7 @@ import { exit } from "shelljs";
 import { IGenerator } from "../../shared/interface/generator.interface";
 import * as child from "child_process";
 import { Logger } from "../logger/logger";
+import { OutputType } from "../../shared/enum/outputType.enum";
 const fs = require("fs");
 
 /**
@@ -101,7 +102,7 @@ export class Generator implements IGenerator {
     private verbose?: boolean
   ) {
     if (!outputType) {
-      this.outputType = "png";
+      this.outputType = OutputType.SVG;
     }
     this.codemapperDirectory = this.checkDir();
   }
@@ -436,7 +437,7 @@ export class Generator implements IGenerator {
       let dotCommand = `dot -T${this.outputType} "${this.codemapperDirectory}/${
         this.name
       }.dot" -o "${this.codemapperDirectory}/${this.name}.${
-        this.outputType
+        this.outputType === "plain" ? "txt" : this.outputType
       }" -Kfdp`;
 
       if (this.verbose) {
@@ -449,7 +450,7 @@ export class Generator implements IGenerator {
         }
 
         if (stderr) {
-          this.logger.error(stderr);
+          this.logger.important(stderr);
         }
 
         if (stdout) {
