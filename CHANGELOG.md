@@ -17,12 +17,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Angular: Check for contstruct declarations
 - Add custom HTML output
 - Add output verification checks
+- Expand interactive menu options to include all CLI parameters
+- Unit tests
 
 ### Bugs
 
 - Issues mapping monorepos
 
-## [1.1.0] - 2019-03-
+## [1.1.0] - 2019-04-19
 
 ### Added
 
@@ -33,8 +35,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Output handling to allow for verbose output during processing
 - Allow optional mapping of all files in directory
 
+### Changed
+
+- Root directory now included in graph
+- Rewrote parts of walker and generator
+- Fixed empty folders being displayed when they shouldn't
+
 ### Bugs
 
 - Files in non end directories ignored
 - Some files are missed, notably some x.module.ts
 - Sometimes files have too many edges
+
+## [1.0.0] - 2019-03-10
+
+### Added
+
+- Initial public release
