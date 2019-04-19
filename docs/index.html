@@ -75,17 +75,34 @@
 				<h3 id="further-documentation">Further documentation</h3>
 				<p>Type docs can be found <a href="https://thejff.github.io/codemapper">here</a></p>
 				<h2 id="installation">Installation</h2>
-				<pre><code>$ <span class="hljs-built_in">npm</span> i -g @justforfun/codemapper</code></pre><h2 id="notes">Notes</h2>
+				<pre><code>$ <span class="hljs-built_in">npm</span> i -g @justforfun/codemapper</code></pre><p>You also need to make sure Graphviz is installed, it can be downloaded <a href="https://www.graphviz.org/download/">here</a></p>
+				<h2 id="notes">Notes</h2>
 				<p>The code mapper is currently in its early stages of development, as such there are a few restrictions (see the next release and future work sections below for more). <br/></p>
 				<ul>
-					<li>Currently the only output available is png allow all Graphviz outputs are planned for the next release. Additionally a custom HTML output will be added.</li>
-					<li>There is no direct command that can be run to generate the graph and skip the menu, this is also planned for the next release.</li>
-					<li>You can&#39;t use custom regex, this is also planned for the next release.</li>
-					<li>Only files local to the project that are linked via import code will be linked in the graph, but all .ts files will be shown</li>
+					<li>[Added in v1.1.0] Currently the only output available is png allow all Graphviz outputs are planned for the next release.~~ Additionally a custom HTML output will be added.</li>
+					<li>[Added in v1.1.0] There is no direct command that can be run to generate the graph and skip the menu, this is also planned for the next release.</li>
+					<li>[Added in v1.1.0] You can&#39;t use custom regex, this is also planned for the next release.</li>
+					<li>Only files local to the project that are linked via import code will be linked in the graph, but all .ts files will be shown and [as of v1.1.0] all files can be shown in the graph.</li>
 				</ul>
 				<h2 id="usage">Usage</h2>
-				<p>The code mapper can be run globablly, after installing it run the following command:</p>
-				<pre><code><span class="hljs-attribute">codemapper</span></code></pre><p>Once the app has started you will see a menu with several options:</p>
+				<p>The code mapper can be run globablly, after installing it you can run the following commands:</p>
+				<p>To run interactive mode use:</p>
+				<pre><code><span class="hljs-attribute">codemapper</span></code></pre><p>See the section &quot;Interactive mode&quot; for more information about its use.</p>
+				<p>To run codemapper with all default values, detailed below, run the following:</p>
+				<pre><code><span class="hljs-attribute">codemapper -d</span></code></pre><p>-d is short for --default, this will use the following values.<br></p>
+				<ul>
+					<li>The graph will be generated using the current directory</li>
+					<li>node_modules will be excluded</li>
+					<li>The output file name will be codemapper-yyyymmdd.ext where y = year, m = month d = day and .ext is the file extension (by default .dot and .png)</li>
+					<li>Verbose will be false</li>
+					<li>Mapping of all files will be false</li>
+					<li>The default regex will be used</li>
+					<li>The output type png will be used</li>
+					<li>The output location will be a codemapper folder in the current directory. If one doesn&#39;t exist it will be created.
+					See the section &quot;CLI mode&quot; for more information about its use.</li>
+				</ul>
+				<h3 id="interactive-mode">Interactive mode</h3>
+				<p>Once the app has started you will see a menu with several options:</p>
 				<ol>
 					<li>Input a directory to map - This can be relative or a full path</li>
 					<li>Map the current directory - Generate the graph from the location codemapper is run</li>
@@ -95,31 +112,126 @@
 					<li>&quot;q&quot; to quit</li>
 					<li>&quot;menu&quot; to return to the menu</li>
 				</ul>
+				<h3 id="cli-mode">CLI Mode</h3>
+				<p>In CLI mode there are multiple parameters that can be included in the codemapper command to customise the processing to your liking.</p>
+				<table>
+					<thead>
+						<tr>
+							<th>Parameter</th>
+							<th>Shorthand</th>
+							<th>Description</th>
+						</tr>
+					</thead>
+					<tbody><tr>
+							<td>--default</td>
+							<td>-d</td>
+							<td>Run codemapper using the default settings</td>
+						</tr>
+						<tr>
+							<td>--input</td>
+							<td>-i</td>
+							<td>The input path of the project to map</td>
+						</tr>
+						<tr>
+							<td>--output</td>
+							<td>-o</td>
+							<td>The output path of the graph data and the name you want to use</td>
+						</tr>
+						<tr>
+							<td>--outName</td>
+							<td>-oN</td>
+							<td>The name of the graph file, this should not include the file extension</td>
+						</tr>
+						<tr>
+							<td>--type</td>
+							<td>-t</td>
+							<td>Defaults to png. One of: png, jpeg, psd, svg, pdf, plain (for plain text), json, or dot</td>
+						</tr>
+						<tr>
+							<td>--regex</td>
+							<td>-r</td>
+							<td>The regex used to exclude files, this will bypass the default regex.</td>
+						</tr>
+						<tr>
+							<td>--includeNode</td>
+							<td>-iN</td>
+							<td>Include node_modules in the graph. This can take a very long time.</td>
+						</tr>
+						<tr>
+							<td>--allFiles</td>
+							<td>-aF</td>
+							<td>Include all file typs in the graph.</td>
+						</tr>
+						<tr>
+							<td>--verbose</td>
+							<td>-v</td>
+							<td>Output verbose information whilst processing</td>
+						</tr>
+						<tr>
+							<td>--help</td>
+							<td>-h</td>
+							<td>Display the help menu</td>
+						</tr>
+				</tbody></table>
+				<h3 id="output-types">Output Types</h3>
+				<table>
+					<thead>
+						<tr>
+							<th>Type</th>
+							<th>Output</th>
+							<th>Description</th>
+						</tr>
+					</thead>
+					<tbody><tr>
+							<td>png</td>
+							<td>.png</td>
+							<td>PNG Image</td>
+						</tr>
+						<tr>
+							<td>jpeg</td>
+							<td>.jpeg</td>
+							<td>JPEG Image</td>
+						</tr>
+						<tr>
+							<td>psd</td>
+							<td>.psd</td>
+							<td>Photoshop Image</td>
+						</tr>
+						<tr>
+							<td>svg</td>
+							<td>.svg</td>
+							<td>XML Vector Graphic Image</td>
+						</tr>
+						<tr>
+							<td>pdf</td>
+							<td>.pdf</td>
+							<td>PDF File</td>
+						</tr>
+						<tr>
+							<td>plain</td>
+							<td>.txt</td>
+							<td>Plain text</td>
+						</tr>
+						<tr>
+							<td>json</td>
+							<td>.json</td>
+							<td>JSON file</td>
+						</tr>
+						<tr>
+							<td>dot</td>
+							<td>.dot</td>
+							<td>DOT Code</td>
+						</tr>
+				</tbody></table>
+				<h3 id="after-execution">After execution</h3>
 				<p>Once the code has run successfully you will see a folder called &quot;codemapper&quot; inside the directory you selected.<br/>
 				Inside this directory you will find two files, the generated DOT code and the generated graph (Currently PNG only). You can see an example of the graph below.</p>
 				<h2 id="example-output">Example output</h2>
 				<img src="https://thejustforfun.foundation/wp-content/uploads/2019/03/codemapper-20190310.png" alt="Example graph output" width="500"/>
-				<h2 id="next-release">Next release</h2>
+				<h2 id="future-milestones">Future Milestones</h2>
+				<p>See <a href="CHANGELOG.md">CHANGELOG</a> for latest and future changes and bugs</p>
 				<ul>
-					<li>Allow for multiple output types</li>
-					<li>Direct CLI command input</li>
-					<li>Allow optional custom regex</li>
-				</ul>
-				<h2 id="future-work">Future work</h2>
-				<ul>
-					<li>Allow optional mapping of NPM dependencies</li>
-					<li>Allow optional mapping of all files in directory</li>
-					<li>Check and map require()</li>
-					<li>Allow walking of .js files</li>
-					<li>Map all imports (currently checks for local imports only)</li>
-					<li>Ignore imports/requires that are commented out</li>
-					<li>Angular: Check for contstruct declarations</li>
-					<li>Add custom HTML output</li>
-					<li>Add output verification checks</li>
-				</ul>
-				<h2 id="known-issues">Known issues</h2>
-				<ul>
-					<li>Doesn&#39;t map monorepos</li>
+					<li>Custom HTML Output</li>
 				</ul>
 				<h2 id="the-just-for-fun-foundation">The Just For Fun Foundation</h2>
 				<p><a href="https://thejustforfun.foundation">Vist TheJustForFun.Foundation</a></p>
@@ -155,10 +267,19 @@
 						<a href="modules/_modules_generator_generator_.html">"modules/generator/generator"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
+						<a href="modules/_modules_logger_logger_.html">"modules/logger/logger"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
 						<a href="modules/_modules_mapper_mapper_.html">"modules/mapper/mapper"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="modules/_modules_walker_walker_.html">"modules/walker/walker"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_shared_enum_cli_enum_.html">"shared/enum/cli.enum"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_shared_enum_outputtype_enum_.html">"shared/enum/output<wbr>Type.enum"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="modules/_shared_interface_cli_interface_.html">"shared/interface/cli.interface"</a>
