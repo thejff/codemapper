@@ -1,12 +1,12 @@
 {
   "name": "@justforfun/codemapper",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "A pretty dependency mapper for Typescript & Angular",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "scripts": {
     "start": "npm run build && node ./lib",
-    "test": "jest --config=jestconfig.json --detectOpenHandles",
+    "test": "jest --config=jestconfig.json",
     "build": "tsc --outDir ./lib",
     "docs": "typedoc --out docs src/",
     "prepare": "npm run build"
@@ -34,22 +34,23 @@
   "files": [
     "lib"
   ],
-  "author": "Chris Holdt <chris@thejustforfun.foundation> (https://chrisholdt.com)",
+  "author": "Chris Holdt <chris@thejff.foundation> (https://chrisholdt.com)",
   "license": "MIT",
   "devDependencies": {
-    "@types/jest": "^24.0.11",
-    "@types/node": "^11.11.0",
-    "jest": "^24.3.1",
-    "nodemon": "^1.18.10",
-    "prettier": "^1.16.4",
-    "ts-jest": "^24.0.0",
-    "ts-node": "^8.0.3",
-    "typedoc": "^0.14.2",
-    "typescript": "^3.3.3333"
+    "@types/jest": "^25.2.1",
+    "@types/node": "^13.13.5",
+    "jest": "^26.0.1",
+    "nodemon": "^2.0.3",
+    "prettier": "^2.0.5",
+    "ts-jest": "^25.5.0",
+    "ts-node": "^8.10.1",
+    "typedoc": "^0.17.6",
+    "typescript": "^3.8.3"
   },
   "dependencies": {
-    "figlet": "^1.2.1",
-    "shelljs": "^0.8.3"
+    "@types/shelljs": "^0.8.7",
+    "figlet": "^1.4.0",
+    "shelljs": "^0.8.4"
   },
   "directories": {
     "doc": "docs"
