@@ -27,7 +27,7 @@ import { IMapper } from "../../shared/interface/mapper.interface";
 import {
   ICLI,
   IInputMap,
-  IMapData
+  IMapData,
 } from "../../shared/interface/cli.interface";
 import { OutputType } from "../../shared/enum/outputType.enum";
 import { CLIParameters } from "../../shared/enum/cli.enum";
@@ -158,6 +158,9 @@ export class CLI implements ICLI {
           resolve();
         })
         .catch((err: Error) => {
+          if (!err) {
+            err = new Error("Mapping error");
+          }
           this.handleEnd("An error occured during mapping!", err);
           reject();
         });
@@ -196,7 +199,7 @@ export class CLI implements ICLI {
         "-aF": CLIParameters.ALLFILES,
         "--allFiles": CLIParameters.ALLFILES,
         "-h": CLIParameters.HELP,
-        "--help": CLIParameters.HELP
+        "--help": CLIParameters.HELP,
       };
 
       if (
@@ -395,7 +398,7 @@ export class CLI implements ICLI {
             5: OutputType.PDF,
             6: OutputType.PLAIN,
             7: OutputType.JSON,
-            8: OutputType.DOT
+            8: OutputType.DOT,
           };
 
           if (input.trim() !== "") {
@@ -469,16 +472,42 @@ export class CLI implements ICLI {
    * @memberof CLI
    */
   private handleEnd(output: string, error?: Error): void {
+    const path = require("path");
+
     if (error) {
-      this.logger.error(error);
+      if (output) {
+        this.logger.error(output);
+        if (error) {
+          this.logger.error(error);
+        }
+      } else if (!output && error) {
+        this.logger.error(error);
+      } else {
+        this.logger.error("An unknown error occured.", true);
+      }
+    } else {
+      if (output) {
+        this.logger.info(output);
+      } else {
+        this.logger.error("An unknown error occured.", true);
+      }
     }
-    this.logger.info(output);
 
     if (this.isCLI) {
-      this.logger.info(
-        "Process is finished, thank you for using the JFF Foundations code mapper!"
-      );
+      if (error) {
+        this.logger.warning("Process did not finish correctly");
+      } else {
+        this.logger.important(
+          `Files can be found in ${path.join(process.cwd(), "codemapper")}`
+        );
+        this.logger.info(
+          "Process is finished, thank you for using the JFF Foundations code mapper!"
+        );
+      }
     } else {
+      this.logger.important(
+        `Files can be found in ${path.join(process.cwd(), "codemapper")}`
+      );
       this.getInput(
         "Process is finished, thank you for using the JFF Foundations code mapper!\nPress return to continue or q to quit... "
       )
@@ -527,7 +556,7 @@ export class CLI implements ICLI {
     return new Promise((resolve) => {
       const readlineInterface = readline.createInterface({
         input: process.stdin,
-        output: process.stdout
+        output: process.stdout,
       });
 
       readlineInterface.question(request, (answer: string) => {

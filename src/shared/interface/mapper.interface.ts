@@ -24,7 +24,7 @@
 import { IWalkerStructure } from "./walker.interface";
 
 export interface IMapper {
-  startProcessing: Function;
+  startProcessing: () => Promise<string>;
 }
 
 export interface IWalkedProjectData {

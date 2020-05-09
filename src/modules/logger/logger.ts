@@ -21,17 +21,71 @@
  * SOFTWARE.
  */
 
-export class Logger {
-  constructor(private _verbose: boolean) {}
+import { ILogger } from "../../shared/interface/logger.interface";
 
+/**
+ * Internal logger
+ *
+ * Logs information with a prefix that includes the date, time and log type
+ *
+ * @export
+ * @class Logger
+ * @implements {ILogger}
+ */
+export class Logger implements ILogger {
+  /**
+   * Holds a prettified date for the timestamp
+   *
+   * @private
+   * @type {string}
+   * @memberof Logger
+   */
+  private currentDate: string;
+
+  /**
+   * Creates an instance of Logger.
+   * @param {boolean} _verbose
+   * @memberof Logger
+   */
+  constructor(private _verbose: boolean) {
+    const date = new Date();
+
+    let month = (date.getMonth() + 1).toString();
+    let day = date.getDate().toString();
+
+    if (month.length === 1) {
+      month = "0" + month;
+    }
+
+    if (day.length === 1) {
+      day = "0" + day;
+    }
+
+    this.currentDate = `${date.getFullYear()}.${month}.${day}`;
+  }
+
+  /**
+   * Set the verbosity
+   *
+   * @memberof Logger
+   */
   set verbose(state: boolean) {
     this._verbose = state;
   }
 
+  /**
+   * Prints out an information message using green prefix information
+   *
+   * @param {string} message
+   * @param {boolean} [overrideVerbose]
+   * @memberof Logger
+   */
   public info(message: string, overrideVerbose?: boolean): void {
     if (this._verbose || overrideVerbose) {
       const date = new Date();
-      const timestamp = `${date.getFullYear()}${date.getMonth()}${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}.${date.getMilliseconds()}`;
+      const timestamp = `${
+        this.currentDate
+      } ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}.${date.getMilliseconds()}`;
       console.log(
         "%s\x1b[32m%s\x1b[0m%s",
         "[",
@@ -41,12 +95,21 @@ export class Logger {
     }
   }
 
+  /**
+   * Prints out an information message using yellow prefix information
+   *
+   * @param {string} message
+   * @param {boolean} [overrideVerbose]
+   * @memberof Logger
+   */
   public warning(message: string, overrideVerbose?: boolean): void {
     if (this._verbose || overrideVerbose) {
       const date = new Date();
-      const timestamp = `${date.getFullYear()}${date.getMonth()}${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}.${date.getMilliseconds()}`;
+      const timestamp = `${
+        this.currentDate
+      } ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}.${date.getMilliseconds()}`;
       console.log(
-        "%s\x1b[33m%s\x1b[0m%s",
+        "%s\x1b[93m%s\x1b[0m%s",
         "[",
         `${timestamp} WARNING`,
         "]: " + message
@@ -54,10 +117,19 @@ export class Logger {
     }
   }
 
+  /**
+   * Prints out an error message using red prefix information
+   *
+   * @param {(string | Error)} message
+   * @param {boolean} [overrideVerbose]
+   * @memberof Logger
+   */
   public error(message: string | Error, overrideVerbose?: boolean): void {
     if (this._verbose || overrideVerbose) {
       const date = new Date();
-      const timestamp = `${date.getFullYear()}${date.getMonth()}${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}.${date.getMilliseconds()}`;
+      const timestamp = `${
+        this.currentDate
+      } ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}.${date.getMilliseconds()}`;
       console.log(
         "%s\x1b[91m%s\x1b[0m%s",
         "[",
@@ -67,10 +139,19 @@ export class Logger {
     }
   }
 
+  /**
+   * Prints out an important message using purple prefix information
+   *
+   * @param {string} message
+   * @param {boolean} [overrideVerbose]
+   * @memberof Logger
+   */
   public important(message: string, overrideVerbose?: boolean): void {
     if (this._verbose || overrideVerbose) {
       const date = new Date();
-      const timestamp = `${date.getFullYear()}${date.getMonth()}${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}.${date.getMilliseconds()}`;
+      const timestamp = `${
+        this.currentDate
+      } ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}.${date.getMilliseconds()}`;
       console.log(
         "%s\x1b[95m%s\x1b[0m%s",
         "[",

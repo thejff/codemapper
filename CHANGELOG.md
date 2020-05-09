@@ -24,6 +24,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Issues mapping monorepos
 
+## [1.2.0] - 2020-05-09
+
+### Added
+
+- startup.ts - Run startup checks before continuing execution, in this case check the user has graphviz installed
+
+### Changed
+
+- Logger - Improved timestamp
+- Interfaces - Some minor improvements
+- Generator - Improved dot calling, now checks if DOT is in the path or if it can find the absolute path
+- Mapper - Now handles paths with spaces correctly
+- CLI - Added output to display location of output files, some other tweaks
+- Updated packages to make GitHub dependency alerts and npm auditing happy
+
+### Bugs
+
+- Generator - Dot errors weren't being displayed as errors, fixed this
+
 ## [1.1.0] - 2019-04-19
 
 ### Added
