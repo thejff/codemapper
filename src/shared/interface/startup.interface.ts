@@ -21,6 +21,6 @@
  * SOFTWARE.
  */
 
-export interface IGenerator {
-  generate: () => Promise<void>;
+export interface IStartup {
+  runChecks: () => boolean;
 }

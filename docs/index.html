@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>@justforfun/codemapper</title>
-	<meta name="description" content="">
+	<meta name="description" content="Documentation for @justforfun/codemapper">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="assets/css/main.css">
 </head>
@@ -13,7 +13,7 @@
 	<div class="tsd-page-toolbar">
 		<div class="container">
 			<div class="table-wrap">
-				<div class="table-cell" id="tsd-search" data-index="assets/js/search.js" data-base=".">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.json" data-base=".">
 					<div class="field">
 						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
 						<input id="tsd-search-field" type="text" />
@@ -56,7 +56,7 @@
 					<a href="globals.html">Globals</a>
 				</li>
 			</ul>
-			<h1> @justforfun/codemapper</h1>
+			<h1>@justforfun/codemapper</h1>
 		</div>
 	</div>
 </header>
@@ -65,26 +65,41 @@
 		<div class="col-8 col-content">
 			<div class="tsd-panel tsd-typography">
 				<img src="https://thejustforfun.foundation/wp-content/uploads/2019/03/Logo.png" alt="TJFFF Logo" width="200"/>
-				<h1 id="the-just-for-fun-foundation-code-mapper">The Just for Fun Foundation - Code Mapper</h1>
+				<a href="#the-just-for-fun-foundation---code-mapper" id="the-just-for-fun-foundation---code-mapper" style="color: inherit; text-decoration: none;">
+					<h1>The Just for Fun Foundation - Code Mapper</h1>
+				</a>
 				<p>The Just for Fun Foundation presents the code mapper. <br/>
 				This project runs through a Typescript project and maps all internal dependencies, generating a useful graph powered by <a href="https://www.graphviz.org/">Graphviz</a></p>
-				<h3 id="github">GitHub</h3>
+				<a href="#github" id="github" style="color: inherit; text-decoration: none;">
+					<h3>GitHub</h3>
+				</a>
 				<p>You can find the source code for the project <a href="https://github.com/thejff/codemapper">here</a></p>
-				<h3 id="bugs">Bugs</h3>
+				<a href="#bugs" id="bugs" style="color: inherit; text-decoration: none;">
+					<h3>Bugs</h3>
+				</a>
 				<p>Please report any issues <a href="https://github.com/thejff/codemapper/issues">here</a></p>
-				<h3 id="further-documentation">Further documentation</h3>
+				<a href="#further-documentation" id="further-documentation" style="color: inherit; text-decoration: none;">
+					<h3>Further documentation</h3>
+				</a>
 				<p>Type docs can be found <a href="https://thejff.github.io/codemapper">here</a></p>
-				<h2 id="installation">Installation</h2>
-				<pre><code>$ <span class="hljs-built_in">npm</span> i -g @justforfun/codemapper</code></pre><p>You also need to make sure Graphviz is installed, it can be downloaded <a href="https://www.graphviz.org/download/">here</a></p>
-				<h2 id="notes">Notes</h2>
+				<a href="#installation" id="installation" style="color: inherit; text-decoration: none;">
+					<h2>Installation</h2>
+				</a>
+				<pre><code>$ <span class="hljs-built_in">npm</span> i -g @justforfun/codemapper</code></pre><p>You also need to make sure Graphviz is installed, it can be downloaded <a href="https://www.graphviz.org/download/">here</a>
+				You may need to manually add the path to the bin folder in your environment variables: <code>C:\Program Files (x86)\Graphviz2.38\bin</code> <strong>Note:</strong> This may be different for your system.</p>
+				<a href="#notes" id="notes" style="color: inherit; text-decoration: none;">
+					<h2>Notes</h2>
+				</a>
 				<p>The code mapper is currently in its early stages of development, as such there are a few restrictions (see the next release and future work sections below for more). <br/></p>
 				<ul>
-					<li>[Added in v1.1.0] Currently the only output available is png allow all Graphviz outputs are planned for the next release.~~ Additionally a custom HTML output will be added.</li>
-					<li>[Added in v1.1.0] There is no direct command that can be run to generate the graph and skip the menu, this is also planned for the next release.</li>
-					<li>[Added in v1.1.0] You can&#39;t use custom regex, this is also planned for the next release.</li>
+					<li>[Added in v1.1.0] <del>Currently the only output available is png, allowing all Graphviz outputs are planned for the next release.</del> Additionally a custom HTML output will be added (Not in v1.1.0).</li>
+					<li>[Added in v1.1.0] <del>There is no direct command that can be run to generate the graph and skip the menu, this is also planned for the next release.</del></li>
+					<li>[Added in v1.1.0] <del>You can&#39;t use custom regex, this is also planned for the next release.</del></li>
 					<li>Only files local to the project that are linked via import code will be linked in the graph, but all .ts files will be shown and [as of v1.1.0] all files can be shown in the graph.</li>
 				</ul>
-				<h2 id="usage">Usage</h2>
+				<a href="#usage" id="usage" style="color: inherit; text-decoration: none;">
+					<h2>Usage</h2>
+				</a>
 				<p>The code mapper can be run globablly, after installing it you can run the following commands:</p>
 				<p>To run interactive mode use:</p>
 				<pre><code><span class="hljs-attribute">codemapper</span></code></pre><p>See the section &quot;Interactive mode&quot; for more information about its use.</p>
@@ -101,7 +116,9 @@
 					<li>The output location will be a codemapper folder in the current directory. If one doesn&#39;t exist it will be created.
 					See the section &quot;CLI mode&quot; for more information about its use.</li>
 				</ul>
-				<h3 id="interactive-mode">Interactive mode</h3>
+				<a href="#interactive-mode" id="interactive-mode" style="color: inherit; text-decoration: none;">
+					<h3>Interactive mode</h3>
+				</a>
 				<p>Once the app has started you will see a menu with several options:</p>
 				<ol>
 					<li>Input a directory to map - This can be relative or a full path</li>
@@ -112,7 +129,9 @@
 					<li>&quot;q&quot; to quit</li>
 					<li>&quot;menu&quot; to return to the menu</li>
 				</ul>
-				<h3 id="cli-mode">CLI Mode</h3>
+				<a href="#cli-mode" id="cli-mode" style="color: inherit; text-decoration: none;">
+					<h3>CLI Mode</h3>
+				</a>
 				<p>In CLI mode there are multiple parameters that can be included in the codemapper command to customise the processing to your liking.</p>
 				<table>
 					<thead>
@@ -173,7 +192,9 @@
 							<td>Display the help menu</td>
 						</tr>
 				</tbody></table>
-				<h3 id="output-types">Output Types</h3>
+				<a href="#output-types" id="output-types" style="color: inherit; text-decoration: none;">
+					<h3>Output Types</h3>
+				</a>
 				<table>
 					<thead>
 						<tr>
@@ -223,19 +244,29 @@
 							<td>DOT Code</td>
 						</tr>
 				</tbody></table>
-				<h3 id="after-execution">After execution</h3>
+				<a href="#after-execution" id="after-execution" style="color: inherit; text-decoration: none;">
+					<h3>After execution</h3>
+				</a>
 				<p>Once the code has run successfully you will see a folder called &quot;codemapper&quot; inside the directory you selected.<br/>
 				Inside this directory you will find two files, the generated DOT code and the generated graph (Currently PNG only). You can see an example of the graph below.</p>
-				<h2 id="example-output">Example output</h2>
+				<a href="#example-output" id="example-output" style="color: inherit; text-decoration: none;">
+					<h2>Example output</h2>
+				</a>
 				<img src="https://thejustforfun.foundation/wp-content/uploads/2019/03/codemapper-20190310.png" alt="Example graph output" width="500"/>
-				<h2 id="future-milestones">Future Milestones</h2>
+				<a href="#future-milestones" id="future-milestones" style="color: inherit; text-decoration: none;">
+					<h2>Future Milestones</h2>
+				</a>
 				<p>See <a href="CHANGELOG.md">CHANGELOG</a> for latest and future changes and bugs</p>
 				<ul>
 					<li>Custom HTML Output</li>
 				</ul>
-				<h2 id="the-just-for-fun-foundation">The Just For Fun Foundation</h2>
+				<a href="#the-just-for-fun-foundation" id="the-just-for-fun-foundation" style="color: inherit; text-decoration: none;">
+					<h2>The Just For Fun Foundation</h2>
+				</a>
 				<p><a href="https://thejustforfun.foundation">Vist TheJustForFun.Foundation</a></p>
-				<h2 id="license">License</h2>
+				<a href="#license" id="license" style="color: inherit; text-decoration: none;">
+					<h2>License</h2>
+				</a>
 				<p>This project is licensed under the <a href="https://github.com/thejff/codemapper/blob/master/LICENSE">MIT</a> License</p>
 			</div>
 		</div>
@@ -245,53 +276,62 @@
 					<li class="globals  ">
 						<a href="globals.html"><em>Globals</em></a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/___tests___cli_cli_tests_.html">"__tests__/cli/cli.tests"</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/___tests___cli_cli_tests_.html">&quot;__tests__/cli/cli.tests&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/___tests___generator_generator_tests_.html">"__tests__/generator/generator.tests"</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/___tests___generator_generator_tests_.html">&quot;__tests__/generator/generator.tests&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/___tests___mapper_mapper_tests_.html">"__tests__/mapper/mapper.tests"</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/___tests___mapper_mapper_tests_.html">&quot;__tests__/mapper/mapper.tests&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/___tests___walker_walker_tests_.html">"__tests__/walker/walker.tests"</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/___tests___walker_walker_tests_.html">&quot;__tests__/walker/walker.tests&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_index_.html">"index"</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/_index_.html">&quot;index&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_modules_cli_cli_.html">"modules/cli/cli"</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/_modules_cli_cli_.html">&quot;modules/cli/cli&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_modules_generator_generator_.html">"modules/generator/generator"</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/_modules_generator_generator_.html">&quot;modules/generator/generator&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_modules_logger_logger_.html">"modules/logger/logger"</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/_modules_logger_logger_.html">&quot;modules/logger/logger&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_modules_mapper_mapper_.html">"modules/mapper/mapper"</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/_modules_mapper_mapper_.html">&quot;modules/mapper/mapper&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_modules_walker_walker_.html">"modules/walker/walker"</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/_modules_startup_startup_.html">&quot;modules/startup/startup&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_shared_enum_cli_enum_.html">"shared/enum/cli.enum"</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/_modules_walker_walker_.html">&quot;modules/walker/walker&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_shared_enum_outputtype_enum_.html">"shared/enum/output<wbr>Type.enum"</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/_shared_enum_cli_enum_.html">&quot;shared/enum/cli.enum&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_shared_interface_cli_interface_.html">"shared/interface/cli.interface"</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/_shared_enum_outputtype_enum_.html">&quot;shared/enum/output<wbr>Type.enum&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_shared_interface_generator_interface_.html">"shared/interface/generator.interface"</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/_shared_interface_cli_interface_.html">&quot;shared/interface/cli.interface&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_shared_interface_mapper_interface_.html">"shared/interface/mapper.interface"</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/_shared_interface_generator_interface_.html">&quot;shared/interface/generator.interface&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_shared_interface_walker_interface_.html">"shared/interface/walker.interface"</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/_shared_interface_logger_interface_.html">&quot;shared/interface/logger.interface&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_shared_interface_mapper_interface_.html">&quot;shared/interface/mapper.interface&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_shared_interface_startup_interface_.html">&quot;shared/interface/startup.interface&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_shared_interface_walker_interface_.html">&quot;shared/interface/walker.interface&quot;</a>
 					</li>
 				</ul>
 			</nav>
@@ -307,62 +347,22 @@
 		<h2>Legend</h2>
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
-				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
-				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
 				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
-				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
-				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
-				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
-				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
-				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
-				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
-				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
-				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
-				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
-				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
-				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
 			</ul>
 		</div>
 	</div>
 </footer>
 <div class="container tsd-generator">
-	<p>Generated using <a href="http://typedoc.org/" target="_blank">TypeDoc</a></p>
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
 </div>
 <div class="overlay"></div>
 <script src="assets/js/main.js"></script>

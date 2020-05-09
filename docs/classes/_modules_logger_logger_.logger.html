@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>Logger | @justforfun/codemapper</title>
-	<meta name="description" content="">
+	<meta name="description" content="Documentation for @justforfun/codemapper">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
 </head>
@@ -13,7 +13,7 @@
 	<div class="tsd-page-toolbar">
 		<div class="container">
 			<div class="table-wrap">
-				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.js" data-base="..">
+				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.json" data-base="..">
 					<div class="field">
 						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
 						<input id="tsd-search-field" type="text" />
@@ -69,12 +69,33 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Internal logger</p>
+					</div>
+					<p>Logs information with a prefix that includes the date, time and log type</p>
+					<dl class="tsd-comment-tags">
+						<dt>export</dt>
+						<dd></dd>
+						<dt>implements</dt>
+						<dd><p>{ILogger}</p>
+						</dd>
+					</dl>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
 						<span class="target">Logger</span>
 					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel">
+				<h3>Implements</h3>
+				<ul class="tsd-hierarchy">
+					<li><a href="../interfaces/_shared_interface_logger_interface_.ilogger.html" class="tsd-signature-type">ILogger</a></li>
 				</ul>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
@@ -91,6 +112,7 @@
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_modules_logger_logger_.logger.html#_verbose" class="tsd-kind-icon">_verbose</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_modules_logger_logger_.logger.html#currentdate" class="tsd-kind-icon">current<wbr>Date</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
@@ -123,9 +145,19 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/thejff/codemapper/blob/1bd5584/src/modules/logger/logger.ts#L24">modules/logger/logger.ts:24</a></li>
+									<li>Defined in <a href="https://github.com/thejff/codemapper/blob/093f1ba/src/modules/logger/logger.ts#L43">modules/logger/logger.ts:43</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Creates an instance of Logger.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>memberof</dt>
+									<dd><p>Logger</p>
+									</dd>
+								</dl>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -145,9 +177,29 @@
 					<div class="tsd-signature tsd-kind-icon">_verbose<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/thejff/codemapper/blob/1bd5584/src/modules/logger/logger.ts#L25">modules/logger/logger.ts:25</a></li>
+							<li>Defined in <a href="https://github.com/thejff/codemapper/blob/093f1ba/src/modules/logger/logger.ts#L50">modules/logger/logger.ts:50</a></li>
 						</ul>
 					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="currentdate" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> current<wbr>Date</h3>
+					<div class="tsd-signature tsd-kind-icon">current<wbr>Date<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/thejff/codemapper/blob/093f1ba/src/modules/logger/logger.ts#L43">modules/logger/logger.ts:43</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Holds a prettified date for the timestamp</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>memberof</dt>
+							<dd><p>Logger</p>
+							</dd>
+						</dl>
+					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
@@ -162,9 +214,19 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/thejff/codemapper/blob/1bd5584/src/modules/logger/logger.ts#L27">modules/logger/logger.ts:27</a></li>
+									<li>Defined in <a href="https://github.com/thejff/codemapper/blob/093f1ba/src/modules/logger/logger.ts#L72">modules/logger/logger.ts:72</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Set the verbosity</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>memberof</dt>
+									<dd><p>Logger</p>
+									</dd>
+								</dl>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -188,9 +250,19 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/thejff/codemapper/blob/1bd5584/src/modules/logger/logger.ts#L57">modules/logger/logger.ts:57</a></li>
+									<li>Defined in <a href="https://github.com/thejff/codemapper/blob/093f1ba/src/modules/logger/logger.ts#L127">modules/logger/logger.ts:127</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Prints out an error message using red prefix information</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>memberof</dt>
+									<dd><p>Logger</p>
+									</dd>
+								</dl>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -214,9 +286,19 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/thejff/codemapper/blob/1bd5584/src/modules/logger/logger.ts#L70">modules/logger/logger.ts:70</a></li>
+									<li>Defined in <a href="https://github.com/thejff/codemapper/blob/093f1ba/src/modules/logger/logger.ts#L149">modules/logger/logger.ts:149</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Prints out an important message using purple prefix information</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>memberof</dt>
+									<dd><p>Logger</p>
+									</dd>
+								</dl>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -240,9 +322,19 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/thejff/codemapper/blob/1bd5584/src/modules/logger/logger.ts#L31">modules/logger/logger.ts:31</a></li>
+									<li>Defined in <a href="https://github.com/thejff/codemapper/blob/093f1ba/src/modules/logger/logger.ts#L83">modules/logger/logger.ts:83</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Prints out an information message using green prefix information</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>memberof</dt>
+									<dd><p>Logger</p>
+									</dd>
+								</dl>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -266,9 +358,19 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/thejff/codemapper/blob/1bd5584/src/modules/logger/logger.ts#L44">modules/logger/logger.ts:44</a></li>
+									<li>Defined in <a href="https://github.com/thejff/codemapper/blob/093f1ba/src/modules/logger/logger.ts#L105">modules/logger/logger.ts:105</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Prints out an information message using yellow prefix information</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>memberof</dt>
+									<dd><p>Logger</p>
+									</dd>
+								</dl>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -290,53 +392,62 @@
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/___tests___cli_cli_tests_.html">"__tests__/cli/cli.tests"</a>
+					<li class=" tsd-kind-module">
+						<a href="../modules/___tests___cli_cli_tests_.html">&quot;__tests__/cli/cli.tests&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/___tests___generator_generator_tests_.html">"__tests__/generator/generator.tests"</a>
+					<li class=" tsd-kind-module">
+						<a href="../modules/___tests___generator_generator_tests_.html">&quot;__tests__/generator/generator.tests&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/___tests___mapper_mapper_tests_.html">"__tests__/mapper/mapper.tests"</a>
+					<li class=" tsd-kind-module">
+						<a href="../modules/___tests___mapper_mapper_tests_.html">&quot;__tests__/mapper/mapper.tests&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/___tests___walker_walker_tests_.html">"__tests__/walker/walker.tests"</a>
+					<li class=" tsd-kind-module">
+						<a href="../modules/___tests___walker_walker_tests_.html">&quot;__tests__/walker/walker.tests&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_index_.html">"index"</a>
+					<li class=" tsd-kind-module">
+						<a href="../modules/_index_.html">&quot;index&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_modules_cli_cli_.html">"modules/cli/cli"</a>
+					<li class=" tsd-kind-module">
+						<a href="../modules/_modules_cli_cli_.html">&quot;modules/cli/cli&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_modules_generator_generator_.html">"modules/generator/generator"</a>
+					<li class=" tsd-kind-module">
+						<a href="../modules/_modules_generator_generator_.html">&quot;modules/generator/generator&quot;</a>
 					</li>
-					<li class="current tsd-kind-external-module">
-						<a href="../modules/_modules_logger_logger_.html">"modules/logger/logger"</a>
+					<li class="current tsd-kind-module">
+						<a href="../modules/_modules_logger_logger_.html">&quot;modules/logger/logger&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_modules_mapper_mapper_.html">"modules/mapper/mapper"</a>
+					<li class=" tsd-kind-module">
+						<a href="../modules/_modules_mapper_mapper_.html">&quot;modules/mapper/mapper&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_modules_walker_walker_.html">"modules/walker/walker"</a>
+					<li class=" tsd-kind-module">
+						<a href="../modules/_modules_startup_startup_.html">&quot;modules/startup/startup&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_shared_enum_cli_enum_.html">"shared/enum/cli.enum"</a>
+					<li class=" tsd-kind-module">
+						<a href="../modules/_modules_walker_walker_.html">&quot;modules/walker/walker&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_shared_enum_outputtype_enum_.html">"shared/enum/output<wbr>Type.enum"</a>
+					<li class=" tsd-kind-module">
+						<a href="../modules/_shared_enum_cli_enum_.html">&quot;shared/enum/cli.enum&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_shared_interface_cli_interface_.html">"shared/interface/cli.interface"</a>
+					<li class=" tsd-kind-module">
+						<a href="../modules/_shared_enum_outputtype_enum_.html">&quot;shared/enum/output<wbr>Type.enum&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_shared_interface_generator_interface_.html">"shared/interface/generator.interface"</a>
+					<li class=" tsd-kind-module">
+						<a href="../modules/_shared_interface_cli_interface_.html">&quot;shared/interface/cli.interface&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_shared_interface_mapper_interface_.html">"shared/interface/mapper.interface"</a>
+					<li class=" tsd-kind-module">
+						<a href="../modules/_shared_interface_generator_interface_.html">&quot;shared/interface/generator.interface&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_shared_interface_walker_interface_.html">"shared/interface/walker.interface"</a>
+					<li class=" tsd-kind-module">
+						<a href="../modules/_shared_interface_logger_interface_.html">&quot;shared/interface/logger.interface&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/_shared_interface_mapper_interface_.html">&quot;shared/interface/mapper.interface&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/_shared_interface_startup_interface_.html">&quot;shared/interface/startup.interface&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/_shared_interface_walker_interface_.html">&quot;shared/interface/walker.interface&quot;</a>
 					</li>
 				</ul>
 			</nav>
@@ -344,7 +455,7 @@
 				<ul class="before-current">
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-class tsd-parent-kind-external-module">
+					<li class="current tsd-kind-class tsd-parent-kind-module">
 						<a href="_modules_logger_logger_.logger.html" class="tsd-kind-icon">Logger</a>
 						<ul>
 							<li class=" tsd-kind-constructor tsd-parent-kind-class">
@@ -352,6 +463,9 @@
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
 								<a href="_modules_logger_logger_.logger.html#_verbose" class="tsd-kind-icon">_verbose</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="_modules_logger_logger_.logger.html#currentdate" class="tsd-kind-icon">current<wbr>Date</a>
 							</li>
 							<li class=" tsd-kind-set-signature tsd-parent-kind-class">
 								<a href="_modules_logger_logger_.logger.html#verbose" class="tsd-kind-icon">verbose</a>
@@ -382,62 +496,27 @@
 		<h2>Legend</h2>
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
-				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
-				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
 				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
-				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
-				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
-				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
-				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
-				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
-				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
-				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
-				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
-				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
-				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
-				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
 			</ul>
 		</div>
 	</div>
 </footer>
 <div class="container tsd-generator">
-	<p>Generated using <a href="http://typedoc.org/" target="_blank">TypeDoc</a></p>
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
 </div>
 <div class="overlay"></div>
 <script src="../assets/js/main.js"></script>
