@@ -24,6 +24,17 @@
  */
 
 import { CLI } from "./modules/cli/cli";
+import { Startup } from "./modules/startup/startup";
+import { Logger } from "./modules/logger/logger";
 
-const commandline = new CLI();
-commandline.start();
+const logger = new Logger(true);
+const startup = new Startup();
+const checks = startup.runChecks();
+
+if (checks) {
+  logger.info("Startup checks succeeded");
+  const commandline = new CLI();
+  commandline.start();
+} else {
+  logger.error("Startup checks failed, won't continue.");
+}

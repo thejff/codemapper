@@ -21,6 +21,10 @@
  * SOFTWARE.
  */
 
-export interface IGenerator {
-  generate: () => Promise<void>;
+export interface ILogger {
+  verbose: boolean;
+  info: (message: string, overrideVerbose?: boolean) => void;
+  warning: (message: string, overrideVerbose?: boolean) => void;
+  error: (message: string | Error, overrideVerbose?: boolean) => void;
+  important: (message: string, overrideVerbose?: boolean) => void;
 }

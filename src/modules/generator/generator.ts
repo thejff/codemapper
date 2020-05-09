@@ -27,6 +27,7 @@ import { IGenerator } from "../../shared/interface/generator.interface";
 import * as child from "child_process";
 import { Logger } from "../logger/logger";
 import { OutputType } from "../../shared/enum/outputType.enum";
+import * as util from "util";
 const fs = require("fs");
 
 /**
@@ -57,7 +58,7 @@ export class Generator implements IGenerator {
     "firebrick2",
     "limegreen",
     "yellow",
-    "turquoise1"
+    "turquoise1",
   ];
 
   /**
@@ -206,7 +207,7 @@ export class Generator implements IGenerator {
 
           this.logger.info(`Adding folder: ${keys[i]}`);
 
-          const charsToReplace = [`\\.`, "-", "_", "@"];
+          const charsToReplace = [`\\.`, "-", "_", "@", " "];
           let cleanKey = keys[i];
 
           let j = charsToReplace.length;
@@ -433,53 +434,131 @@ export class Generator implements IGenerator {
    */
   private runDot(): Promise<void> {
     return new Promise((resolve, reject) => {
-      this.logger.info("Beginning DOT processing...");
-      let dotCommand = `dot -T${this.outputType} "${this.codemapperDirectory}/${
-        this.name
-      }.dot" -o "${this.codemapperDirectory}/${this.name}.${
-        this.outputType === "plain" ? "txt" : this.outputType
-      }" -Kfdp`;
+      const path = require("path");
 
-      if (this.verbose) {
-        dotCommand += " -v";
+      const checkResult = this.checkForDot();
+
+      if (!checkResult.found) {
+        return reject(
+          new Error(
+            "Unable to run dot, it is either not in the path or not in a known install location."
+          )
+        );
       }
 
-      const dotChild = child.exec(dotCommand, (err, stdout, stderr) => {
-        if (err) {
-          this.logger.error(err);
-        }
+      let dotCwd = "dot";
+      if (checkResult.path) {
+        dotCwd = checkResult.path;
+      }
 
-        if (stderr) {
-          this.logger.important(stderr);
-        }
+      this.logger.info("Beginning DOT processing...");
 
-        if (stdout) {
-          this.logger.important(stdout);
-        }
-      });
+      const outputType = this.outputType === "plain" ? "txt" : this.outputType;
 
-      dotChild.on("message", (message) => {
-        this.logger.important("message");
-        this.logger.important(message);
-      });
+      const outputPath = path.join(
+        this.codemapperDirectory,
+        `${this.name}.${outputType}`
+      );
+      const inputPath = path.join(this.codemapperDirectory, `${this.name}.dot`);
 
-      dotChild.on("close", (code: number) => {
-        this.logger.info("DOT processing finished. Exited with code: " + code);
+      let dotArgs = [
+        `-T${outputType}`,
+        `-o${outputPath}`,
+        `-Kfdp`,
+        `${inputPath}`,
+      ];
+
+      if (this.verbose) {
+        dotArgs.push("-v");
+      }
+
+      try {
+        child.execFileSync(dotCwd, dotArgs, { stdio: "ignore" });
         resolve();
-      });
-
-      dotChild.on("error", (err) => {
-        this.logger.error("DOT processing errored. Error: \n" + err);
-        reject(err);
-      });
-
-      dotChild.on("disconnect", (code: number) => {
-        this.logger.warning(
-          "DOT processing disconnected. Exited with code: " + code
-        );
-        reject("DOT Process disconnected");
-      });
+      } catch (error) {
+        this.logger.error("An error occured running the DOT Command", true);
+        reject(error);
+      }
     });
+  }
+
+  /**
+   * Check if dot is in the path, otherwise check for the install path
+   *
+   * @private
+   * @returns {{ found: boolean; path?: string }}
+   * @memberof Generator
+   */
+  private checkForDot(): { found: boolean; path?: string } {
+    this.logger.info("Checking for DOT", true);
+
+    try {
+      child.execSync("dot", { stdio: "ignore" });
+      return { found: true };
+    } catch (error) {
+      let dotPath;
+      switch (process.platform) {
+        case "win32":
+          this.logger.warning(
+            "Unable to execute dot command, checking default install path.",
+            true
+          );
+          dotPath = this.findWindowsDir();
+          break;
+
+        case "linux":
+          this.logger.warning(
+            "It appears you are running linux, please manually add dot to the path."
+          );
+          return { found: false };
+
+        case "darwin":
+          this.logger.warning(
+            "It appears you are running MacOS, please manually add dot to the path."
+          );
+          return { found: false };
+      }
+
+      if (!dotPath) {
+        this.logger.error(
+          "Unable to determine default Graphviz path for your OS",
+          true
+        );
+        return { found: false };
+      }
+
+      this.logger.info("Checking found absolute dot path", true);
+      try {
+        child.execFileSync(dotPath, { stdio: "ignore" });
+        this.logger.info("Dot absolute path check suceeded", true);
+        return { found: true, path: dotPath };
+      } catch (error) {
+        this.logger.error("Dot absolute path check failed", true);
+        this.logger.error(error, true);
+        return { found: false };
+      }
+    }
+  }
+
+  /**
+   * Get the correct windows directory, graphviz version agnostic
+   *
+   * @private
+   * @returns {(string | void)}
+   * @memberof Generator
+   */
+  private findWindowsDir(): string | void {
+    const baseDir = "C:\\Program Files (x86)";
+    const programFiles = fs.readdirSync(baseDir);
+
+    for (const folder of programFiles) {
+      if (folder.includes("Graphviz")) {
+        const path = require("path");
+        return path.join("C:", "Program Files (x86)", folder, "bin", "dot.exe");
+      }
+    }
+
+    return;
   }
 
   /**
@@ -494,9 +573,7 @@ export class Generator implements IGenerator {
   private writeFile(data: string, name: string): Promise<void> {
     return new Promise((resolve, reject) => {
       this.logger.info(
-        `Writing file: ${name}\n Full path: ${
-          this.codemapperDirectory
-        }/${name}.dot`
+        `Writing file: ${name}\n Full path: ${this.codemapperDirectory}/${name}.dot`
       );
       fs.writeFile(
         `${this.codemapperDirectory}/${name}.dot`,

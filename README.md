@@ -24,14 +24,17 @@ $ npm i -g @justforfun/codemapper
 ```
 
 You also need to make sure Graphviz is installed, it can be downloaded [here](https://www.graphviz.org/download/)
+You may need to manually add the path to the bin folder in your environment variables, on windows for example: `C:\Program Files (x86)\Graphviz2.38\bin` **Note:** This may be different for your system.
+
+Codemapper performs a startup check to see if it can find and execute Graphviz (specifically dot), windows has a "default" install location however linux distributions and mac installation can vary so on these systems GraphViz must be in the path.
 
 ## Notes
 
 The code mapper is currently in its early stages of development, as such there are a few restrictions (see the next release and future work sections below for more). <br/>
 
-- [Added in v1.1.0] Currently the only output available is png allow all Graphviz outputs are planned for the next release.~~ Additionally a custom HTML output will be added.
-- [Added in v1.1.0] There is no direct command that can be run to generate the graph and skip the menu, this is also planned for the next release.
-- [Added in v1.1.0] You can't use custom regex, this is also planned for the next release.
+- [Added in v1.1.0] ~~Currently the only output available is png, allowing all Graphviz outputs are planned for the next release.~~ Additionally a custom HTML output will be added (Not in v1.1.0).
+- [Added in v1.1.0] ~~There is no direct command that can be run to generate the graph and skip the menu, this is also planned for the next release.~~
+- [Added in v1.1.0] ~~You can't use custom regex, this is also planned for the next release.~~
 - Only files local to the project that are linked via import code will be linked in the graph, but all .ts files will be shown and [as of v1.1.0] all files can be shown in the graph.
 
 ## Usage
@@ -56,7 +59,7 @@ codemapper -d
 
 - The graph will be generated using the current directory
 - node_modules will be excluded
-- The output file name will be codemapper-yyyymmdd.ext where y = year, m = month d = day and .ext is the file extension (by default .dot and .png)
+- The output file name will be codemapper-yyyymmdd.ext where y = year, m = month d = day and .ext is the file extension (by default .dot and .svg)
 - Verbose will be false
 - Mapping of all files will be false
 - The default regex will be used

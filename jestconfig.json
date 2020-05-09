@@ -5,5 +5,5 @@
   "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
   "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"],
   "testEnvironment": "node",
-  "setupTestFrameworkScriptFile": "<rootDir>/__tests__/setup.js"
+  "setupFilesAfterEnv": ["<rootDir>/src/__tests__/setup.js"]
 }
