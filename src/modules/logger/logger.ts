@@ -83,9 +83,8 @@ export class Logger implements ILogger {
   public info(message: string, overrideVerbose?: boolean): void {
     if (this._verbose || overrideVerbose) {
       const date = new Date();
-      const timestamp = `${
-        this.currentDate
-      } ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}.${date.getMilliseconds()}`;
+      const timestamp = `${this.currentDate
+        } ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}.${date.getMilliseconds()}`;
       console.log(
         "%s\x1b[32m%s\x1b[0m%s",
         "[",
@@ -105,9 +104,8 @@ export class Logger implements ILogger {
   public warning(message: string, overrideVerbose?: boolean): void {
     if (this._verbose || overrideVerbose) {
       const date = new Date();
-      const timestamp = `${
-        this.currentDate
-      } ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}.${date.getMilliseconds()}`;
+      const timestamp = `${this.currentDate
+        } ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}.${date.getMilliseconds()}`;
       console.log(
         "%s\x1b[93m%s\x1b[0m%s",
         "[",
@@ -124,12 +122,11 @@ export class Logger implements ILogger {
    * @param {boolean} [overrideVerbose]
    * @memberof Logger
    */
-  public error(message: string | Error, overrideVerbose?: boolean): void {
+  public error(message: string | Error | unknown, overrideVerbose?: boolean): void {
     if (this._verbose || overrideVerbose) {
       const date = new Date();
-      const timestamp = `${
-        this.currentDate
-      } ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}.${date.getMilliseconds()}`;
+      const timestamp = `${this.currentDate
+        } ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}.${date.getMilliseconds()}`;
       console.log(
         "%s\x1b[91m%s\x1b[0m%s",
         "[",
@@ -149,9 +146,8 @@ export class Logger implements ILogger {
   public important(message: string, overrideVerbose?: boolean): void {
     if (this._verbose || overrideVerbose) {
       const date = new Date();
-      const timestamp = `${
-        this.currentDate
-      } ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}.${date.getMilliseconds()}`;
+      const timestamp = `${this.currentDate
+        } ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}.${date.getMilliseconds()}`;
       console.log(
         "%s\x1b[95m%s\x1b[0m%s",
         "[",
