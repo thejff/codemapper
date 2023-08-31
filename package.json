@@ -13,7 +13,7 @@
   },
   "preferGlobal": true,
   "bin": {
-    "codemapper": "./lib/index.js"
+    "codemapper": "lib/index.js"
   },
   "repository": {
     "type": "git",
