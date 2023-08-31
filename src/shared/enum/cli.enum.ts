@@ -31,5 +31,6 @@ export enum CLIParameters {
   VERBOSE = "verbose",
   INCLUDENODE = "includenode",
   ALLFILES = "allfiles",
+  EXCLUDESYMLINKS = "excludesymlinks",
   HELP = "help"
 }

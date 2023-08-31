@@ -50,6 +50,7 @@ export class Mapper implements IMapper {
   constructor(
     private directory: string,
     private excludeNodeModules: boolean = true,
+    private excludeSymlinks: boolean = false,
     private outputName: string,
     private verbose: boolean = false,
     private allFiles: boolean = false,
@@ -100,6 +101,7 @@ export class Mapper implements IMapper {
       walker = new Walker(
         this.directory,
         this.excludeNodeModules,
+        this.excludeSymlinks,
         this.allFiles,
         this.logger,
         this.regex
