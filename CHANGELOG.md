@@ -24,6 +24,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Issues mapping monorepos
 
+## [1.2.1] - 2023-08-31
+
+- Fix: Issue #30 - Crash on symbolic links
+    Walker now checks to see if a given path is a symbolic link
+    Users can choose to exclude symbolic links
+
 ## [1.2.0] - 2020-05-09
 
 ### Added

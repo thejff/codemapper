@@ -26,6 +26,7 @@ import {
   IDirectoryStructure
 } from "../../shared/interface/walker.interface";
 import { Logger } from "../logger/logger";
+import { Stats } from "fs";
 
 const fs = require("fs");
 
@@ -75,6 +76,7 @@ export class Walker {
   constructor(
     directory: string = process.cwd(),
     private excludeNodeModules: boolean = true,
+    private excludeSymbolicLinks: boolean = false,
     private allFiles: boolean = false,
     private logger: Logger,
     regex?: string
@@ -219,20 +221,62 @@ export class Walker {
       folders: []
     };
 
+    const isFile = (path: string, i: number) => {
+      // Check if file passes parameters and regex
+      if (this.acceptableFile(directoryData[i])) {
+        structure.files.push(directoryData[i]);
+        this.completePathedFileList.push(path);
+      }
+    }
+
+    const isDir = (i: number) => {
+      if (this.acceptableFolder(directoryData[i])) {
+        structure.folders.push(directoryData[i]);
+      }
+    }
+
+    const isUnknown = (path: string) => {
+      this.logger.warning(
+        `Path ${path} is not a file, symlink, or directory, skipping`
+      );
+    }
+
+    const isSymLink = (path: string, i: number) => {
+      const pathStats: Stats = fs.statSync(path);
+      if (pathStats.isDirectory()) {
+        isDir(i);
+      } else if (pathStats.isFile()) {
+        isFile(path, i);
+      } else {
+        isUnknown(path);
+      }
+    }
+
     let i = 0;
     while (i < directoryData.length) {
       const pathCheck = `${path}/${directoryData[i]}`;
+      const pathLStats: Stats = fs.lstatSync(pathCheck);
 
-      if (fs.lstatSync(pathCheck).isFile()) {
-        // Check if file passes parameters and regex
-        if (this.acceptableFile(directoryData[i])) {
-          structure.files.push(directoryData[i]);
-          this.completePathedFileList.push(pathCheck);
+      if (pathLStats.isFile()) {
+
+        isFile(pathCheck, i);
+
+      } else if (pathLStats.isSymbolicLink()) {
+
+        if (!this.excludeSymbolicLinks) {
+          isSymLink(pathCheck, i);
+        } else {
+          this.logger.info(`${pathCheck} is symbolic and will be ignored.`);
         }
+
+      } else if (pathLStats.isDirectory()) {
+
+        isDir(i);
+
       } else {
-        if (this.acceptableFolder(directoryData[i])) {
-          structure.folders.push(directoryData[i]);
-        }
+
+        isUnknown(pathCheck);
+
       }
 
       i++;

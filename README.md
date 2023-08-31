@@ -83,18 +83,19 @@ As well as options that can be entered into any input
 
 In CLI mode there are multiple parameters that can be included in the codemapper command to customise the processing to your liking.
 
-| Parameter     | Shorthand | Description                                                                             |
-| ------------- | --------- | --------------------------------------------------------------------------------------- |
-| --default     | -d        | Run codemapper using the default settings                                               |
-| --input       | -i        | The input path of the project to map                                                    |
-| --output      | -o        | The output path of the graph data and the name you want to use                          |
-| --outName     | -oN       | The name of the graph file, this should not include the file extension                  |
-| --type        | -t        | Defaults to png. One of: png, jpeg, psd, svg, pdf, plain (for plain text), json, or dot |
-| --regex       | -r        | The regex used to exclude files, this will bypass the default regex.                    |
-| --includeNode | -iN       | Include node_modules in the graph. This can take a very long time.                      |
-| --allFiles    | -aF       | Include all file typs in the graph.                                                     |
-| --verbose     | -v        | Output verbose information whilst processing                                            |
-| --help        | -h        | Display the help menu                                                                   |
+| Parameter         | Shorthand | Description                                                                             |
+| ----------------- | --------- | --------------------------------------------------------------------------------------- |
+| --default         | -d        | Run codemapper using the default settings                                               |
+| --input           | -i        | The input path of the project to map                                                    |
+| --output          | -o        | The output path of the graph data and the name you want to use                          |
+| --outName         | -oN       | The name of the graph file, this should not include the file extension                  |
+| --type            | -t        | Defaults to png. One of: png, jpeg, psd, svg, pdf, plain (for plain text), json, or dot |
+| --regex           | -r        | The regex used to exclude files, this will bypass the default regex.                    |
+| --includeNode     | -iN       | Include node_modules in the graph. This can take a very long time.                      |
+| --excludeSymlinks | -exS      | Exclude any files and folders that are symbolic links
+| --allFiles        | -aF       | Include all file typs in the graph.                                                     |
+| --verbose         | -v        | Output verbose information whilst processing                                            |
+| --help            | -h        | Display the help menu                                                                   |
 
 ### Output Types
 
